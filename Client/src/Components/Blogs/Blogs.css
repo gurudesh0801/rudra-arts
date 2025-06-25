@@ -1,0 +1,170 @@
+/* General Blog Section */
+.blogs-section {
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+/* Title & Subtitle */
+.blogs-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #7a2e19;
+}
+
+.blogs-subtitle {
+  font-size: 18px;
+  color: #5a4f42;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+/* Blog Card */
+.blog-card {
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  background: #fffaf1;
+  border-radius: 10px;
+}
+
+.blog-card:hover {
+  transform: scale(1.03);
+}
+
+/* Blog Image */
+.blog-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Blog Title */
+.blog-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #7a2e19;
+  margin-top: 10px;
+}
+
+/* Short Description */
+.blog-shortDesc {
+  font-size: 14px;
+  color: #555;
+  padding: 0 15px;
+}
+
+/* Read More Button */
+.blog-card button {
+  background-color: #7a2e19;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-family: "Garamond", serif;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+}
+
+.blog-card button:hover {
+  background-color: #5d2112;
+}
+
+/* Modal Styling */
+.modal-content {
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #7a2e19;
+}
+
+.modal-body {
+  text-align: left;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.blog-fullDesc {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .blogs-title {
+    font-size: 28px;
+  }
+
+  .blogs-subtitle {
+    font-size: 16px;
+  }
+
+  .blog-title {
+    font-size: 18px;
+  }
+
+  .blog-shortDesc {
+    font-size: 13px;
+  }
+
+  .blog-card {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .blogs-title {
+    font-size: 26px;
+  }
+
+  .blogs-subtitle {
+    font-size: 14px;
+  }
+
+  .blog-image {
+    height: 180px;
+  }
+
+  .modal-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 576px) {
+  .blogs-section {
+    padding: 30px 15px;
+  }
+
+  .blogs-title {
+    font-size: 24px;
+  }
+
+  .blog-card {
+    margin: 10px 0;
+  }
+
+  .blog-image {
+    height: 160px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .blog-fullDesc {
+    font-size: 14px;
+  }
+}

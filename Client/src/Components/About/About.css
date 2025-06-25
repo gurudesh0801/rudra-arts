@@ -1,0 +1,169 @@
+.about-us-section {
+  background-image: url('../../assets/images/about-bg.jpg'); /* Replace with your actual image path */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  padding-top: calc(
+    30vh - 80px
+  ); /* Adjusting to ensure hero section fills viewport */
+  font-family: "Garamond", serif;
+  text-align: center;
+}
+
+/* Title */
+.about-title {
+  font-size: 2.8rem;
+/*   font-family: "Amita", serif; */
+  font-weight: bold;
+  color: #4a3d2f;
+  text-transform: uppercase;
+  border-bottom: 3px solid #b08968;
+  display: inline-block;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Subtitle */
+.about-subtitle {
+  font-size: 1.5rem;
+  color: #6d5c4b;
+  margin-top: 10px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* History Card */
+.history-card {
+  background: #eae0c8;
+  border: none;
+  padding: 20px;
+  border-left: 5px solid #8b6f47;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+/* Card Title */
+.history-card .card-title {
+  font-size: 1.6rem;
+  color: #3e3228;
+  font-weight: bold;
+}
+
+/* Card Text */
+.history-card .card-text {
+  font-size: 1.2rem;
+  color: #5e4d3f;
+  line-height: 1.6;
+}
+
+/* Vision Section */
+.vision-title {
+  font-size: 2.2rem;
+  color: #4a3d2f;
+  margin-top: 40px;
+}
+
+.vision-text {
+  font-size: 1.4rem;
+  color: #6d5c4b;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .about-title {
+    font-size: 2.5rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.4rem;
+  }
+
+  .history-card {
+    padding: 18px;
+  }
+
+  .history-card .card-title {
+    font-size: 1.5rem;
+  }
+
+  .history-card .card-text {
+    font-size: 1.1rem;
+  }
+
+  .vision-title {
+    font-size: 2rem;
+  }
+
+  .vision-text {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2.2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .history-card {
+    padding: 15px;
+    border-left: 4px solid #8b6f47;
+  }
+
+  .history-card .card-title {
+    font-size: 1.4rem;
+  }
+
+  .history-card .card-text {
+    font-size: 1.1rem;
+  }
+
+  .vision-title {
+    font-size: 1.8rem;
+  }
+
+  .vision-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-title {
+    font-size: 2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .history-card {
+    padding: 12px;
+    border-left: 3px solid #8b6f47;
+  }
+
+  .history-card .card-title {
+    font-size: 1.3rem;
+  }
+
+  .history-card .card-text {
+    font-size: 1rem;
+  }
+
+  .vision-title {
+    font-size: 1.6rem;
+  }
+
+  .vision-text {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,132 @@
+/* General Page Styling */
+.contact-page {
+  background: #f4f1ea; /* Light parchment-like color */
+  padding: 50px 0;
+  font-family: "Georgia", serif;
+  color: #333;
+}
+
+/* Title Styling */
+.contact-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #4a362d; /* Dark brown for a vintage feel */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #a67c52;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+.contact-subtitle {
+  font-size: 18px;
+  color: #6c4f3d;
+  font-style: italic;
+}
+
+/* Contact Form */
+.contact-form {
+  background: #eae0c8; /* Aged paper feel */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 22px;
+  color: #4a362d;
+  margin-bottom: 15px;
+}
+
+.send-button {
+  background-color: #6b4f36;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.send-button:hover {
+  background-color: #8b5e3c;
+}
+
+/* Contact Information */
+.contact-info {
+  background: #eae0c8;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Quick Links */
+.quick-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.quick-links li {
+  margin: 5px 0;
+}
+
+.quick-links a {
+  text-decoration: none;
+  color: #6b4f36;
+  font-size: 16px;
+}
+
+.quick-links a:hover {
+  color: #a67c52;
+}
+
+/* WhatsApp Contact */
+.whatsapp-contact {
+  margin-top: 15px;
+}
+
+.whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+
+.whatsapp-button:hover {
+  background-color: #1ebc5b; /* Darker green on hover */
+}
+
+.whatsapp-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-title {
+    font-size: 28px;
+  }
+
+  .contact-subtitle {
+    font-size: 16px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .contact-form,
+  .contact-info {
+    padding: 15px;
+  }
+}
