@@ -1,27 +1,78 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
+
+const ZoomImage = ({ src, zoom = 2.5, radius = 180 }) => {
+  const containerRef = useRef();
+  const [showZoom, setShowZoom] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setZoomPosition({ x, y });
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setShowZoom(true)}
+      onMouseLeave={() => setShowZoom(false)}
+      className="relative w-full h-[400px] overflow-hidden border rounded-lg"
+    >
+      <img
+        src={src}
+        alt="Zoom"
+        className="w-full h-full object-cover"
+        draggable={false}
+      />
+      {showZoom && (
+        <div
+          className="absolute pointer-events-none border-2 border-white shadow-2xl rounded-full"
+          style={{
+            width: radius,
+            height: radius,
+            top: zoomPosition.y - radius / 2,
+            left: zoomPosition.x - radius / 2,
+            backgroundImage: `url(${src})`,
+            backgroundSize: `${containerRef.current?.offsetWidth * zoom}px ${
+              containerRef.current?.offsetHeight * zoom
+            }px`,
+            backgroundPosition: `-${zoomPosition.x * zoom - radius / 2}px -${
+              zoomPosition.y * zoom - radius / 2
+            }px`,
+            backgroundRepeat: "no-repeat",
+            transition: "opacity 0.1s ease",
+            zIndex: 10,
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
+        const res = await fetch(
           `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/products/${id}`
         );
-        if (!response.ok) throw new Error("Failed to fetch product");
-        const data = await response.json();
+        if (!res.ok) throw new Error("Failed to fetch product");
+        const data = await res.json();
         setProduct(data);
+        setSelectedImage(data.product_image?.[0]); // default main image
       } catch (err) {
         console.error(err);
       } finally {
@@ -30,20 +81,6 @@ const ProductDetails = () => {
     };
     fetchProduct();
   }, [id]);
-
-  const handleBuyNow = async () => {
-    try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_BASE_URL_PRODUCTION
-        }/api/products/${id}/whatsapp-message`
-      );
-      const data = await response.json();
-      if (data.whatsappURL) window.open(data.whatsappURL, "_blank");
-    } catch (err) {
-      console.error("Error sending WhatsApp message:", err);
-    }
-  };
 
   if (loading) {
     return (
@@ -63,21 +100,6 @@ const ProductDetails = () => {
 
   return (
     <div className="bg-gradient-to-b from-orange-50 via-white to-orange-100 py-20 px-6 mt-16">
-      {/* Modal for full image preview */}
-      {showModal && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center"
-          onClick={() => setShowModal(false)}
-        >
-          <img
-            src={selectedImage}
-            alt="Preview"
-            className="max-w-[90%] max-h-[80vh] rounded-xl shadow-xl border-4 border-white"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -85,28 +107,20 @@ const ProductDetails = () => {
         className="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden grid md:grid-cols-2 gap-10 p-6 md:p-12"
       >
         <div>
-          <img
-            src={product.product_image?.[0]}
-            alt={product.product_name}
-            className="rounded-2xl w-full h-[400px] object-cover shadow-md border border-orange-200 cursor-pointer"
-            onClick={() => {
-              setSelectedImage(product.product_image?.[0]);
-              setShowModal(true);
-            }}
-          />
+          <ZoomImage src={selectedImage} />
 
-          {/* Thumbnail Gallery */}
           <div className="flex gap-3 mt-4 flex-wrap">
-            {product.product_image?.slice(1).map((img, index) => (
+            {product.product_image?.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Thumbnail ${index}`}
-                className="h-20 w-20 object-cover rounded-lg border border-gray-300 cursor-pointer hover:scale-105 transition-transform"
-                onClick={() => {
-                  setSelectedImage(img);
-                  setShowModal(true);
-                }}
+                className={`h-20 w-20 object-cover rounded-lg border cursor-pointer transition-transform duration-300 hover:scale-105 ${
+                  selectedImage === img
+                    ? "border-orange-500 ring-2 ring-orange-500"
+                    : "border-gray-300"
+                }`}
+                onClick={() => setSelectedImage(img)}
               />
             ))}
           </div>

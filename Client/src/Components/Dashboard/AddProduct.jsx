@@ -4,8 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaSpinner } from "react-icons/fa";
 import DashboardLayout from "./DashboardLayout";
+import { toast } from "react-hot-toast";
 
 const AddProduct = ({ onProductAdded }) => {
+  const [imagePreviews, setImagePreviews] = useState([null, null, null, null]);
+
   const [form, setForm] = useState({
     pname: "",
     pid: "",
@@ -17,6 +20,20 @@ const AddProduct = ({ onProductAdded }) => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  const handleImageChange = (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const updatedFiles = [...form.pimages];
+    updatedFiles[index] = file;
+
+    const updatedPreviews = [...imagePreviews];
+    updatedPreviews[index] = URL.createObjectURL(file);
+
+    setForm((prev) => ({ ...prev, pimages: updatedFiles }));
+    setImagePreviews(updatedPreviews);
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -46,9 +63,10 @@ const AddProduct = ({ onProductAdded }) => {
       formData.append("pdescription", form.pdescription);
       formData.append("psize", form.psize);
       formData.append("pcategory", form.pcategory);
+      formData.append("pdiscount", form.pdiscount || "0");
 
       form.pimages.forEach((file) => {
-        formData.append("pimages", file); // multiple images
+        formData.append("pimages", file);
       });
 
       const res = await fetch(
@@ -61,8 +79,10 @@ const AddProduct = ({ onProductAdded }) => {
 
       if (!res.ok) throw new Error("Failed to add product");
 
-      if (onProductAdded) onProductAdded();
+      // ✅ Show custom success message
+      toast.success("Product added successfully!");
 
+      // ✅ Reset form
       setForm({
         pname: "",
         pid: "",
@@ -71,9 +91,16 @@ const AddProduct = ({ onProductAdded }) => {
         pdescription: "",
         psize: "",
         pcategory: "",
+        pdiscount: "",
       });
+
+      // ✅ Reset image previews
+      setImagePreviews([null, null, null, null]);
+
+      if (onProductAdded) onProductAdded();
     } catch (err) {
       console.error("Error adding product:", err);
+      alert("❌ Failed to add product. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -190,23 +217,48 @@ const AddProduct = ({ onProductAdded }) => {
             </div>
 
             <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700">
+                Upload up to 4 Images
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[0, 1, 2, 3].map((index) => (
+                  <label
+                    key={index}
+                    className="relative border-2 border-dashed rounded-lg h-32 flex items-center justify-center bg-gray-50 cursor-pointer overflow-hidden group"
+                  >
+                    {imagePreviews[index] ? (
+                      <img
+                        src={imagePreviews[index]}
+                        alt={`preview-${index}`}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <span className="text-gray-400 text-sm">
+                        Click to Upload
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={(e) => handleImageChange(e, index)}
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
               <label className="block text-sm font-medium mb-1 text-gray-700">
-                Upload Images
+                Discount (%)
               </label>
-              <label className="w-full cursor-pointer flex items-center justify-between border rounded-lg px-4 py-2 bg-white hover:bg-gray-50">
-                {form.pimages.length > 0
-                  ? `${form.pimages.length} file(s) selected`
-                  : "Choose files"}
-                <input
-                  type="file"
-                  name="pimages"
-                  accept="image/*"
-                  multiple
-                  onChange={handleChange}
-                  className="hidden"
-                  required
-                />
-              </label>
+              <input
+                type="number"
+                name="pdiscount"
+                value={form.pdiscount || ""}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500"
+              />
             </div>
 
             <div>

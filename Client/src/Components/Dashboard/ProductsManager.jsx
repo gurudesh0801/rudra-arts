@@ -31,7 +31,8 @@ const ProductManager = () => {
     pprice: "",
     psize: "",
     pcategory: "",
-    pimage: "",
+    pimage: [], // Changed ,
+    pdiscount: "",
   });
 
   const fetchProducts = async () => {
@@ -78,6 +79,7 @@ const ProductManager = () => {
       psize: product.product_size,
       pcategory: product.product_category,
       pimage: product.product_image,
+      pdiscount: product.product_discount || "",
     });
   };
 
@@ -102,7 +104,11 @@ const ProductManager = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(editFormData),
+          body: JSON.stringify({
+            ...editFormData,
+            pimage: editFormData.pimage,
+            pdiscount: editFormData.pdiscount || 0,
+          }),
         }
       );
 
@@ -153,6 +159,35 @@ const ProductManager = () => {
     }
   };
 
+  const handleMultipleImageChange = async (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "rudra-arts");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dxpf6dhn1/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      const newImages = [...editFormData.pimage];
+      newImages[index] = data.secure_url;
+      setEditFormData((prev) => ({
+        ...prev,
+        pimage: newImages,
+      }));
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  };
+
   return (
     <DashboardLayout>
       <Box p={4}>
@@ -188,6 +223,7 @@ const ProductManager = () => {
                   <TableCell>Price (₹)</TableCell>
                   <TableCell>Size</TableCell>
                   <TableCell>Category</TableCell>
+                  <TableCell align="center">Discount</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -197,7 +233,7 @@ const ProductManager = () => {
                     <TableCell>
                       <Avatar
                         variant="rounded"
-                        src={product.product_image}
+                        src={product.product_image?.[0] || "/placeholder.jpg"}
                         alt={product.product_name}
                         sx={{ width: 60, height: 60 }}
                       />
@@ -206,6 +242,7 @@ const ProductManager = () => {
                     <TableCell>₹{product.product_price}</TableCell>
                     <TableCell>{product.product_size}</TableCell>
                     <TableCell>{product.product_category}</TableCell>
+                    <TableCell>{product.product_discount}</TableCell>
                     <TableCell align="center">
                       <IconButton
                         color="primary"
@@ -263,6 +300,13 @@ const ProductManager = () => {
               fullWidth
             />
             <TextField
+              label="Product Discount"
+              name="pdiscount"
+              value={editFormData.pdiscount}
+              onChange={handleEditChange}
+              fullWidth
+            />
+            <TextField
               label="Product Category"
               name="pcategory"
               value={editFormData.pcategory}
@@ -271,27 +315,46 @@ const ProductManager = () => {
             />
 
             {/* Upload Image Button */}
-            <Button variant="outlined" component="label">
-              Upload Image
-              <input
-                type="file"
-                hidden
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </Button>
-
-            {/* Show selected image preview */}
-            {editFormData.pimage && (
-              <Box mt={2} display="flex" justifyContent="center">
-                <Avatar
-                  src={editFormData.pimage}
-                  alt="Product Preview"
-                  sx={{ width: 100, height: 100 }}
-                  variant="rounded"
-                />
-              </Box>
-            )}
+            <Typography variant="subtitle1">Product Images (max 4)</Typography>
+            <Box display="flex" flexWrap="wrap" gap={2}>
+              {[0, 1, 2, 3].map((i) => (
+                <Box
+                  key={i}
+                  width={100}
+                  height={100}
+                  border="2px dashed #ccc"
+                  borderRadius={2}
+                  position="relative"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  overflow="hidden"
+                  bgcolor="#f9f9f9"
+                >
+                  {editFormData.pimage?.[i] ? (
+                    <Avatar
+                      src={editFormData.pimage[i]}
+                      alt={`Product Image ${i + 1}`}
+                      sx={{ width: "100%", height: "100%", borderRadius: 0 }}
+                      variant="square"
+                    />
+                  ) : (
+                    <Button
+                      component="label"
+                      sx={{ fontSize: "0.75rem", textTransform: "none" }}
+                    >
+                      Upload
+                      <input
+                        type="file"
+                        hidden
+                        accept="image/*"
+                        onChange={(e) => handleMultipleImageChange(e, i)}
+                      />
+                    </Button>
+                  )}
+                </Box>
+              ))}
+            </Box>
           </DialogContent>
 
           <DialogActions>

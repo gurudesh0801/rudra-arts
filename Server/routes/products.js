@@ -38,7 +38,8 @@ router.get("/:id", async (req, res) => {
 // Update
 // Add upload middleware
 router.put("/:id", upload.single("pimage"), async (req, res) => {
-  const { pname, pid, pprice, pdescription, psize, pcategory } = req.body;
+  const { pname, pid, pprice, pdescription, psize, pcategory, pdiscount } =
+    req.body;
 
   let pimage = req.body.pimage;
 
@@ -61,14 +62,14 @@ router.put("/:id", upload.single("pimage"), async (req, res) => {
         product_name: pname,
         product_id: pid,
         product_price: pprice,
-        product_image: pimage,
+        product_image: Array.isArray(pimage) ? pimage : [pimage],
         product_description: pdescription,
         product_size: psize,
         product_category: pcategory,
+        product_discount: pdiscount || 0, // ← here
       },
       { new: true }
     );
-
     if (!updatedProduct)
       return res.status(404).json({ error: "Product not found" });
 

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaHeart, FaRegHeart, FaFilter, FaEnvelope } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaFilter } from "react-icons/fa";
 import { ShoppingCartIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import AutoScrollCarousel from "./Carousel";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Fetch products from API (expects a flat array of products)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -19,11 +20,10 @@ const AllProducts = () => {
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
 
-        // Add default fields like isFavorite to each product
         const productsWithExtras = data.map((product) => ({
           ...product,
           isFavorite: false,
-          category: product.product_category || "Uncategorized", // fallback category
+          category: product.product_category || "Uncategorized",
         }));
 
         setProducts(productsWithExtras);
@@ -37,10 +37,8 @@ const AllProducts = () => {
     fetchProducts();
   }, []);
 
-  // Extract unique categories for filter dropdown
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
-  // Filter products by selected category
   const filteredProducts =
     selectedCategory === "All"
       ? products
@@ -54,8 +52,8 @@ const AllProducts = () => {
     );
   };
 
-  const handleEnquiry = (productId) => {
-    alert(`Enquiry sent for product ID: ${productId}`);
+  const handleAddToCartAndNavigate = (productId) => {
+    navigate(`/product-details/${productId}`);
   };
 
   if (loading) {
@@ -67,11 +65,11 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 pt-16">
       <AutoScrollCarousel />
-      {/* Header */}
+
       <div className="text-center mb-12 mt-12">
-        <h1 className="text-5xl sm:text-5xl font-montserrat font-bold mb-4 text-gray-900">
+        <h1 className="text-5xl font-montserrat font-bold mb-4 text-gray-900">
           Heritage Artisans Collection
         </h1>
         <p className="text-gray-600 max-w-xl mx-auto mb-6">
@@ -133,12 +131,11 @@ const AllProducts = () => {
             key={product._id}
             layout
             whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+              scale: 1.03,
+              boxShadow: "0 10px 20px rgba(0,0,0,0.12)",
             }}
             className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col relative"
           >
-            {/* Image */}
             <img
               src={product.product_image}
               alt={product.product_name}
@@ -146,23 +143,19 @@ const AllProducts = () => {
               loading="lazy"
             />
 
-            {/* Content */}
             <div className="p-4 flex flex-col flex-grow">
               <h3 className="text-lg font-semibold font-outfit text-gray-900 mb-2 line-clamp-2">
                 {product.product_name}
               </h3>
-              {/* You can add description if you have */}
-              <p className="text-gray-600 flex-grow text-sm mb-4 line-clamp-3">
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                 {product.product_description}
               </p>
               <div className="flex justify-between items-center mb-4">
                 <span className="text-xl font-bold text-customBrown">
                   ₹{product.product_price}
                 </span>
-                {/* Optional: Ratings or tags here */}
               </div>
 
-              {/* Actions */}
               <div className="flex justify-between items-center">
                 <button
                   onClick={() => toggleFavorite(product._id)}
@@ -171,17 +164,13 @@ const AllProducts = () => {
                 >
                   {product.isFavorite ? <FaHeart /> : <FaRegHeart />}
                 </button>
+
                 <button
-                  onClick={() => handleEnquiry(product._id)}
-                  aria-label="Send Enquiry"
-                  className="outline rounded-2xl text-customBrown p-2 hover:text-gray-700 transition text-xs"
+                  onClick={() => handleAddToCartAndNavigate(product._id)}
+                  className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 rounded-full transition flex items-center gap-2"
                 >
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm">
-                      <ShoppingCartIcon />
-                    </span>
-                    <p>Add to Cart</p>
-                  </div>
+                  <ShoppingCartIcon size={16} />
+                  View & Buy
                 </button>
               </div>
             </div>

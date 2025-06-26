@@ -3,7 +3,8 @@ const cloudinary = require("../cloudinaryConfig");
 const streamifier = require("streamifier");
 
 exports.createProduct = async (req, res) => {
-  const { pname, pid, pprice, pdescription, psize, pcategory } = req.body;
+  const { pname, pid, pprice, pdescription, psize, pcategory, pdiscount } =
+    req.body;
 
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: "At least one image is required." });
@@ -37,6 +38,7 @@ exports.createProduct = async (req, res) => {
       product_description: pdescription,
       product_size: psize,
       product_category: pcategory,
+      product_discount: pdiscount || 0,
     });
 
     await newProduct.save();

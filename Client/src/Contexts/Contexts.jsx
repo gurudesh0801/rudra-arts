@@ -8,10 +8,11 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cartItems");
+    console.log("💾 Loaded from localStorage:", savedCart);
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
     }
-    setIsCartLoading(false); // Done loading
+    setIsCartLoading(false);
   }, []);
 
   useEffect(() => {

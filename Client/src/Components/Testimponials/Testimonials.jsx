@@ -1,41 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-
-// Import your single weapon image
-import weaponBg from "/weapons/weapon1.png";
-import weaponBg2 from "/weapons/weapon2.png";
+import weaponBg2 from "/weapons/weapon2.png"; // subtle wallpaper
 
 const Testimonials = () => {
-  const cardVariants = {
-    offscreen: {
-      y: 50,
-      opacity: 0,
-    },
-    onscreen: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        bounce: 0.4,
-        duration: 0.8,
-      },
-    },
-  };
-
-  const weaponVariants = {
-    hover: {
-      y: -10,
-      rotate: -5,
-      transition: { type: "spring", stiffness: 300 },
-    },
-  };
-
   const testimonials = [
     {
       name: "Donald Jackman",
       title: "Arms Historian",
       img: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200",
-      weaponAlt: "Historic weapon",
       quote:
         "The craftsmanship displayed here rivals the royal armories of 15th century Europe.",
     },
@@ -43,7 +15,6 @@ const Testimonials = () => {
       name: "Richard Nelson",
       title: "Museum Guide",
       img: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
-      weaponAlt: "Historic weapon",
       quote:
         "A magnificent collection that preserves not just weapons, but the honor of their wielders.",
     },
@@ -51,55 +22,32 @@ const Testimonials = () => {
       name: "James Washington",
       title: "Antique Collector",
       img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200",
-      weaponAlt: "Historic weapon",
       quote:
         "Each piece tells a story. This collection brings history's warriors back to life.",
     },
   ];
 
-  // Background elements with different weapon angles
-  const backgroundElements = Array.from({ length: 20 }).map((_, i) => ({
-    id: i,
-    top: `${Math.random() * 100}%`,
-    left: `${Math.random() * 100}%`,
-    rotation: `${Math.random() * 360}deg`,
-    opacity: 0.05 + Math.random() * 0.05,
-    size: `${30 + Math.random() * 70}px`,
-    flip: Math.random() > 0.5 ? "scaleX(-1)" : "scaleX(1)",
-  }));
+  const cardVariants = {
+    offscreen: { y: 50, opacity: 0 },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", bounce: 0.4, duration: 0.8 },
+    },
+  };
 
   return (
-    <div className="relative max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center overflow-hidden bg-black">
-      {/* Parallax weapon background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {backgroundElements.map((item) => (
-          <motion.img
-            key={item.id}
-            src={weaponBg2}
-            alt="background-weapon"
-            className="absolute invert"
-            style={{
-              top: item.top,
-              left: item.left,
-              width: item.size,
-              height: "auto",
-              transform: `rotate(${item.rotation}) ${item.flip}`,
-            }}
-            initial={{ y: 0 }}
-            whileInView={{
-              y: [0, 20, 0],
-              transition: {
-                duration: 10 + Math.random() * 20,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Gradient overlay */}
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 z-10" /> */}
+    <div className="relative max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center overflow-hidden bg-[#8C391B]">
+      {/* Wallpaper background with repeated weapon image */}
+      <div
+        className="absolute inset-0 z-0 opacity-10"
+        style={{
+          backgroundImage: `url(${weaponBg2})`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "120px",
+          filter: "grayscale(100%) contrast(1)",
+        }}
+      />
 
       <div className="relative z-20 text-white">
         <motion.div
@@ -113,7 +61,7 @@ const Testimonials = () => {
             Armory Chronicles
           </h1>
           <div className="w-20 h-1 bg-amber-500 mx-auto mb-6" />
-          <p className="text-sm md:text-base text-gray-300 max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-gray-200 max-w-2xl mx-auto">
             Hear from collectors and historians about these legendary weapons
             that shaped history.
           </p>
@@ -129,20 +77,7 @@ const Testimonials = () => {
               variants={cardVariants}
               className="w-full sm:w-[350px] relative group"
             >
-              {/* Weapon display - using the same weaponBg image */}
-              <motion.div
-                className="absolute -top-16 left-[7rem] z-10"
-                whileHover="hover"
-                variants={weaponVariants}
-              >
-                <img
-                  src={weaponBg}
-                  alt={testimonial.weaponAlt}
-                  className="h-28 object-contain filter drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]"
-                />
-              </motion.div>
-
-              {/* Testimonial card */}
+              {/* Testimonial Card */}
               <div className="pt-20 pb-8 px-6 rounded-lg border border-amber-900/50 bg-gradient-to-b from-gray-900/80 to-gray-900/50 backdrop-blur-sm shadow-lg">
                 <div className="flex flex-col items-center">
                   <motion.img
@@ -197,7 +132,7 @@ const Testimonials = () => {
                 </div>
               </div>
 
-              {/* Decorative corner elements */}
+              {/* Decorative Corners */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-500/50" />
               <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-500/50" />
               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-500/50" />

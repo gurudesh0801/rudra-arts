@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import aboutBg from "/images/contactbg.png";
+import aboutBg from "/images/fort4.png";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
