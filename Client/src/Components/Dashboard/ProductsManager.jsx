@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -18,23 +19,35 @@ import {
   DialogActions,
   TextField,
   Button,
+  FormControlLabel,
+  Switch,
+  Chip,
+  InputAdornment,
 } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, CheckCircle, Cancel } from "@mui/icons-material";
 import DashboardLayout from "./DashboardLayout";
+import { toast } from "react-toastify";
+import { Search } from "lucide-react";
 
 const ProductManager = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editProduct, setEditProduct] = useState(null); // For editing product
+  const [editProduct, setEditProduct] = useState(null);
+  const [stockFilter, setStockFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
   const [editFormData, setEditFormData] = useState({
     pname: "",
     pprice: "",
     psize: "",
     pcategory: "",
-    pimage: [], // Changed ,
+    pimage: [],
     pdiscount: "",
+    inStock: true,
   });
 
+  // Fetch products
   const fetchProducts = async () => {
     try {
       const res = await fetch(
@@ -44,11 +57,13 @@ const ProductManager = () => {
       setProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
+      toast.error("Failed to load products");
     } finally {
       setLoading(false);
     }
   };
 
+  // Delete product
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?"))
       return;
@@ -65,12 +80,41 @@ const ProductManager = () => {
         throw new Error("Failed to delete product");
       }
 
+      toast.success("Product deleted successfully");
       fetchProducts();
     } catch (err) {
       console.error("Delete error:", err);
+      toast.error("Failed to delete product");
     }
   };
 
+  // Toggle stock status
+  const toggleStockStatus = async (productId, currentStatus) => {
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_BASE_URL_PRODUCTION
+        }/api/products/${productId}/stock`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ inStock: !currentStatus }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to update stock status");
+
+      toast.success("Stock status updated");
+      fetchProducts();
+    } catch (err) {
+      console.error("Stock update error:", err);
+      toast.error("Failed to update stock status");
+    }
+  };
+
+  // Handle edit click
   const handleEditClick = (product) => {
     setEditProduct(product);
     setEditFormData({
@@ -80,19 +124,11 @@ const ProductManager = () => {
       pcategory: product.product_category,
       pimage: product.product_image,
       pdiscount: product.product_discount || "",
+      inStock: product.inStock !== false,
     });
   };
 
-  console.log(editFormData);
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
+  // Handle edit save
   const handleEditSave = async () => {
     try {
       const res = await fetch(
@@ -105,9 +141,13 @@ const ProductManager = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...editFormData,
-            pimage: editFormData.pimage,
-            pdiscount: editFormData.pdiscount || 0,
+            product_name: editFormData.pname,
+            product_price: editFormData.pprice,
+            product_size: editFormData.psize,
+            product_category: editFormData.pcategory,
+            product_image: editFormData.pimage,
+            product_discount: editFormData.pdiscount || 0,
+            inStock: editFormData.inStock,
           }),
         }
       );
@@ -116,50 +156,31 @@ const ProductManager = () => {
         throw new Error("Failed to update product");
       }
 
-      setEditProduct(null); // Close modal
-      fetchProducts(); // Refresh list
+      setEditProduct(null);
+      fetchProducts();
+      toast.success("Product updated successfully");
     } catch (err) {
       console.error("Edit error:", err);
+      toast.error("Failed to update product");
     }
   };
 
+  // Handle edit cancel
   const handleEditCancel = () => {
     setEditProduct(null);
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "rudra-arts"); // replace
-    formData.append("cloud_name", "dxpf6dhn1"); // optional if preset config handles this
-
-    try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dxpf6dhn1/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await res.json();
-      setEditFormData((prev) => ({
-        ...prev,
-        pimage: data.secure_url,
-      }));
-    } catch (error) {
-      console.error("Image upload failed:", error);
-    }
+  // Handle form field changes
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleMultipleImageChange = async (e, index) => {
+  // Handle image upload
+  const handleImageChange = async (e, index) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -185,20 +206,109 @@ const ProductManager = () => {
       }));
     } catch (error) {
       console.error("Upload error:", error);
+      toast.error("Image upload failed");
     }
   };
+
+  // Filter products based on stock status
+  const filteredProducts = products.filter((product) => {
+    // Search term filter
+    const matchesSearch = product.product_name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    // Stock status filter
+    const matchesStock =
+      stockFilter === "all" ||
+      (stockFilter === "inStock" && product.inStock !== false) ||
+      (stockFilter === "outOfStock" && product.inStock === false);
+
+    return matchesSearch && matchesStock;
+  });
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <DashboardLayout>
       <Box p={4}>
-        <Typography
-          variant="h4"
-          fontWeight="bold"
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
           mb={4}
-          className="text-3xl font-outfit"
+          flexWrap="wrap"
+          gap={2}
         >
-          All Products
-        </Typography>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            className="text-3xl font-outfit"
+          >
+            Product Inventory
+          </Typography>
+
+          {/* Search Box */}
+          <TextField
+            variant="outlined"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              flexGrow: 1,
+              maxWidth: "400px",
+              mx: 2,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "50px",
+                backgroundColor: "background.paper",
+              },
+            }}
+          />
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/admin/add-products")}
+          >
+            Add Product
+          </Button>
+        </Box>
+
+        {/* Stock Filter Controls */}
+        <Box display="flex" gap={2} mb={4}>
+          <Chip
+            label="All Products"
+            clickable
+            color={stockFilter === "all" ? "primary" : "default"}
+            onClick={() => setStockFilter("all")}
+          />
+          <Chip
+            label="In Stock"
+            clickable
+            color={stockFilter === "inStock" ? "success" : "default"}
+            onClick={() => setStockFilter("inStock")}
+            icon={<CheckCircle fontSize="small" />}
+          />
+          <Chip
+            label="Out of Stock"
+            clickable
+            color={stockFilter === "outOfStock" ? "error" : "default"}
+            onClick={() => setStockFilter("outOfStock")}
+            icon={<Cancel fontSize="small" />}
+          />
+        </Box>
 
         {loading ? (
           <Box
@@ -209,9 +319,9 @@ const ProductManager = () => {
           >
             <CircularProgress />
           </Box>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <Typography textAlign="center" color="text.secondary">
-            No products found.
+            No products found matching your criteria.
           </Typography>
         ) : (
           <TableContainer component={Paper} elevation={3}>
@@ -223,13 +333,21 @@ const ProductManager = () => {
                   <TableCell>Price (₹)</TableCell>
                   <TableCell>Size</TableCell>
                   <TableCell>Category</TableCell>
+                  <TableCell align="center">Stock</TableCell>
                   <TableCell align="center">Discount</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product._id}>
+                {filteredProducts.map((product) => (
+                  <TableRow
+                    key={product._id}
+                    sx={{
+                      opacity: product.inStock === false ? 0.7 : 1,
+                      backgroundColor:
+                        product.inStock === false ? "#fff8f8" : "inherit",
+                    }}
+                  >
                     <TableCell>
                       <Avatar
                         variant="rounded"
@@ -242,7 +360,26 @@ const ProductManager = () => {
                     <TableCell>₹{product.product_price}</TableCell>
                     <TableCell>{product.product_size}</TableCell>
                     <TableCell>{product.product_category}</TableCell>
-                    <TableCell>{product.product_discount}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={() =>
+                          toggleStockStatus(
+                            product._id,
+                            product.inStock !== false
+                          )
+                        }
+                        color={product.inStock !== false ? "success" : "error"}
+                      >
+                        {product.inStock !== false ? (
+                          <CheckCircle />
+                        ) : (
+                          <Cancel />
+                        )}
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      {product.product_discount || "0"}%
+                    </TableCell>
                     <TableCell align="center">
                       <IconButton
                         color="primary"
@@ -273,7 +410,6 @@ const ProductManager = () => {
           }}
         >
           <DialogTitle>Edit Product</DialogTitle>
-
           <DialogContent
             sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
           >
@@ -300,11 +436,12 @@ const ProductManager = () => {
               fullWidth
             />
             <TextField
-              label="Product Discount"
+              label="Product Discount (%)"
               name="pdiscount"
               value={editFormData.pdiscount}
               onChange={handleEditChange}
               fullWidth
+              type="number"
             />
             <TextField
               label="Product Category"
@@ -314,8 +451,8 @@ const ProductManager = () => {
               fullWidth
             />
 
-            {/* Upload Image Button */}
-            <Typography variant="subtitle1">Product Images (max 4)</Typography>
+            {/* Image Upload Section */}
+            <Typography variant="subtitle1">Product Images</Typography>
             <Box display="flex" flexWrap="wrap" gap={2}>
               {[0, 1, 2, 3].map((i) => (
                 <Box
@@ -348,19 +485,38 @@ const ProductManager = () => {
                         type="file"
                         hidden
                         accept="image/*"
-                        onChange={(e) => handleMultipleImageChange(e, i)}
+                        onChange={(e) => handleImageChange(e, i)}
                       />
                     </Button>
                   )}
                 </Box>
               ))}
             </Box>
-          </DialogContent>
 
+            {/* Stock Status Switch */}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={editFormData.inStock}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      inStock: e.target.checked,
+                    })
+                  }
+                  name="inStock"
+                  color="primary"
+                />
+              }
+              label={editFormData.inStock ? "In Stock" : "Out of Stock"}
+              labelPlacement="start"
+              sx={{ justifyContent: "space-between", ml: 0 }}
+            />
+          </DialogContent>
           <DialogActions>
             <Button onClick={handleEditCancel}>Cancel</Button>
             <Button variant="contained" onClick={handleEditSave}>
-              Save
+              Save Changes
             </Button>
           </DialogActions>
         </Dialog>

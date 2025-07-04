@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const images = [
   { src: "/images/IMG-20250617-WA0006.jpg", title: "Mountain View" },
@@ -52,15 +53,9 @@ const Lorem = () => {
 
   return (
     <section className="px-6 py-12 bg-gray-100 mt-12">
-      <h2 className="text-5xl font-bold font-montserrat text-[#794121] text-center mb-4 mt-10">
-        Collage Gallery
+      <h2 className="text-5xl font-bold font-montserrat text-center mb-5 mt-10">
+        <AnimatedUnderline>Collage Gallery</AnimatedUnderline>
       </h2>
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-        className="border-b-4 w-60 mx-auto border-[#794121] mb-10"
-      ></motion.div>
 
       {/* Masonry Columns */}
       <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">

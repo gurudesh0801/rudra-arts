@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,9 @@ export default function AutoScrollCarousel() {
   const [isHovered, setIsHovered] = useState(false);
   const controls = useAnimation();
   const navigate = useNavigate();
+  const progressRef = useRef(0);
+  const animationRef = useRef(null);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     const fetchLatestProducts = async () => {
@@ -17,7 +20,11 @@ export default function AutoScrollCarousel() {
           `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/products`
         );
         const data = await res.json();
-        setProducts(data.slice(-10)); // Show latest 10
+        // Sort by newest first (assuming products have createdAt field)
+        const sortedProducts = data.sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+        setProducts(sortedProducts.slice(0, 10)); // Show latest 10
       } catch (err) {
         console.error("Failed to fetch products", err);
       }
@@ -27,21 +34,65 @@ export default function AutoScrollCarousel() {
   }, []);
 
   useEffect(() => {
-    const sequence = async () => {
+    let rafId;
+    let unsubscribe;
+
+    const trackProgress = () => {
+      if (carouselRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100;
+        progressRef.current = progress;
+      }
+      rafId = requestAnimationFrame(trackProgress);
+    };
+
+    const startAnimation = async () => {
       if (!isHovered) {
+        // Start from current progress
         await controls.start({
-          x: ["100%", "-100%"],
+          x: [`${-progressRef.current}%`, "-100%"],
+          transition: {
+            duration: 40 * (1 - progressRef.current / 100),
+            ease: "linear",
+          },
+        });
+
+        // Infinite loop after first complete cycle
+        animationRef.current = controls.start({
+          x: ["0%", "-100%"],
           transition: {
             repeat: Infinity,
             duration: 40,
             ease: "linear",
           },
         });
+
+        // Start tracking progress
+        rafId = requestAnimationFrame(trackProgress);
       } else {
-        controls.stop(); // This is the correct way to stop animations
+        // Stop animation and progress tracking
+        if (animationRef.current) {
+          controls.stop();
+        }
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
       }
     };
-    sequence();
+
+    startAnimation();
+
+    return () => {
+      if (animationRef.current) {
+        controls.stop();
+      }
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [isHovered, controls]);
 
   if (!products.length) return null;
@@ -62,12 +113,12 @@ export default function AutoScrollCarousel() {
         <span className="block w-16 h-1 bg-orange-500 mt-2"></span>
       </h2>
 
-      <motion.div className="flex gap-8" animate={controls}>
+      <motion.div className="flex gap-8" animate={controls} ref={carouselRef}>
         {[...products, ...products].map((product, index) => (
           <motion.div
             key={`${product._id}-${index}`}
             className="relative group cursor-pointer min-w-[280px]"
-            onClick={() => navigate(`/product/${product._id}`)}
+            onClick={() => navigate(`/product-details/${product._id}`)}
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,9 +126,12 @@ export default function AutoScrollCarousel() {
           >
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
               <img
-                src={product.product_image?.[0]}
+                src={product.product_image?.[0] || "/placeholder-image.jpg"}
                 alt={product.product_name}
                 className="w-full h-48 object-cover rounded-2xl transform transition-all duration-500 group-hover:scale-110"
+                onError={(e) => {
+                  e.target.src = "/placeholder-image.jpg";
+                }}
               />
 
               {/* Glow effect */}
@@ -95,10 +149,12 @@ export default function AutoScrollCarousel() {
                 </div>
               </div>
 
-              {/* Floating tag */}
-              <div className="absolute top-4 right-4 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
-                New
-              </div>
+              {/* Floating tag - only show on first 3 newest products */}
+              {index < 3 && (
+                <div className="absolute top-4 right-4 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                  New
+                </div>
+              )}
             </div>
           </motion.div>
         ))}
@@ -109,13 +165,13 @@ export default function AutoScrollCarousel() {
         <div className="h-1 w-full bg-gray-700 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-orange-500"
+            initial={{ width: "0%" }}
             animate={{
-              width: isHovered ? "0%" : "100%",
+              width: isHovered ? `${progressRef.current}%` : "100%",
             }}
             transition={{
-              duration: 40,
+              duration: isHovered ? 0 : 40 * (1 - progressRef.current / 100),
               ease: "linear",
-              repeat: Infinity,
             }}
           />
         </div>

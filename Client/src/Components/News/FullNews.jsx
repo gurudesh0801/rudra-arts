@@ -1,52 +1,8 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import img1 from "../../assets/images/blog1.jpg";
-import img2 from "../../assets/images/blog2.jpg";
-import img3 from "../../assets/images/blog3.jpg";
-
-const newsData = [
-  {
-    title: "Rudra Arts Unveils New Statue Collection",
-    description:
-      "Experience the depth of Indian mythology with our latest hand-sculpted masterpieces crafted by traditional artisans.",
-    image: img1,
-    link: "/news/statue-collection",
-  },
-  {
-    title: "Featured in National Handicraft Exhibition 2025",
-    description:
-      "We proudly showcased our handcrafted decor at India’s largest cultural heritage exhibition, receiving national acclaim.",
-    image: img2,
-    link: "/news/exhibition-2025",
-  },
-  {
-    title: "Behind the Scenes: Crafting Spiritual Murals",
-    description:
-      "Take a glimpse into our mural-making process that blends spiritual symbolism with artistic realism.",
-    image: img3,
-    link: "/news/spiritual-murals",
-  },
-  {
-    title: "Rudra Arts Unveils New Statue Collection",
-    description:
-      "Experience the depth of Indian mythology with our latest hand-sculpted masterpieces crafted by traditional artisans.",
-    image: img1,
-    link: "/news/statue-collection",
-  },
-  {
-    title: "Featured in National Handicraft Exhibition 2025",
-    description:
-      "We proudly showcased our handcrafted decor at India’s largest cultural heritage exhibition, receiving national acclaim.",
-    image: img2,
-    link: "/news/exhibition-2025",
-  },
-  {
-    title: "Behind the Scenes: Crafting Spiritual Murals",
-    description:
-      "Take a glimpse into our mural-making process that blends spiritual symbolism with artistic realism.",
-    image: img3,
-    link: "/news/spiritual-murals",
-  },
-];
+import { Typography, Box, Button } from "@mui/material";
+import weaponsBg from "../../assets/images/Weponsbg.jpg";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -58,63 +14,361 @@ const cardVariants = {
 };
 
 const FullNews = () => {
+  const [newsData, setNewsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    totalItems: 0,
+  });
+
+  const fetchNewsData = async (page = 1) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const apiUrl = `${
+        import.meta.env.VITE_BASE_URL_PRODUCTION
+      }/api/news?page=${page}&limit=6`;
+      console.log("Fetching news from:", apiUrl);
+
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data.newsItems)) {
+        throw new Error(
+          "Invalid format: 'newsItems' array missing in response"
+        );
+      }
+
+      setNewsData(data.newsItems.filter((item) => !item.isHide));
+      setPagination({
+        page: Number(data.currentPage),
+        totalPages: data.totalPages,
+        totalItems: data.totalItems,
+      });
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNewsData();
+  }, []);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchNewsData(newPage);
+    }
+  };
+
   return (
-    <section className="w-full mt-10 bg-[#fdfaf6] py-20 px-6 font-sans">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-6xl mx-auto text-center mb-12 mt-16"
+    <Box
+      sx={{
+        position: "relative",
+        py: 8,
+        overflow: "hidden",
+        minHeight: "100vh",
+      }}
+    >
+      {/* Background with overlay */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          backgroundImage: `url(${weaponsBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            backgroundColor: "rgba(255, 255, 255, 0.92)",
+          },
+        }}
+      />
+
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: "1200px",
+          margin: "0 auto",
+          px: { xs: 3, md: 4 },
+        }}
       >
-        <h2 className="text-5xl font-bold text-[#3b2f2f] mb-4 font-montserrat">
-          Latest from Rudra Arts
-        </h2>
-        <p className="text-gray-700 max-w-xl mx-auto">
-          Stay updated with our artistic journey, media features, exhibitions,
-          and creative insights.
-        </p>
-      </motion.div>
-
-      {/* News Grid */}
-      <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-        {newsData.map((news, index) => (
-          <motion.div
-            key={index}
-            custom={index}
-            initial="hidden"
-            animate="visible"
-            variants={cardVariants}
-            className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden flex flex-col"
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: "2.2rem", md: "3rem" },
+              fontWeight: "bold",
+              mb: 2,
+              color: "#3b2f2f",
+              fontFamily: "'Montserrat', sans-serif",
+            }}
+            className="pt-20"
           >
-            {/* Image */}
-            <div className="w-full h-64 overflow-hidden">
-              <img
-                src={news.image}
-                alt={news.title}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
+            <AnimatedUnderline> Latest from Rudra Arts</AnimatedUnderline>
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              maxWidth: "600px",
+              mx: "auto",
+              color: "#555",
+              fontSize: "1.1rem",
+            }}
+          >
+            Stay updated with our artistic journey, media features, exhibitions,
+            and creative insights.
+          </Typography>
+        </motion.div>
 
-            {/* Content */}
-            <div className="p-6 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-semibold text-[#3b2f2f] mb-2">
-                  {news.title}
-                </h3>
-                <p className="text-gray-700 text-sm">{news.description}</p>
-              </div>
-              <a
-                href={news.link}
-                className="w-50 mt-4 inline-block bg-customBrown hover:bg-[#d89b60] text-white text-sm font-semibold px-4 py-2 rounded transition-colors duration-300"
+        {/* Error State */}
+        {error && (
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography color="error" sx={{ mb: 2 }}>
+              Error: {error}
+            </Typography>
+            <Button
+              onClick={() => fetchNewsData(pagination.page)}
+              variant="contained"
+              sx={{
+                bgcolor: "#8C391B",
+                "&:hover": { bgcolor: "#A04A2B" },
+              }}
+            >
+              Retry
+            </Button>
+          </Box>
+        )}
+
+        {/* Loading Spinner */}
+        {loading && newsData.length === 0 && (
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Box
+              sx={{
+                display: "inline-block",
+                animation: "spin 1s linear infinite",
+                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                border: "3px solid rgba(140, 57, 27, 0.3)",
+                borderTopColor: "#8C391B",
+                mb: 2,
+              }}
+            />
+            <Typography>Loading news...</Typography>
+          </Box>
+        )}
+
+        {/* News Cards Grid */}
+        {!error && newsData.length > 0 && (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+              gap: 4,
+              mb: 6,
+            }}
+          >
+            {newsData.map((news, index) => (
+              <motion.div
+                key={news._id || index}
+                custom={index}
+                initial="hidden"
+                animate="visible"
+                variants={cardVariants}
               >
-                Read More
-              </a>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
+                <Box
+                  sx={{
+                    bgcolor: "background.paper",
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    boxShadow: 3,
+                    transition: "all 0.3s ease",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: 6,
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      height: "250px",
+                      overflow: "hidden",
+                      position: "relative",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={news.image}
+                      alt={news.title}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.5s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                        },
+                      }}
+                      onError={(e) => {
+                        e.target.src = "/placeholder-news.jpg";
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "60px",
+                        background:
+                          "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+                      }}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      p: 3,
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        mb: 2,
+                        color: "text.primary",
+                        fontFamily: "'Montserrat', sans-serif",
+                      }}
+                    >
+                      {news.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "text.secondary",
+                        mb: 3,
+                        flex: 1,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {news.description}
+                    </Typography>
+                    <Button
+                      href={news.link || `/news/${news._id}`}
+                      variant="contained"
+                      sx={{
+                        alignSelf: "flex-start",
+                        bgcolor: "#8C391B",
+                        "&:hover": { bgcolor: "#A04A2B" },
+                      }}
+                    >
+                      Read More
+                    </Button>
+                  </Box>
+                </Box>
+              </motion.div>
+            ))}
+          </Box>
+        )}
+
+        {/* Pagination */}
+        {!error && pagination.totalPages > 1 && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Button
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={pagination.page === 1}
+                sx={{
+                  minWidth: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  "&:disabled": { opacity: 0.5 },
+                }}
+              >
+                &lt;
+              </Button>
+              {Array.from({ length: pagination.totalPages }, (_, i) => (
+                <Button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  sx={{
+                    minWidth: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    bgcolor:
+                      pagination.page === i + 1 ? "#8C391B" : "transparent",
+                    color: pagination.page === i + 1 ? "#fff" : "inherit",
+                    "&:hover": {
+                      bgcolor:
+                        pagination.page === i + 1
+                          ? "#8C391B"
+                          : "rgba(0,0,0,0.1)",
+                    },
+                  }}
+                >
+                  {i + 1}
+                </Button>
+              ))}
+              <Button
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={pagination.page === pagination.totalPages}
+                sx={{
+                  minWidth: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  "&:disabled": { opacity: 0.5 },
+                }}
+              >
+                &gt;
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        {/* Empty state */}
+        {!loading && !error && newsData.length === 0 && (
+          <Box sx={{ textAlign: "center", py: 6 }}>
+            <Typography variant="h6" sx={{ color: "text.secondary" }}>
+              No news articles found.
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 

@@ -115,3 +115,63 @@ export const getPendingBlogs = async (req, res) => {
     res.status(500).json({ error: "Server Error", details: err.message });
   }
 };
+
+export const updateBlog = async (req, res) => {
+  try {
+    const { title, content, author } = req.body;
+    const updateData = { title, content, author };
+
+    if (req.file) {
+      const result = await streamUpload(req);
+      updateData.image = result.secure_url;
+    }
+
+    const blog = await Blog.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+    });
+
+    if (!blog) return res.status(404).json({ error: "Blog not found" });
+
+    res.json({ message: "Blog updated successfully", blog });
+  } catch (err) {
+    res.status(500).json({ error: "Server Error", details: err.message });
+  }
+};
+
+export const deleteBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findByIdAndDelete(req.params.id);
+    if (!blog) return res.status(404).json({ error: "Blog not found" });
+
+    res.json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Server Error", details: err.message });
+  }
+};
+
+export const toggleBlogHide = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ error: "Blog not found" });
+
+    blog.isHidden = !blog.isHidden;
+    await blog.save();
+
+    res.json({
+      message: `Blog ${blog.isHidden ? "hidden" : "visible"} successfully.`,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getBlogById = async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    res.json(blog);
+  } else {
+    res.status(404);
+    throw new Error("Blog not found");
+  }
+};

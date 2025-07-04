@@ -1,8 +1,9 @@
+// src/pages/Login.jsx
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import loginImg from "../../assets/images/realImg.jpg";
+import loginImg from "/images/fort8.jpg";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -35,7 +36,6 @@ const Login = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({ username, password }),
         }
       );
@@ -43,12 +43,13 @@ const Login = () => {
       const data = await res.json();
 
       if (res.ok) {
+        localStorage.setItem("isAdminLoggedIn", "true");
         navigate("/admin/dashboard");
       } else {
         setError(data.error || "Login failed.");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -58,7 +59,7 @@ const Login = () => {
   return (
     <div
       className="mt-16 min-h-screen flex items-center justify-center bg-cover bg-center px-4 font-outfit"
-      style={{ backgroundImage: `url(${loginImg})` }} // Place the image in /public
+      style={{ backgroundImage: `url(${loginImg})` }}
     >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -66,7 +67,7 @@ const Login = () => {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md backdrop-blur-lg bg-black/10 border border-white/30 rounded-xl shadow-xl p-8 text-black"
       >
-        <h2 className="text-4xl text-white font-bold text-center mb-6 drop-shadow">
+        <h2 className="text-4xl text-white font-bold text-center mb-6 drop-shadow text-montserrat">
           Rudra Arts & Handicrafts Login
         </h2>
 

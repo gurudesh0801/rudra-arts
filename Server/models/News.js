@@ -18,6 +18,7 @@ const newsSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isHide: { type: Boolean, default: false },
   },
   {
     timestamps: true,

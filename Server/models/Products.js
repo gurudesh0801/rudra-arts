@@ -35,6 +35,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    inStock: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 ); // Optional: Adds createdAt and updatedAt

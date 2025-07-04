@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import DashboardLayout from "./DashboardLayout";
+import { useNavigate } from "react-router-dom";
 
 const AddNews = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -58,6 +60,16 @@ const AddNews = () => {
   return (
     <DashboardLayout>
       <div className="max-w-xl font-outfit mx-auto p-6 mt-10 bg-white shadow-xl rounded-xl border border-gray-200">
+        {/* Back Button */}
+        <div className="mb-4">
+          <button
+            onClick={() => navigate("/admin/news-manager")}
+            className="text-sm text-indigo-600 hover:underline font-medium"
+          >
+            ← Back to News Manager
+          </button>
+        </div>
+
         <h2 className="text-3xl font-semibold mb-6 text-center text-gray-800">
           Add News
         </h2>

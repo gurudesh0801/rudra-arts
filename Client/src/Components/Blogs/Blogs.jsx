@@ -1,42 +1,14 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { FiSearch, FiX, FiArrowRight } from "react-icons/fi";
+import { Typography, Avatar, Box } from "@mui/material";
+import weaponsBg from "../../assets/images/Weponsbg.jpg";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import { Link } from "react-router-dom";
 
-const placeholderImages = [
-  "https://picsum.photos/id/10/600/400",
-  "https://picsum.photos/id/20/600/400",
-  "https://picsum.photos/id/30/600/400",
-  "https://picsum.photos/id/40/600/400",
-  "https://picsum.photos/id/50/600/400",
-  "https://picsum.photos/id/60/600/400",
-];
-
-const generateBlogData = () => {
-  const titles = [
-    "The Art of Sculpture Making",
-    "Ancient Techniques in Modern Art",
-    "Exploring Cultural Heritage",
-    "Materials That Shape History",
-    "From Clay to Masterpiece",
-    "Preserving Traditional Crafts",
-  ];
-
-  return titles.map((title, index) => ({
-    id: index + 1,
-    title,
-    image: placeholderImages[index],
-    shortDesc:
-      "Discover the fascinating journey from raw materials to timeless artistry in this detailed exploration.",
-    fullDesc:
-      "In this article, we delve into the meticulous process of transforming raw clay into a finished sculpture...",
-    date: "May 15, 2025",
-    author: "Rudra Arts",
-  }));
-};
-
-const cardVariants = {
+const cardFade = {
   hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
+  visible: (i = 0) => ({
     opacity: 1,
     y: 0,
     transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
@@ -44,239 +16,482 @@ const cardVariants = {
 };
 
 const Blogs = () => {
-  const [expandedId, setExpandedId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({
-    title: "",
-    content: "",
-    author: "",
-    image: null,
-  });
-  const [successMsg, setSuccessMsg] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  const toggleExpand = (id) => {
-    setExpandedId((prevId) => (prevId === id ? null : id));
-  };
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccessMsg("");
-    setLoading(true); // Start loading
-
+  const fetchBlogs = async () => {
     try {
-      const formData = new FormData();
-      for (const key in form) {
-        if (form[key]) formData.append(key, form[key]);
-      }
-
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/blogs/submit`,
-        {
-          method: "POST",
-          body: formData,
-        }
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/blogs/all`
       );
-
-      if (!res.ok) throw new Error("Failed to submit blog");
-
-      setForm({ title: "", content: "", author: "", image: null });
-      setSuccessMsg("✅ Blog submitted for admin review!");
-      setTimeout(() => {
-        setShowModal(false);
-        setSuccessMsg("");
-      }, 2000);
+      const data = await res.json();
+      setBlogs(data.reverse());
     } catch (err) {
-      alert("❌ Failed to submit blog");
-    } finally {
-      setLoading(false); // Stop loading
+      console.error("Failed to fetch blogs:", err);
     }
   };
 
-  const blogData = generateBlogData();
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const getExcerpt = (text, charLimit = 150) => {
+    if (text.length <= charLimit) return text;
+    return text.substring(0, charLimit).trim() + "...";
+  };
+
+  const filteredBlogs = blogs
+    .filter((blog) => !blog.isHidden) // <-- exclude hidden blogs
+    .filter((blog) => {
+      const searchLower = searchTerm.toLowerCase();
+      return (
+        blog.title.toLowerCase().includes(searchLower) ||
+        blog.content.toLowerCase().includes(searchLower) ||
+        (blog.author && blog.author.toLowerCase().includes(searchLower))
+      );
+    });
 
   return (
-    <div className="py-20 px-6 mt-20 bg-[#fdfaf6] relative font-sans">
-      {/* Create Blog Floating Button */}
-      <button
-        onClick={() => setShowModal(true)}
-        className="fixed z-50 top-32 right-8 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 transition"
+    <Box
+      sx={{
+        position: "relative",
+        py: 8,
+        overflow: "hidden",
+      }}
+    >
+      {/* Background with overlay */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          backgroundImage: `url(${weaponsBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            backgroundColor: "rgba(255, 255, 255, 0.92)",
+          },
+        }}
+      />
+
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 20,
+          maxWidth: "1200px",
+          margin: "0 auto",
+          px: { xs: 3, md: 4 },
+        }}
       >
-        <div className="flex items-center">
-          <Plus /> <p>Create Blog</p>
-        </div>
-      </button>
-
-      {/* Modal */}
-      <AnimatePresence>
-        {showModal && (
+        {/* Hero Section */}
+        <Box sx={{ textAlign: "center", mb: 8 }}>
           <motion.div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white w-full max-w-lg rounded-lg p-6 shadow-lg"
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "2.2rem", md: "3rem" },
+                fontWeight: "bold",
+                mb: 3,
+                letterSpacing: "-0.5px",
+                lineHeight: 1.2,
+              }}
+              className="font-montserrat pt-14"
             >
-              <h2 className="text-3xl text-center font-outfit font-semibold mb-4">
-                Add a Blog
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  name="title"
-                  value={form.title}
-                  onChange={handleChange}
-                  placeholder="Blog Title"
-                  required
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                <textarea
-                  name="content"
-                  value={form.content}
-                  onChange={handleChange}
-                  rows={4}
-                  placeholder="Blog Content"
-                  required
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="text"
-                  name="author"
-                  value={form.author}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="file"
-                  name="image"
-                  onChange={handleChange}
-                  accept="image/*"
-                  required
-                  className="w-full"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`${
-                    loading
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-customBrown hover:bg-green-700"
-                  } text-white px-4 py-2 rounded transition-all`}
-                >
-                  {loading ? "Submitting..." : "Submit Blog"}
-                </button>
+              <AnimatedUnderline>The Cultural Roots Blog</AnimatedUnderline>
+            </Typography>
+            <Typography
+              sx={{
+                maxWidth: "800px",
+                mx: "auto",
+                fontSize: { xs: "1rem", md: "1.1rem" },
+                color: "#333333",
+                lineHeight: 1.7,
+                mb: 4,
+              }}
+            >
+              Discover the world of traditional craftsmanship and stories behind
+              each masterpiece.
+            </Typography>
 
-                {successMsg && (
-                  <p className="text-green-600 text-sm">{successMsg}</p>
-                )}
-              </form>
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-6 text-2xl text-gray-500 hover:text-gray-700"
+            {/* Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              sx={{
+                maxWidth: "800px",
+                mx: "auto",
+                position: "relative",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: "0 0 0 0",
+                  display: "flex",
+                  alignItems: "center",
+                  pl: 3,
+                  pointerEvents: "none",
+                }}
               >
-                &times;
-              </button>
+                <FiSearch style={{ color: "#8C391B" }} />
+              </Box>
+              <input
+                type="text"
+                placeholder="Search blogs by title, content or author..."
+                style={{
+                  width: "100%",
+                  padding: "16px 16px 16px 40px",
+                  border: "1px solid rgba(0,0,0,0.1)",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  backgroundColor: "rgba(255,255,255,0.8)",
+                  backdropFilter: "blur(4px)",
+                  outline: "none",
+                  transition: "all 0.3s",
+                  boxShadow: isSearchFocused ? "0 0 0 2px #8C391B" : "none",
+                }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  style={{
+                    position: "absolute",
+                    right: "16px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <FiX style={{ color: "#8C391B" }} />
+                </button>
+              )}
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </Box>
 
-      {/* Header */}
-      <div className="text-center max-w-4xl mx-auto mb-12">
-        <h1 className="text-5xl font-bold text-[#3b2f2f] font-montserrat">
-          Artisan Blog
-        </h1>
-        <p className="text-gray-600 mt-2 text-base md:text-lg">
-          Discover the world of traditional craftsmanship and stories behind
-          each masterpiece.
-        </p>
-      </div>
+        {/* Category Tags */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={cardFade}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "12px",
+            marginBottom: "48px",
+          }}
+        >
+          {[
+            "All",
+            "Craftsmanship",
+            "Techniques",
+            "Artisans",
+            "Materials",
+            "History",
+          ].map((tag) => (
+            <button
+              key={tag}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "999px",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                transition: "all 0.3s",
+                backgroundColor:
+                  searchTerm === tag ? "#8C391B" : "rgba(0,0,0,0.05)",
+                color: searchTerm === tag ? "#fff" : "#333",
+                border: "none",
+                cursor: "pointer",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  backgroundColor:
+                    searchTerm === tag ? "#8C391B" : "rgba(0,0,0,0.1)",
+                },
+              }}
+              onClick={() => setSearchTerm(tag === "All" ? "" : tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </motion.div>
 
-      {/* Blog Cards */}
-      <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-        {blogData.map((blog, i) => (
-          <motion.div
-            key={blog.id}
-            variants={cardVariants}
-            viewport={{ once: true }}
-            custom={i}
-            className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+        {/* Blog Grid */}
+        {filteredBlogs.length > 0 ? (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "1fr 1fr",
+                lg: "1fr 1fr 1fr",
+              },
+              gap: "32px",
+            }}
           >
-            <div className="flex items-center justify-between px-4 pt-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">
-                  {blog.author[0]}
-                </div>
-                <div className="text-sm">
-                  <h4 className="font-semibold">{blog.author}</h4>
-                  <p className="text-gray-500 text-xs">{blog.date}</p>
-                </div>
-              </div>
-              <button className="text-gray-400 hover:text-gray-600 text-xl">
-                ⋮
-              </button>
-            </div>
-
-            <img
-              src={blog.image}
-              alt={blog.title}
-              className="w-full h-56 object-cover mt-3"
-            />
-
-            <div className="p-4 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-[#3b2f2f] mb-2">
-                  {blog.title}
-                </h3>
-                <p className="text-sm text-gray-600">{blog.shortDesc}</p>
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <div className="flex items-center gap-4 text-gray-500">
-                  <button className="hover:text-red-500 transition">❤️</button>
-                  <button className="hover:text-blue-500 transition">🔗</button>
-                </div>
-                <button
-                  onClick={() => toggleExpand(blog.id)}
-                  className={`text-sm text-gray-600 hover:text-black transition transform ${
-                    expandedId === blog.id ? "rotate-180" : ""
-                  }`}
-                >
-                  ⌄
-                </button>
-              </div>
-            </div>
-
-            <AnimatePresence initial={false}>
-              {expandedId === blog.id && (
+            {filteredBlogs.map((blog, i) => (
+              <Link
+                to={`/blogs/${blog._id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="px-4 pb-4"
+                  key={blog._id}
+                  variants={cardFade}
+                  viewport={{ once: true }}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  whileHover={{ y: -5 }}
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.8)",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+                    transition: "all 0.3s",
+                    cursor: "pointer",
+                    border: "1px solid rgba(0,0,0,0.1)",
+                    backdropFilter: "blur(4px)",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  <p className="text-sm text-gray-700 mt-2">{blog.fullDesc}</p>
+                  <motion.div
+                    key={blog._id}
+                    variants={cardFade}
+                    viewport={{ once: true }}
+                    custom={i}
+                    initial="hidden"
+                    whileInView="visible"
+                    whileHover={{ y: -5 }}
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.8)",
+                      borderRadius: "12px",
+                      overflow: "hidden",
+                      boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+                      transition: "all 0.3s",
+                      cursor: "pointer",
+                      border: "1px solid rgba(0,0,0,0.1)",
+                      backdropFilter: "blur(4px)",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    onClick={() => openBlogDetail(blog)}
+                  >
+                    {/* Image */}
+                    {blog.image && (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "#fff",
+                          p: 3,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          src={blog.image}
+                          alt={blog.title}
+                          style={{
+                            width: "100%",
+                            height: "auto",
+                            objectFit: "contain",
+                            maxHeight: "256px",
+                          }}
+                        />
+                      </Box>
+                    )}
+
+                    {/* Content */}
+                    <Box
+                      sx={{
+                        p: 4,
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          mb: 2,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "0.75rem",
+                            fontWeight: 500,
+                            px: "8px",
+                            py: "4px",
+                            backgroundColor: "rgba(140, 57, 27, 0.1)",
+                            color: "#8C391B",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          {blog.category || "General"}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "0.75rem",
+                            color: "#666",
+                          }}
+                        >
+                          {new Date(blog.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
+                        </Typography>
+                      </Box>
+
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          fontSize: "1.25rem",
+                          fontWeight: "bold",
+                          mb: 2,
+                          color: "#333",
+                          lineHeight: 1.4,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {blog.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#666",
+                          mb: 3,
+                          lineHeight: 1.6,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {getExcerpt(blog.content, 200)}
+                      </Typography>
+
+                      <Box
+                        sx={{
+                          mt: "auto",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              backgroundColor: "#8C391B",
+                              color: "#fff",
+                              fontSize: "0.875rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {blog.author?.[0] || "A"}
+                          </Avatar>
+                          <Typography
+                            sx={{
+                              fontSize: "0.875rem",
+                              fontWeight: 500,
+                              color: "#333",
+                            }}
+                          >
+                            {blog.author || "Anonymous"}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            color: "#8C391B",
+                            fontSize: "0.875rem",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Read more <FiArrowRight size={14} />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </motion.div>
                 </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        ))}
-      </div>
-    </div>
+              </Link>
+            ))}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 8,
+              backgroundColor: "rgba(255,255,255,0.8)",
+              borderRadius: "8px",
+              backdropFilter: "blur(4px)",
+              border: "1px solid rgba(0,0,0,0.1)",
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: "1.25rem",
+                fontWeight: 500,
+                color: "#666",
+                mb: 2,
+              }}
+            >
+              No blogs found matching your search
+            </Typography>
+            <button
+              onClick={() => setSearchTerm("")}
+              style={{
+                color: "#8C391B",
+                fontWeight: 500,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1rem",
+              }}
+            >
+              Clear search
+            </button>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 

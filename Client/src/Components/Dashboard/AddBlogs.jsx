@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import DashboardLayout from "./DashboardLayout";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AddBlogs = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -9,7 +12,6 @@ const AddBlogs = () => {
     author: "",
   });
   const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -41,10 +43,21 @@ const AddBlogs = () => {
       if (!res.ok) throw new Error("Failed to add blog");
 
       setForm({ title: "", content: "", image: null, author: "" });
-      setSuccessMsg("✅ Blog added successfully!");
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "✅ Blog added successfully!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (err) {
-      alert("❌ Failed to add blog");
       console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "❌ Failed to add blog. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -53,6 +66,14 @@ const AddBlogs = () => {
   return (
     <DashboardLayout>
       <div className="max-w-xl font-outfit mx-auto p-6 mt-10 bg-white shadow-xl rounded-xl border border-gray-200">
+        <div className="mb-4">
+          <button
+            onClick={() => navigate("/admin/blog-manager")}
+            className="text-sm text-indigo-600 hover:underline font-medium"
+          >
+            ← Back to Blog Manager
+          </button>
+        </div>
         <h2 className="text-3xl font-semibold mb-6 text-center text-gray-800">
           Add Blog
         </h2>
@@ -120,12 +141,6 @@ const AddBlogs = () => {
           >
             {loading ? "Uploading..." : "Add Blog"}
           </button>
-
-          {successMsg && (
-            <p className="text-green-600 text-center font-medium">
-              {successMsg}
-            </p>
-          )}
         </form>
       </div>
     </DashboardLayout>

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBlog } from "react-icons/fa";
-import { Add, CheckCircleRounded } from "@mui/icons-material";
+import { Add, CheckBox, CheckCircleRounded } from "@mui/icons-material";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -29,24 +29,19 @@ const Sidebar = () => {
       to: "/admin/dashboard",
     },
     {
-      label: "Add Products",
-      icon: <Add size={20} />,
-      to: "/admin/add-products",
-    },
-    {
       label: "Products",
       icon: <Box size={20} />,
       to: "/admin/products",
     },
     {
-      label: "News",
+      label: "News Manager",
       icon: <Newspaper size={20} />,
-      to: "/admin/news",
+      to: "/admin/news-manager",
     },
     {
-      label: "Blog",
-      icon: <PenLine size={20} />,
-      to: "/admin/blog",
+      label: "Blog Manager",
+      icon: <CheckBox size={20} />,
+      to: "/admin/blog-manager",
     },
     {
       label: "Blog Checker",

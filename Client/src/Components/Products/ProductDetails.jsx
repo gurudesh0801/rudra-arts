@@ -1,8 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiArrowLeft,
+  FiCheck,
+} from "react-icons/fi";
 
+// ZoomImage component remains exactly the same
 const ZoomImage = ({ src, zoom = 2.5, radius = 180 }) => {
   const containerRef = useRef();
   const [showZoom, setShowZoom] = useState(false);
@@ -60,6 +67,9 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const thumbnailContainerRef = useRef(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   const { addToCart } = useCart();
 
@@ -72,7 +82,7 @@ const ProductDetails = () => {
         if (!res.ok) throw new Error("Failed to fetch product");
         const data = await res.json();
         setProduct(data);
-        setSelectedImage(data.product_image?.[0]); // default main image
+        setSelectedImage(data.product_image?.[0]);
       } catch (err) {
         console.error(err);
       } finally {
@@ -81,6 +91,45 @@ const ProductDetails = () => {
     };
     fetchProduct();
   }, [id]);
+
+  const handleNextImage = () => {
+    if (!product?.product_image) return;
+    const nextIndex = (currentImageIndex + 1) % product.product_image.length;
+    setCurrentImageIndex(nextIndex);
+    setSelectedImage(product.product_image[nextIndex]);
+    scrollThumbnail(nextIndex);
+  };
+
+  const handlePrevImage = () => {
+    if (!product?.product_image) return;
+    const prevIndex =
+      (currentImageIndex - 1 + product.product_image.length) %
+      product.product_image.length;
+    setCurrentImageIndex(prevIndex);
+    setSelectedImage(product.product_image[prevIndex]);
+    scrollThumbnail(prevIndex);
+  };
+
+  const scrollThumbnail = (index) => {
+    if (thumbnailContainerRef.current) {
+      const thumbnailWidth = 88;
+      thumbnailContainerRef.current.scrollTo({
+        left: index * thumbnailWidth - thumbnailWidth * 2,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleThumbnailClick = (img, index) => {
+    setSelectedImage(img);
+    setCurrentImageIndex(index);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000); // Hide after 3 seconds
+  };
 
   if (loading) {
     return (
@@ -99,63 +148,130 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-orange-50 via-white to-orange-100 py-20 px-6 mt-16">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden grid md:grid-cols-2 gap-10 p-6 md:p-12"
-      >
-        <div>
-          <ZoomImage src={selectedImage} />
+    <div className="bg-white py-12 px-4 sm:px-6 lg:px-8 mt-10">
+      <AnimatePresence>
+        {showAlert && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-8 right-8 z-50"
+          >
+            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+              <FiCheck className="text-xl" />
+              <span>Product Added to Cart!</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <div className="max-w-7xl mx-auto">
+        {/* Back button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-gray-600 hover:text-orange-600 mb-8 transition-colors duration-200"
+        >
+          <FiArrowLeft className="mr-2" />
+          Back to Products
+        </button>
 
-          <div className="flex gap-3 mt-4 flex-wrap">
-            {product.product_image?.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`Thumbnail ${index}`}
-                className={`h-20 w-20 object-cover rounded-lg border cursor-pointer transition-transform duration-300 hover:scale-105 ${
-                  selectedImage === img
-                    ? "border-orange-500 ring-2 ring-orange-500"
-                    : "border-gray-300"
-                }`}
-                onClick={() => setSelectedImage(img)}
-              />
-            ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Image gallery */}
+          <div className="space-y-6">
+            <div className="relative rounded-xl overflow-hidden bg-gray-50">
+              <ZoomImage src={selectedImage} />
+
+              {product.product_image?.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-2 rounded-full shadow-md transition-all duration-300 z-20 hover:bg-white hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <FiChevronLeft size={24} />
+                  </button>
+                  <button
+                    onClick={handleNextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-2 rounded-full shadow-md transition-all duration-300 z-20 hover:bg-white hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <FiChevronRight size={24} />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Thumbnail strip */}
+            {product.product_image?.length > 1 && (
+              <div className="relative">
+                <div
+                  ref={thumbnailContainerRef}
+                  className="flex space-x-3 overflow-x-auto py-2 scrollbar-hide"
+                >
+                  {product.product_image.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleThumbnailClick(img, index)}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                        currentImageIndex === index
+                          ? "border-orange-500 ring-1 ring-orange-300"
+                          : "border-transparent hover:border-gray-300"
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`Thumbnail ${index}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Product info */}
+          <div className="lg:pt-8">
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                {product.product_name}
+              </h1>
+
+              <div className="flex items-center space-x-4">
+                <p className="text-3xl font-semibold text-orange-600">
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0,
+                  }).format(product.product_price)}
+                </p>
+              </div>
+
+              {product.product_size && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-500">Size:</span>
+                  <span className="font-medium">{product.product_size}</span>
+                </div>
+              )}
+
+              <div className="prose text-gray-500 max-w-none">
+                <p>
+                  {product.product_description || "No description provided."}
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300 shadow-md hover:shadow-lg"
+                >
+                  Add to cart
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-col justify-center">
-          <h1 className="text-4xl font-extrabold text-[#5C4A1C] mb-4 tracking-tight leading-tight">
-            {product.product_name}
-          </h1>
-          <p className="text-md text-gray-600 mb-6 leading-relaxed">
-            {product.product_description || "No description provided."}
-          </p>
-          <p className="text-3xl font-bold text-orange-700 mb-8">
-            {new Intl.NumberFormat("en-IN", {
-              style: "currency",
-              currency: "INR",
-              maximumFractionDigits: 0,
-            }).format(product.product_price)}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => addToCart(product)}
-              className="bg-orange-600 hover:bg-orange-700 text-white text-lg font-medium py-2 px-6 rounded-lg transition duration-300"
-            >
-              Add to cart
-            </button>
-            <button
-              onClick={() => navigate(-1)}
-              className="border border-orange-500 hover:bg-orange-50 text-orange-700 font-medium py-3 px-6 rounded-lg transition duration-300"
-            >
-              Back to Products
-            </button>
-          </div>
-        </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import BrushIcon from "@mui/icons-material/Brush";
 import InsightsIcon from "@mui/icons-material/Insights";
 import Diversity2Icon from "@mui/icons-material/Diversity2";
 import { motion } from "framer-motion";
+import weaponsBg from "../../assets/images/Weponsbg.jpg"; // Using your specified background
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const cardFade = {
   hidden: { opacity: 0, y: 40 },
@@ -23,8 +25,40 @@ const FullAbout = () => {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: "#ffffff", py: 8 }}>
-      <Box sx={{ maxWidth: "1200px", margin: "0 auto", px: { xs: 3, md: 4 } }}>
+    <Box
+      sx={{
+        position: "relative",
+        py: 8,
+        overflow: "hidden",
+      }}
+    >
+      {/* Background with dark overlay */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          backgroundImage: `url(${weaponsBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            inset: 1,
+            backgroundColor: "rgba(255, 255, 255, 0.9)", // Light overlay for better readability
+          },
+        }}
+      />
+
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 20,
+          maxWidth: "1200px",
+          margin: "0 auto",
+          px: { xs: 3, md: 4 },
+        }}
+      >
         {/* Hero Section */}
         <Box sx={{ textAlign: "center", mb: 8 }}>
           <motion.div
@@ -40,13 +74,14 @@ const FullAbout = () => {
                 fontSize: { xs: "2.2rem", md: "3rem" },
                 fontWeight: "bold",
                 mb: 3,
-                color: "#000000",
                 letterSpacing: "-0.5px",
                 lineHeight: 1.2,
               }}
               className="font-montserrat"
             >
-              Chhatrapati’s Legacy, Etched in Every Stone
+              <AnimatedUnderline>
+                Chhatrapati's Legacy, Etched in Every Stone
+              </AnimatedUnderline>
             </Typography>
             <Typography
               sx={{
@@ -82,11 +117,14 @@ const FullAbout = () => {
         {/* Mission Section */}
         <Box
           sx={{
+            position: "relative",
             textAlign: "center",
             mb: 8,
             py: 6,
-            backgroundColor: "#f8f8f8",
+            backgroundColor: "rgba(248, 248, 248, 0.8)",
             borderRadius: "8px",
+            backdropFilter: "blur(4px)",
+            border: "1px solid rgba(0,0,0,0.1)",
           }}
         >
           <motion.div
@@ -136,7 +174,9 @@ const FullAbout = () => {
               letterSpacing: "-0.5px",
             }}
           >
-            The Spirit Behind Our Work
+            <AnimatedUnderline>The Spirit Behind Our Work</AnimatedUnderline>
+
+            <AnimatedUnderline />
           </Typography>
 
           <Box
@@ -173,11 +213,12 @@ const FullAbout = () => {
                 viewport={{ once: true }}
                 variants={cardFade}
                 sx={{
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
                   borderRadius: "8px",
                   p: 4,
-                  border: "1px solid #e0e0e0",
+                  border: "1px solid rgba(0,0,0,0.1)",
                   transition: "all 0.3s",
+                  backdropFilter: "blur(4px)",
                   "&:hover": {
                     transform: "translateY(-5px)",
                     boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
@@ -225,11 +266,14 @@ const FullAbout = () => {
         {/* Craftsmanship Section */}
         <Box
           sx={{
+            position: "relative",
             textAlign: "center",
             mb: 8,
             py: 6,
-            backgroundColor: "#f8f8f8",
+            backgroundColor: "rgba(248, 248, 248, 0.8)",
             borderRadius: "8px",
+            backdropFilter: "blur(4px)",
+            border: "1px solid rgba(0,0,0,0.1)",
           }}
         >
           <motion.div
@@ -286,7 +330,7 @@ const FullAbout = () => {
                 letterSpacing: "-0.5px",
               }}
             >
-              Inspired by History
+              <AnimatedUnderline> Inspired by History</AnimatedUnderline>
             </Typography>
 
             <Box
@@ -318,11 +362,12 @@ const FullAbout = () => {
                   viewport={{ once: true }}
                   variants={cardFade}
                   sx={{
-                    backgroundColor: "#ffffff",
+                    backgroundColor: "rgba(255, 255, 255, 0.8)",
                     borderRadius: "8px",
                     p: 4,
-                    border: "1px solid #e0e0e0",
+                    border: "1px solid rgba(0,0,0,0.1)",
                     transition: "all 0.3s",
+                    backdropFilter: "blur(4px)",
                     "&:hover": {
                       transform: "translateY(-5px)",
                       boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
@@ -340,7 +385,7 @@ const FullAbout = () => {
                       textAlign: "center",
                     }}
                   >
-                    {item.title}
+                    <AnimatedUnderline>{item.title}</AnimatedUnderline>
                   </Typography>
                   <Typography
                     sx={{
@@ -364,23 +409,12 @@ const FullAbout = () => {
             textAlign: "center",
             py: 6,
             px: { xs: 3, md: 6 },
-            backgroundColor: "#8C391B",
+            backgroundColor: "rgba(140, 57, 27, 0.9)",
             borderRadius: "8px",
             color: "#ffffff",
             overflow: "hidden",
-            backgroundImage: `
-      url('/weapons/weapon2.png'),
-      url('/weapons/weapon3.png')
-    `,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: {
-              xs: "top left, center right, bottom left",
-              md: "top 20px left 40px, center right 80px, bottom 20px left 60px",
-            },
-            backgroundSize: {
-              xs: "80px, 100px, 80px",
-              md: "100px, 120px, 100px",
-            },
+            backdropFilter: "blur(4px)",
+            border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
           <motion.div
@@ -388,7 +422,12 @@ const FullAbout = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={cardFade}
-            sx={{ maxWidth: "800px", mx: "auto" }}
+            sx={{
+              maxWidth: "800px",
+              mx: "auto",
+              position: "relative",
+              zIndex: 10,
+            }}
           >
             <Typography
               variant="h2"

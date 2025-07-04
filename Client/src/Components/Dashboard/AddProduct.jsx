@@ -5,9 +5,11 @@ import { motion } from "framer-motion";
 import { FaSpinner } from "react-icons/fa";
 import DashboardLayout from "./DashboardLayout";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = ({ onProductAdded }) => {
   const [imagePreviews, setImagePreviews] = useState([null, null, null, null]);
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     pname: "",
@@ -109,15 +111,23 @@ const AddProduct = ({ onProductAdded }) => {
   return (
     <DashboardLayout>
       <section className="py-2 px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-4xl font-outfit font-bold text-gray-800 font-[Playfair]">
+            Add Product
+          </h2>
+          <button
+            onClick={() => navigate("/admin/products")}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-300 text-white rounded-lg transition"
+          >
+            Back to Products
+          </button>
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8"
         >
-          <h2 className="text-4xl font-outfit font-bold mb-6 text-center text-gray-800 font-[Playfair]">
-            Add Product
-          </h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid md:grid-cols-2 gap-4">
               <div>

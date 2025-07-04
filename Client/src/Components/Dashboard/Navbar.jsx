@@ -1,23 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await fetch("http://localhost:5000/api/admin/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      Cookies.remove("adminToken", { path: "/" });
-      navigate("/login");
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#8C391B",
+      cancelButtonColor: "#aaa",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "No, stay",
+      backdrop: true,
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("isAdminLoggedIn");
+        navigate("/login");
+      }
+    });
   };
 
   return (

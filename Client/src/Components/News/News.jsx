@@ -1,45 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaInstagram } from "react-icons/fa";
-import img1 from "../../assets/images/blog1.jpg";
-import img2 from "../../assets/images/blog2.jpg";
-import img3 from "../../assets/images/blog3.jpg";
 import aboutBg from "../../assets/images/about-bg.jpg";
 
-// News Data
-const NewsData = [
-  {
-    id: 1,
-    slug: "https://www.instagram.com/p/C6eK0gjtaOr/?hl=en&img_index=1",
-    title: "With Vicky Kaushal",
-    image: img1,
-    shortDesc:
-      "मागील कित्येक महिन्यांपासून ‘छावा’ या छत्रपती संभाजी महाराजांच्या आयुष्यावर आधारित....",
-    isExternal: true,
-  },
-  {
-    id: 2,
-    slug: "https://www.instagram.com/p/DGvmCIMM7QD/?hl=en",
-    title: "Rajputana & Maratha Warrior Sculptures",
-    image: img2,
-    shortDesc:
-      "How warrior sculptures represent the bravery of Rajput and Maratha traditions.",
-    isExternal: true,
-  },
-  {
-    id: 3,
-    slug: "https://www.instagram.com/p/DHXxaICtlkY/?hl=en",
-    title: "Wooden vs. Metal Handicrafts",
-    image: img3,
-    shortDesc:
-      "A comparison between wooden and metal handicrafts for your home decor.",
-    isExternal: true,
-  },
-];
-
 const News = () => {
+  const [newsData, setNewsData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
+
+  const fetchLatestNews = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=3&sort=desc`
+      );
+      const data = await res.json();
+
+      // Assuming backend returns data.newsItems[]
+      const filteredNews = (data.newsItems || []).filter(
+        (news) => !news.isHide
+      );
+
+      setNewsData(filteredNews);
+    } catch (err) {
+      console.error("Failed to fetch news:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestNews();
+  }, []);
 
   const handleShow = (news) => {
     setSelectedNews(news);
@@ -79,9 +68,9 @@ const News = () => {
 
         {/* News Cards */}
         <div className="grid md:grid-cols-3 gap-8">
-          {NewsData.map((news, index) => (
+          {newsData.map((news, index) => (
             <motion.div
-              key={news.id}
+              key={news._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2, duration: 0.6 }}
@@ -93,6 +82,9 @@ const News = () => {
                 src={news.image}
                 alt={news.title}
                 className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  e.target.src = "/placeholder-news.jpg";
+                }}
               />
 
               {/* Overlay */}
@@ -101,7 +93,7 @@ const News = () => {
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-end z-10 p-6 text-white">
                 <h2 className="text-xl font-bold mb-2">{news.title}</h2>
-                <p className="text-sm line-clamp-3 mb-4">{news.shortDesc}</p>
+                <p className="text-sm line-clamp-3 mb-4">{news.description}</p>
                 <div className="flex justify-between items-center">
                   <button
                     onClick={() =>
@@ -164,7 +156,7 @@ const News = () => {
                     className="w-full h-60 object-contain mb-4 rounded"
                   />
                   <p className="text-gray-700 leading-relaxed">
-                    {selectedNews.shortDesc}
+                    {selectedNews.description}
                   </p>
                   <p className="mt-4 text-sm text-gray-500">
                     Follow us on Instagram for more!

@@ -26,6 +26,9 @@ import BlogChecker from "./Components/Dashboard/BlogChecker";
 import Testimonials from "./Components/Testimponials/Testimonials";
 import Cart from "./Components/Cart/Cart";
 import Lorem from "./Components/Lorem/Lorem";
+import NewsManager from "./Components/Dashboard/NewsManager";
+import BlogManager from "./Components/Dashboard/BlogManager";
+import BlogDetail from "./Components/Blogs/BlogDetails";
 
 const App = () => {
   useEffect(() => {
@@ -74,6 +77,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Lorem" element={<Lorem />} />
+        <Route path="/blogs/:id" element={<BlogDetail />} />
 
         <Route
           path="/admin/dashboard"
@@ -108,10 +112,26 @@ const App = () => {
           }
         />
         <Route
+          path="/admin/news-manager"
+          element={
+            <PrivateRoute>
+              <NewsManager />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/admin/blog"
           element={
             <PrivateRoute>
               <AddBlogs />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/blog-manager"
+          element={
+            <PrivateRoute>
+              <BlogManager />
             </PrivateRoute>
           }
         />
