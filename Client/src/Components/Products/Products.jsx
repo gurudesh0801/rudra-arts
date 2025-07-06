@@ -53,55 +53,70 @@ const Product = () => {
   }
 
   return (
-    <div className="bg-[#fffaf0] py-12">
-      <div className="max-w-7xl mx-auto px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-[#706D54] uppercase mb-3">
-          Products
+    <section className="bg-gradient-to-br from-[#fffaf0] to-[#fef6e4] py-16 px-4">
+      <div className="max-w-7xl mx-auto text-center">
+        <h1 className="text-5xl font-bold text-orange-900 mb-2 font-playfair">
+          Featured Products
         </h1>
-        <p className="italic text-gray-600 mb-12 text-lg">
+        <p className="text-gray-600 italic text-lg mb-12">
           Reliving History Through Every Creation
         </p>
 
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {latestProducts.map((product) => (
             <div
               key={product._id}
-              className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-orange-200 transform hover:scale-[1.02] transition duration-200 will-change-transform"
+              className="relative bg-white/70 backdrop-blur-xl shadow-2xl border border-orange-200 rounded-2xl overflow-hidden transition-transform hover:scale-[1.025] duration-300"
             >
               <img
                 src={product.product_image?.[0] || "/placeholder.jpg"}
                 alt={product.product_name}
-                className="w-full h-48 object-cover"
-                loading="lazy" // ✅ Lazy load to prevent blocking render
+                className="w-full h-48 object-cover cursor-pointer"
+                onClick={() => navigate(`/product-details/${product._id}`)}
               />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800">
+
+              <div className="p-5 text-left">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
                   {product.product_name}
                 </h2>
-                <p className="text-md text-orange-700 mt-1 mb-2 font-medium">
-                  ₹ {product.product_price}
-                </p>
+
+                <div className="flex justify-between items-center mb-3">
+                  <span className="bg-orange-100 text-orange-700 font-semibold text-sm px-3 py-1 rounded-full">
+                    ₹ {product.product_price}
+                  </span>
+                </div>
+
                 <button
                   onClick={() => navigate(`/product-details/${product._id}`)}
-                  className="w-full bg-customBrown hover:bg-orange-700 text-white font-semibold py-2 rounded-md mt-2"
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
                 >
-                  More Details
+                  <img
+                    src="/images/dhaltalwar.png"
+                    alt="Icon Left"
+                    className="w-5 h-5 invert"
+                  />
+                  <span>View Details</span>
+                  <img
+                    src="/images/dhaltalwar.png"
+                    alt="Icon Right"
+                    className="w-5 h-5 invert"
+                  />
                 </button>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-12">
+        <div className="mt-14">
           <button
             onClick={() => navigate("/Products")}
-            className="px-6 py-2 border border-orange-700 text-orange-700 hover:bg-orange-100 rounded-md"
+            className="px-6 py-2 border border-orange-600 text-orange-700 hover:bg-orange-100 rounded-md font-medium transition"
           >
-            See More
+            View All Products
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -29,6 +29,10 @@ import Lorem from "./Components/Lorem/Lorem";
 import NewsManager from "./Components/Dashboard/NewsManager";
 import BlogManager from "./Components/Dashboard/BlogManager";
 import BlogDetail from "./Components/Blogs/BlogDetails";
+import FranchiseCarousel from "./Components/FranchiseCarousel/FranchiseCarousel";
+import TeamComponent from "./Components/TeamComponent/TeamComponent";
+import BTS from "./Components/BTS/BTS";
+import ExploreProcess from "./Components/BTS/ExploreProcess";
 
 const App = () => {
   useEffect(() => {
@@ -52,6 +56,9 @@ const App = () => {
             <>
               <Element name="home">
                 <Home />
+              </Element>
+              <Element name="franchise">
+                <FranchiseCarousel />
               </Element>
               <Element name="about">
                 <AboutUs />
@@ -78,6 +85,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/Lorem" element={<Lorem />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />
+        <Route path="/ourteam" element={<TeamComponent />} />
+        <Route path="/handsbehindrudrarts" element={<BTS />} />
+        <Route path="/explore-process" element={<ExploreProcess />} />
 
         <Route
           path="/admin/dashboard"

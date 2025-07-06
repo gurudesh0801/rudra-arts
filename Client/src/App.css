@@ -22,3 +22,8 @@ body {
 .font-montserrat {
   font-family: "Montserrat Alternates" !important;
 }
+.font-oldStandard {
+  font-family: "Old Standard TT", serif;
+  font-weight: 400;
+  font-style: normal;
+}

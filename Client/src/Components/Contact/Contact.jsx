@@ -38,9 +38,8 @@ const ContactSection = () => {
     <section
       className="relative min-h-screen py-24 px-6 text-gray-900 font-outfit"
       style={{
-        backgroundImage: "url('/images/fort6.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundImage: "url('/images/Stone.jpg')",
+        backgroundSize: "contain",
       }}
     >
       <div className="relative z-10 max-w-6xl mx-auto">

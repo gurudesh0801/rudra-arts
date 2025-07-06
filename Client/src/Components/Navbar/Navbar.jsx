@@ -4,7 +4,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
 import { FaShoppingCart } from "react-icons/fa";
-import logo from "../../../public/images/logo.png";
+import logo from "../../../public/images/rudralogo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +26,8 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Products", path: "/products" },
     { name: "Blog", path: "/blogs" },
+    { name: "Gallary", path: "/lorem" },
+    { name: "Hands Behind Rudra arts", path: "/handsbehindrudrarts" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -49,18 +51,21 @@ const Navbar = () => {
               }`}
               whileHover={{ scale: 1.05 }}
             />
+            <p className="ml-2 font-playfair font-bold">
+              Rudra Arts & Handicrafts
+            </p>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-8">
+            <div className="ml-10 flex items-center space-x-2">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     location.pathname === item.path
-                      ? "text-[#8a4b1f] font-semibold"
+                      ? "text-[#ff8732] font-semibold"
                       : "hover:text-[#8a4b1f]"
                   }`}
                 >

@@ -52,7 +52,7 @@ const News = () => {
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-5xl text-[#706D54] font-bold font-outfit mb-3"
+            className="text-5xl text-customBrown font-bold font-playfair mb-3"
           >
             Rudra Arts & Handicrafts News
           </motion.h1>
@@ -101,10 +101,21 @@ const News = () => {
                         ? window.open(news.slug, "_blank")
                         : handleShow(news)
                     }
-                    className="bg-orange-600 hover:bg-orange-700 text-sm px-4 py-2 rounded font-medium"
+                    className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 rounded font-medium flex items-center justify-center gap-2 transition-all"
                   >
-                    Read More
+                    <img
+                      src="/images/dhaltalwar.png"
+                      alt="Icon Left"
+                      className="w-5 h-5"
+                    />
+                    <span>Read More</span>
+                    <img
+                      src="/images/dhaltalwar.png"
+                      alt="Icon Right"
+                      className="w-5 h-5"
+                    />
                   </button>
+
                   {news.isExternal && (
                     <a
                       href={news.slug}
