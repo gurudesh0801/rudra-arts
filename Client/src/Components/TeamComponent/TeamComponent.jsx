@@ -12,50 +12,52 @@ const TeamComponent = () => {
     {
       id: 1,
       name: "Satyajeet Vaidya",
-      role: "Founder & Visionary",
+      role: "Managing Director",
       description:
-        "Descendant of traditional artisans, carrying forward 5 generations of craftsmanship",
-      image: "/images/satyajeet.jpg",
+        "A proud descendant of traditional artisans, Satyajeet leads Rudra Arts with a vision to preserve, promote, and innovate handcrafted cultural weaponry and artifacts.",
+      image: "/images/owner.jpg",
       historicalNote:
-        "His ancestors crafted artifacts for royal courts in the 18th century",
+        "His family has been trusted artisans for cultural and ceremonial weaponry in Maharashtra for decades.",
     },
     {
       id: 2,
       name: "Mam",
-      role: "Co-Founder & Curator",
+      role: "Operational Head",
       description:
-        "Preserver of ancient techniques with a modern aesthetic vision",
+        "With an eye for detail and a passion for legacy crafts, Mam oversees daily operations, blending age-old techniques with modern production standards.",
       image: "/images/owner2.jpg",
       historicalNote:
-        "Her family's designs were featured in the Great Exhibition of 1851",
+        "She has revived long-lost crafting methods and adapted them for contemporary collectors.",
     },
     {
       id: 3,
       name: "Reshma Tupe",
       role: "Team Leader",
       description:
-        "Trained in the traditional Guru-Shishya parampara since age 12",
+        "Reshma brings unmatched dedication to Rudra Arts, guiding our team of artisans with patience and skill. She ensures each creation is finished with precision and care.",
       image: "/images/teammember1.jpg",
-      historicalNote: "Last apprentice of the legendary craftsman Laxman Bhatt",
+      historicalNote:
+        "Having learned under respected masters, she now mentors upcoming artisans and upholds our commitment to authentic craftsmanship.",
     },
     {
       id: 4,
       name: "Yash Indalkar",
-      role: "QC & Sales Assistant",
+      role: "Quality Control & Sales Assistant",
       description:
-        "Ensures each piece meets our 300-year-old quality standards",
+        "Yash’s deep knowledge of traditional forging and finishing guarantees each product meets Rudra Arts’ strict quality standards before reaching our clients.",
       image: "/images/teammember2.jpg",
       historicalNote:
-        "Uses techniques documented in the 17th century 'Shilpa Ratnakara'",
+        "He specializes in quality inspections rooted in traditional blacksmith practices.",
     },
     {
       id: 5,
       name: "Sanika Indalkar",
       role: "Sales Assistant",
-      description: "Bridges ancient artistry with contemporary collectors",
+      description:
+        "Sanika connects clients and collectors to our heritage pieces, sharing the stories, meaning, and cultural significance behind every work of art.",
       image: "/images/teammember3.jpg",
       historicalNote:
-        "Continues the tradition of merchant families who traded along the Silk Road",
+        "She comes from a family with a deep tradition in local trade, continuing their legacy through her passion for art and storytelling.",
     },
   ];
 
@@ -68,13 +70,14 @@ const TeamComponent = () => {
       <div className="max-w-7xl mx-auto">
         {/* Historical Header */}
         <div className="text-center mb-16 mt-10">
-          <h2 className="text-3xl font-serif font-bold text-amber-800 mb-4 relative inline-block">
+          <h2 className="text-5xl font-serif font-bold text-amber-800 mb-4 relative inline-block">
             <span className="absolute -bottom-2 left-0 w-full h-1 bg-amber-600"></span>
             The Keepers of Tradition
           </h2>
           <p className="text-lg italic text-amber-700 max-w-3xl mx-auto">
-            "Since 1721, our guild has preserved the sacred art forms passed
-            down through generations of master craftsmen"
+            “Rudra Arts carries forward the sacred traditions of master
+            craftsmen—heralding artistry and devotion through every handcrafted
+            masterpiece.”
           </p>
           <div className="mt-6">
             <img
@@ -135,9 +138,6 @@ const TeamComponent = () => {
                         ></div>
                       ))}
                     </div>
-                    <div className="text-xs text-amber-600 font-medium">
-                      Since {member.id % 2 === 0 ? "1754" : "1721"}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -194,9 +194,6 @@ const TeamComponent = () => {
                           className="w-2 h-2 rounded-full bg-amber-400"
                         ></div>
                       ))}
-                    </div>
-                    <div className="text-xs text-amber-600 font-medium">
-                      Since {member.id % 2 === 0 ? "1754" : "1721"}
                     </div>
                   </div>
                 </div>

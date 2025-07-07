@@ -20,6 +20,7 @@ import {
   Button,
 } from "@mui/material";
 import weaponsBg from "../../assets/images/Weponsbg.jpg";
+import bg from "/images/border.jpg";
 import { Link } from "react-router-dom";
 
 const Blogs = () => {
@@ -175,16 +176,16 @@ const Blogs = () => {
           position: "absolute",
           top: 0,
           right: 0,
-          width: "40%",
+          width: "100%",
           height: "100%",
-          background: `url(${weaponsBg})`,
+          background: `url(${bg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          opacity: theme.palette.mode === "dark" ? 0.05 : 0.1,
+          // opacity: theme.palette.mode === "dark" ? 0.05 : 0.1,
           zIndex: 0,
-          mixBlendMode: theme.palette.mode === "dark" ? "lighten" : "multiply",
-          maskImage:
-            "linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+          // mixBlendMode: theme.palette.mode === "dark" ? "lighten" : "multiply",
+          // maskImage:
+          //   "linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
         }}
       />
 
@@ -312,10 +313,10 @@ const Blogs = () => {
                   padding: "16px 16px 16px 48px",
                   borderRadius: "12px",
                   fontSize: "1rem",
-                  backgroundColor:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(0,0,0,0.05)",
+                  // backgroundColor:
+                  //   theme.palette.mode === "dark"
+                  //     ? "rgba(255,255,255,0.1)"
+                  //     : "rgba(0,0,0,0.05)",
                   backdropFilter: "blur(8px)",
                   outline: "none",
                   transition: "all 0.3s",

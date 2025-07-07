@@ -313,12 +313,12 @@ const AllProducts = () => {
               sx={{
                 display: "grid",
                 gridTemplateColumns: {
-                  xs: "1fr",
+                  xs: "1fr 1fr", // 2 columns on mobile
                   sm: "1fr 1fr",
                   md: "1fr 1fr 1fr",
                   lg: "1fr 1fr 1fr 1fr",
                 },
-                gap: 4,
+                gap: 3, // Reduced gap for mobile
               }}
             >
               {Array.from({ length: 8 }).map((_, idx) => (
@@ -353,7 +353,7 @@ const AllProducts = () => {
             <>
               <motion.div
                 layout
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
               >
                 <AnimatePresence>
                   {filteredProducts.slice(0, visibleProducts).map((product) => (
@@ -388,9 +388,9 @@ const AllProducts = () => {
                             backgroundPosition: "center",
                             backgroundRepeat: "no-repeat",
                             backdropFilter: "blur(2rem)",
-                            borderRadius: "16px",
+                            borderRadius: "12px", // Slightly smaller radius for mobile
                             overflow: "hidden",
-                            boxShadow: theme.shadows[2],
+                            boxShadow: theme.shadows[1], // Lighter shadow for mobile
                             border:
                               theme.palette.mode === "dark"
                                 ? "1px solid rgba(255,255,255,0.05)"
@@ -403,7 +403,7 @@ const AllProducts = () => {
                             sx={{
                               position: "relative",
                               width: "100%",
-                              height: "220px",
+                              height: { xs: "180px", sm: "220px" }, // Smaller height on mobile
                               overflow: "hidden",
                               backgroundColor:
                                 theme.palette.mode === "dark"
@@ -480,7 +480,7 @@ const AllProducts = () => {
                           {/* Product Info */}
                           <Box
                             sx={{
-                              p: 3,
+                              p: { xs: 2, sm: 3 }, // Smaller padding on mobile
                               flexGrow: 1,
                               display: "flex",
                               flexDirection: "column",
@@ -489,7 +489,7 @@ const AllProducts = () => {
                             <Typography
                               variant="h3"
                               sx={{
-                                fontSize: "1.1rem",
+                                fontSize: { xs: "1rem", sm: "1.1rem" }, // Smaller font on mobile
                                 fontWeight: 700,
                                 mb: 1,
                                 color:
@@ -504,7 +504,7 @@ const AllProducts = () => {
 
                             <Typography
                               sx={{
-                                fontSize: "0.875rem",
+                                fontSize: { xs: "0.75rem", sm: "0.875rem" }, // Smaller font on mobile
                                 color:
                                   theme.palette.mode === "dark"
                                     ? "rgba(255,255,255,0.7)"
@@ -514,10 +514,10 @@ const AllProducts = () => {
                                 lineHeight: 1.5,
                               }}
                             >
-                              {product.product_description.length > 100
+                              {product.product_description.length > 80
                                 ? `${product.product_description.substring(
                                     0,
-                                    100
+                                    80
                                   )}...`
                                 : product.product_description}
                             </Typography>
@@ -567,11 +567,13 @@ const AllProducts = () => {
                                 justifyContent: "space-between",
                                 alignItems: "center",
                                 mt: "auto",
+                                flexDirection: { xs: "column", sm: "row" }, // Stack on mobile
+                                gap: { xs: 1, sm: 0 }, // Add gap when stacked
                               }}
                             >
                               <Typography
                                 sx={{
-                                  fontSize: "1.25rem",
+                                  fontSize: { xs: "1rem", sm: "1.25rem" }, // Smaller font on mobile
                                   fontWeight: 700,
                                   color:
                                     theme.palette.mode === "dark"
@@ -585,12 +587,7 @@ const AllProducts = () => {
                               <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  handleAddToCartAndNavigate(product._id);
-                                }}
-                                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition"
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold transition" // Smaller button on mobile
                                 style={{
                                   background:
                                     theme.palette.mode === "dark"
@@ -599,8 +596,12 @@ const AllProducts = () => {
                                   color: "white",
                                 }}
                               >
-                                <ShoppingCart size={16} />
-                                View Details
+                                <ShoppingCart size={14} /> {/* Smaller icon */}
+                                <span className="hidden sm:inline">
+                                  View Details
+                                </span>
+                                <span className="sm:hidden">Details</span>{" "}
+                                {/* Shorter text on mobile */}
                               </motion.button>
                             </Box>
                           </Box>

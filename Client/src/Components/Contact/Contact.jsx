@@ -38,8 +38,9 @@ const ContactSection = () => {
     <section
       className="relative min-h-screen py-24 px-6 text-gray-900 font-outfit"
       style={{
-        backgroundImage: "url('/images/Stone.jpg')",
-        backgroundSize: "contain",
+        backgroundImage: "url('/images/border.jpg')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
       }}
     >
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -51,7 +52,7 @@ const ContactSection = () => {
           variants={fadeIn}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 mt-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-customBrown mb-4 mt-6 font-playfair">
             Get In Touch
           </h2>
           <motion.div
@@ -60,7 +61,7 @@ const ContactSection = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="w-60 h-1 bg-customBrown mx-auto mb-4"
           />
-          <p className="text-lg text-white max-w-xl mx-auto">
+          <p className="text-lg text-black max-w-xl mx-auto">
             Have questions or want to collaborate? We'd love to hear from you.
           </p>
         </motion.div>
@@ -155,18 +156,18 @@ const ContactSection = () => {
             variants={fadeIn}
             className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-xl shadow-2xl"
           >
-            <h3 className="text-2xl font-semibold mb-6 text-white text-center">
+            <h3 className="text-2xl font-semibold mb-6 text-customBrown text-center">
               Contact Information
             </h3>
 
-            <div className="space-y-6">
+            <div className="space-y-6 ">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-customBrown rounded-full">
                   <FaMapMarkerAlt className="text-amber-400 text-xl" />
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Our Location</h4>
-                  <p className="text-white/80">
+                  <h4 className="text-black font-medium">Our Location</h4>
+                  <p className="text-black/80">
                     Famous Chowk, Kirti Nagar Ln No. 1, Ganesh Nagar, Samata
                     Nagar, New Sangavi, Pune, Pimpri-Chinchwad, Maharashtra
                     411027
@@ -179,10 +180,10 @@ const ContactSection = () => {
                   <FaEnvelope className="text-amber-400 text-xl" />
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Email Address</h4>
+                  <h4 className="text-black font-medium">Email Address</h4>
                   <a
                     href="mailto:contact@rudraarts.com"
-                    className="text-white/80 hover:text-amber-400 transition"
+                    className="text-black/80 hover:text-orange-700 transition"
                   >
                     contact@rudraarts.com
                   </a>
@@ -194,10 +195,10 @@ const ContactSection = () => {
                   <FaPhone className="text-amber-400 text-xl" />
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Phone Number</h4>
+                  <h4 className="text-black font-medium">Phone Number</h4>
                   <a
                     href="tel:+917028996666"
-                    className="text-white/80 hover:text-amber-400 transition"
+                    className="text-black/80 hover:text-orange-700 transition"
                   >
                     +91 7028996666
                   </a>
