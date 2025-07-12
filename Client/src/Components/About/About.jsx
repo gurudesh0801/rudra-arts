@@ -12,10 +12,7 @@ const cardVariants = {
 
 const AboutUs = () => {
   return (
-    <div
-      className="min-h-screen bg-fixed bg-cover bg-center py-16 px-4 sm:px-6 md:py-24 text-center"
-      style={{ backgroundImage: `url(${aboutBg})` }}
-    >
+    <div className="min-h-screen bg-fixed bg-cover bg-center py-16 px-4 sm:px-6 md:py-24 text-center bg-[#FFF1DE]">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -23,7 +20,7 @@ const AboutUs = () => {
         viewport={{ once: true }}
         className="max-w-3xl mx-auto px-4"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-normal font-times border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal font-times border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
           The Story Behind Rudra Arts & Handicrafts
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-black mt-2">
@@ -41,7 +38,7 @@ const AboutUs = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="bg-[#eae0c8] border-l-4 md:border-l-8 border-[#8b6f47] shadow-lg p-4 sm:p-6 h-auto text-left rounded-l-xl opacity-90"
+              className="bg-white border-l-4 md:border-l-8 border-[#8b6f47] shadow-lg p-4 sm:p-6 h-auto text-left rounded-l-xl opacity-90"
             >
               <h3 className="text-xl sm:text-2xl font-semibold text-[#3e3228] mb-2">
                 {title}

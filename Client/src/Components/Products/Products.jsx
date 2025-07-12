@@ -27,7 +27,10 @@ const Product = () => {
   }, []);
 
   const latestProducts = useMemo(() => {
-    return [...products].reverse().slice(0, 4);
+    const maharajProducts = products.filter(
+      (product) => product.product_category === "Maharaj Idol Series"
+    );
+    return [...maharajProducts].reverse().slice(0, 4);
   }, [products]);
 
   const sendWhatsAppMessage = async (productId) => {

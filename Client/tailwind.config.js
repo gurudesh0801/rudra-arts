@@ -4,6 +4,7 @@ export default {
     extend: {
       colors: {
         customBrown: "#8C391B",
+        darkBrown: "#5F2512",
         parchment: "#eae0c8",
         bronze: "#8b6f47",
         charcoal: "#4a3d2f",

@@ -40,13 +40,6 @@ const App = () => {
     console.log(token);
   }, []);
 
-  // // Add this new effect to disable right-click
-  // const disableRightClick = (e) => {
-  //   e.preventDefault();
-  // };
-
-  // document.addEventListener("contextmenu", disableRightClick);
-
   return (
     <>
       <Routes>
@@ -57,17 +50,14 @@ const App = () => {
               <Element name="home">
                 <Home />
               </Element>
-              <Element name="franchise">
-                <FranchiseCarousel />
-              </Element>
               <Element name="about">
                 <AboutUs />
               </Element>
               <Element name="Products">
                 <Products />
               </Element>
-              <Element name="Testimonials">
-                <Testimonials />
+              <Element name="franchise">
+                <FranchiseCarousel />
               </Element>
               <Element name="news">
                 <News />

@@ -1,97 +1,110 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { FaPause, FaPlay, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate();
-  const videoRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true); // Initially muted for autoplay
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const sliderRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  // Replace these with your actual image paths
+  const slides = [
+    "/images/maharaj1.jpg",
+    "/images/fort2.jpg",
+    "/images/fort3.jpg",
+    "/images/fort4.jpg",
+  ];
 
   const handleShopNow = () => {
     navigate("/Products");
   };
 
-  useEffect(() => {
-    // Try to autoplay when component mounts
-    const tryAutoplay = async () => {
-      try {
-        if (videoRef.current) {
-          await videoRef.current.play();
-        }
-      } catch (err) {
-        console.log("Autoplay prevented:", err);
-        // Fallback to click-to-play
-        const handleFirstClick = () => {
-          if (videoRef.current) {
-            videoRef.current
-              .play()
-              .catch((e) => console.log("Play failed:", e));
-          }
-          document.removeEventListener("click", handleFirstClick);
-        };
-        document.addEventListener("click", handleFirstClick);
-      }
-    };
+  const startSlider = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000); // Change slide every 5 seconds
+  };
 
-    if (videoRef.current) {
-      videoRef.current.addEventListener("loadeddata", () =>
-        setIsVideoLoaded(true)
-      );
-      tryAutoplay();
-    }
+  const stopSlider = () => {
+    clearInterval(intervalRef.current);
+  };
 
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener("loadeddata", () =>
-          setIsVideoLoaded(true)
-        );
-      }
-    };
-  }, []);
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
+  const goToNext = () => {
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    if (isPlaying) {
+      stopSlider();
+      startSlider();
     }
   };
 
-  // Replace with your actual video URL
-  const videoUrl =
-    "https://res.cloudinary.com/your-account/video/upload/v1234567/your-video.mp4";
+  const goToPrev = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    if (isPlaying) {
+      stopSlider();
+      startSlider();
+    }
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      stopSlider();
+    } else {
+      startSlider();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  useEffect(() => {
+    startSlider();
+    return () => stopSlider();
+  }, []);
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-        loop
-        muted={isMuted}
-        playsInline
-        style={{ filter: "brightness(.6)" }}
-        src={"/images/bgvideo.mov"}
-      />
-
-      {/* Loading overlay */}
-      {!isVideoLoaded && (
-        <div className="absolute inset-0 bg-black/50 z-0 flex items-center justify-center">
-          <div className="text-white">Loading...</div>
-        </div>
-      )}
-
-      {/* Mute/Unmute Button */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-6 right-6 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
-        aria-label={isMuted ? "Unmute video" : "Mute video"}
+    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Image Carousel Background */}
+      <div
+        ref={sliderRef}
+        className="absolute top-0 left-0 w-full h-full z-10 overflow-hidden"
       >
-        {isMuted ? <FaVolumeMute size={20} /> : <FaVolumeUp size={20} />}
+        <div
+          className="flex h-full transition-transform duration-1000 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {slides.map((slide, index) => (
+            <div key={index} className="w-full h-full flex-shrink-0 relative">
+              <img
+                src={slide}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-full object-cover brightness-[0.6]"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Play/Pause Button (replacing mute button) */}
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={goToPrev}
+        className="absolute left-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
+        aria-label="Previous slide"
+      >
+        <FaChevronLeft size={20} />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
+        aria-label="Next slide"
+      >
+        <FaChevronRight size={20} />
       </button>
 
-      {/* Main Content */}
+      {/* Main Content (unchanged from your original) */}
       <div className="z-10 text-center text-white max-w-5xl px-4 mt-20">
         <motion.h1
           initial={{ opacity: 0, y: -40 }}
@@ -106,7 +119,7 @@ const Home = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="mt-4 text-lg leading-relaxed"
+          className="mt-4 text-lg leading-relaxed font-times"
         >
           Discover the essence of heritage and artistry in every masterpiece. At
           Rudra Arts & Handicrafts, we bring stories <br />

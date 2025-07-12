@@ -496,6 +496,7 @@ const AllProducts = () => {
                                     ? "#fff"
                                     : "#1a1a1a",
                                 lineHeight: 1.3,
+                                fontFamily: '"Times New Roman", serif',
                               }}
                             >
                               {product.product_name}
@@ -511,6 +512,7 @@ const AllProducts = () => {
                                 mb: 2,
                                 flexGrow: 1,
                                 lineHeight: 1.5,
+                                fontFamily: '"Times New Roman", serif',
                               }}
                             >
                               {product.product_description.length > 80
@@ -554,7 +556,7 @@ const AllProducts = () => {
                                     ? "rgba(255,255,255,0.8)"
                                     : "rgba(0,0,0,0.8)",
                                 mb: 2,
-                                fontStyle: "italic",
+                                fontFamily: '"Times New Roman", serif',
                               }}
                             >
                               Size: {product.product_size}
@@ -578,6 +580,7 @@ const AllProducts = () => {
                                     theme.palette.mode === "dark"
                                       ? "#E67E51"
                                       : "#8C391B",
+                                  fontFamily: '"Times New Roman", serif',
                                 }}
                               >
                                 ₹{product.product_price.toLocaleString()}
