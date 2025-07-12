@@ -23,7 +23,7 @@ const AboutUs = () => {
         viewport={{ once: true }}
         className="max-w-3xl mx-auto px-4"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold font-playfair border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-normal font-times border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
           The Story Behind Rudra Arts & Handicrafts
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-black mt-2">

@@ -172,11 +172,10 @@ const AllProducts = () => {
               variant="h1"
               sx={{
                 fontSize: { xs: "2.5rem", md: "3.5rem", lg: "4rem" },
-                fontWeight: 800,
                 mb: 2,
                 lineHeight: 1.1,
                 letterSpacing: "-1px",
-                fontFamily: '"Playfair Display", serif',
+                fontFamily: '"Times New Roman", serif',
               }}
               className="text-customBrown"
             >
@@ -587,14 +586,7 @@ const AllProducts = () => {
                               <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold transition" // Smaller button on mobile
-                                style={{
-                                  background:
-                                    theme.palette.mode === "dark"
-                                      ? "linear-gradient(90deg, #E67E51 0%, #F9A875 100%)"
-                                      : "linear-gradient(90deg, #8C391B 0%, #D45B2B 100%)",
-                                  color: "white",
-                                }}
+                                className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold transition bg-customBrown text-white" // Smaller button on mobile
                               >
                                 <ShoppingCart size={14} /> {/* Smaller icon */}
                                 <span className="hidden sm:inline">

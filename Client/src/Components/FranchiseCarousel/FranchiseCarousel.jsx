@@ -92,7 +92,7 @@ const FranchiseCarousel = () => {
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="text-5xl md:text-5xl font-semibold font-playfair text-center mb-1 text-customBrown"
+        className="text-5xl md:text-5xl font-normal font-times text-center mb-1 text-customBrown"
       >
         Our Franchises
       </motion.h1>

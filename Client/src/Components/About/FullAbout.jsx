@@ -1,24 +1,8 @@
 import { useEffect } from "react";
-import {
-  Typography,
-  Avatar,
-  Box,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import {
-  Brush,
-  Insights,
-  Diversity2,
-  MilitaryTech,
-  Castle,
-  History,
-} from "@mui/icons-material";
 import { motion } from "framer-motion";
 import weaponsBg from "/images/border.jpg";
 import aboutbg1 from "/images/IMG-20250617-WA0027.jpg";
 import aboutbg2 from "/images/bts21.jpg";
-import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 import { Link } from "react-router-dom";
 
 // Modern card animation variants
@@ -32,9 +16,6 @@ const cardFade = {
 };
 
 const FullAbout = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -43,160 +24,45 @@ const FullAbout = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        py: { xs: 12, md: 8 },
-        pt: 8,
-        overflow: "hidden",
-        background:
-          theme.palette.mode === "dark"
-            ? "radial-gradient(circle at center, #1a1a1a 0%, #121212 100%)"
-            : "radial-gradient(circle at center, #f9f9f9 0%, #eaeaea 100%)",
-      }}
-    >
+    <div className="relative py-12 md:py-16 pt-16 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200 ">
       {/* Background image with reduced opacity for better readability */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "100%",
-          height: "100%",
-          background: `url(${weaponsBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          zIndex: 0,
-        }}
+      <div
+        className="absolute top-0 right-0 w-full h-full bg-cover bg-center z-0 opacity-90"
+        style={{ backgroundImage: `url(${weaponsBg})` }}
       />
 
-      <Box
-        sx={{
-          position: "relative",
-          zIndex: 20,
-          maxWidth: "1400px",
-          margin: "0 auto",
-          px: { xs: 2, md: 6 },
-        }}
-      >
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section - Stacked on mobile */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: "center",
-            gap: { xs: 4, md: 6 },
-            mb: { xs: 4, md: 12 },
-            pt: { xs: 2, md: 8 },
-          }}
-        >
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-8 md:mb-16 pt-8 md:pt-16">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            style={{ flex: 1 }}
+            className="flex-1 font-serif text-left"
           >
-            <Typography
-              variant="h1"
-              sx={{
-                mb: 2,
-                fontSize: { xs: "3rem", sm: "2.5rem", md: "3.5rem" },
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: { xs: "-0.5px", md: "-1px" },
-                fontFamily: '"Playfair Display", serif',
-                textAlign: { xs: "center", md: "left" },
-              }}
-              className="font-playfair text-black"
-            >
-              <Box
-                component="span"
-                sx={{
-                  display: "inline-block",
-                  position: "relative",
-                }}
-                className="text-customBrown"
-              >
-                Chhatrapati's Legacy
-              </Box>
-              <Box
-                sx={{
-                  display: { xs: "block", md: "inline" },
-                  ml: { xs: 0, md: "0.5rem" },
-                }}
-              >
-                Etched in Every Stone
-              </Box>
-            </Typography>
+            <h1 className="mb-4 text-4xl sm:text-5xl md:text-6xl leading-tight tracking-tight text-left md:text-left">
+              <span className="relative inline-block text-customBrown">
+                Chhatrapati's Legacy Etched in Every Stone
+              </span>
+            </h1>
 
-            <Typography
-              sx={{
-                fontSize: { xs: "1rem", md: "1.2rem" },
-                lineHeight: 1.6,
-                mb: 3,
-                textAlign: { xs: "center", md: "left" },
-              }}
-              className="font-extrabold"
-            >
+            <p className="text-lg md:text-xl leading-relaxed mb-6 ml-2 text-left md:text-left">
               India's 1st Historic Studio of Authentic Statues of Chhatrapati
               Shivaji Maharaj and Maratha Weapons. Manufacturer of Miniatures,
               Statues, Mavala Idols.
-            </Typography>
+            </p>
 
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                mt: 3,
-                p: 2,
-                background: "white",
-                borderRadius: 2,
-                borderLeft: `4px solid ${
-                  theme.palette.mode === "dark" ? "#E67E51" : "#8C391B"
-                }`,
-                maxWidth: "100%",
-                mx: { xs: "auto", md: 0 },
-              }}
-            >
-              <Avatar
-                sx={{
-                  bgcolor:
-                    theme.palette.mode === "dark"
-                      ? "rgba(230,126,81,0.2)"
-                      : "rgba(140,57,27,0.2)",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
-                  width: { xs: 40, md: 48 },
-                  height: { xs: 40, md: 48 },
-                }}
-              >
-                <Brush fontSize={isMobile ? "medium" : "large"} />
-              </Avatar>
-              <Box>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: { xs: "0.8rem", md: "0.875rem" },
-                    color:
-                      theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
-                  }}
-                >
+            <div className="flex items-center gap-4 mt-6 p-4 bg-white rounded-lg border-l-4 border-customBrown dark:border-orange-300  mx-auto md:mx-0">
+              <div>
+                <p className="text-sm font-semibold text-customBrown">
                   Managing Director
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    fontSize: { xs: "1rem", md: "1.25rem" },
-                    color: theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                  }}
-                >
+                </p>
+                <h3 className="text-2xl font-bold text-customBrown ">
                   Satyajeet Arun Vaidya
-                </Typography>
-              </Box>
-            </Box>
+                </h3>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div
@@ -204,38 +70,21 @@ const FullAbout = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            style={{
-              flex: 1,
-              position: "relative",
-              minHeight: isMobile ? 250 : 400,
-              width: "100%",
-              marginTop: isMobile ? 2 : 0,
-            }}
+            className="flex-1 relative min-h-[250px] md:min-h-[400px] w-full mt-4 md:mt-0"
           >
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                borderRadius: "16px",
-                overflow: "hidden",
-                boxShadow: theme.shadows[4],
-                background: `url(${aboutbg1})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
+            <div
+              className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg bg-cover bg-center"
+              style={{ backgroundImage: `url(${aboutbg1})` }}
             />
           </motion.div>
-        </Box>
+        </div>
 
         {/* Mission Section */}
-        <Box sx={{ mb: { xs: 6, md: 12 } }}>
+        <div className="mb-12 md:mb-24 font-serif">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+            viewport={{ once: true, margin: "-100px" }}
             variants={{
               hidden: { opacity: 0 },
               visible: {
@@ -244,103 +93,33 @@ const FullAbout = () => {
               },
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                gap: 3,
-                alignItems: "center",
-                mb: 4,
-              }}
-            >
+            <div className="flex flex-col md:flex-row gap-4 items-center mb-8">
               <motion.div variants={cardFade}>
-                <Typography
-                  variant="h2"
-                  sx={{
-                    fontSize: { xs: "1.8rem", md: "3rem" },
-                    fontWeight: 800,
-                    lineHeight: 1,
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(90deg, #E67E51 0%, #F9A875 100%)"
-                        : "linear-gradient(90deg, #8C391B 0%, #D45B2B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    width: "fit-content",
-                    textAlign: { xs: "center", md: "left" },
-                  }}
-                >
+                <h2 className="text-3xl md:text-5xl leading-tight text-center md:text-left text-customBrown">
                   Our Mission
-                </Typography>
+                </h2>
               </motion.div>
 
-              <motion.div variants={cardFade} style={{ flex: 1 }}>
-                <Box
-                  sx={{
-                    height: 4,
-                    width: { xs: "100px", md: "100%" },
-                    mx: { xs: "auto", md: 0 },
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(90deg, rgba(230,126,81,0.5) 0%, rgba(140,57,27,0) 100%)"
-                        : "linear-gradient(90deg, rgba(140,57,27,0.5) 0%, rgba(140,57,27,0) 100%)",
-                    borderRadius: 2,
-                  }}
-                />
+              <motion.div variants={cardFade} className="flex-1">
+                <div className="h-1 w-24 md:w-full mx-auto md:mx-0 bg-gradient-to-r from-customBrown rounded-full" />
               </motion.div>
-            </Box>
+            </div>
 
             <motion.div variants={cardFade}>
-              <Box
-                sx={{
-                  p: { xs: 3, md: 6 },
-                  borderRadius: "12px",
-                  background:
-                    theme.palette.mode === "dark"
-                      ? "linear-gradient(145deg, rgba(40,40,40,0.8) 0%, rgba(26,26,26,0.8) 100%)"
-                      : "linear-gradient(145deg, rgba(255,255,255,0.8) 0%, rgba(248,248,248,0.8) 100%)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: theme.shadows[2],
-                  border:
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255,255,255,0.05)"
-                      : "1px solid rgba(0,0,0,0.05)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "1rem", md: "1.5rem" },
-                    fontWeight: 500,
-                    lineHeight: 1.6,
-                    color:
-                      theme.palette.mode === "dark"
-                        ? "rgba(255,255,255,0.9)"
-                        : "rgba(0,0,0,0.9)",
-                    position: "relative",
-                    zIndex: 1,
-                    "&::first-letter": {
-                      initialLetter: 2,
-                      color:
-                        theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
-                      fontWeight: 700,
-                      marginRight: "0.5rem",
-                    },
-                  }}
-                >
+              <div className="p-6 md:p-8 rounded-xl bg-customBrown backdrop-blur-lg shadow-md border border-gray-200 dark:border-gray-700 relative overflow-hidden">
+                <p className="text-lg md:text-xl leading-relaxed text-gray-900 dark:text-gray-100 relative z-10">
                   To preserve the warrior ethos of the Sahyadri mountains
                   through historically accurate recreations of the weapons,
                   armor, and artifacts once wielded by the legendary forces that
                   shaped our heritage.
-                </Typography>
-              </Box>
+                </p>
+              </div>
             </motion.div>
           </motion.div>
-        </Box>
+        </div>
 
         {/* Core Values Section - Single column on mobile */}
-        <Box sx={{ mb: { xs: 6, md: 12 } }}>
+        <div className="mb-12 md:mb-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -354,155 +133,113 @@ const FullAbout = () => {
             }}
           >
             <motion.div variants={cardFade}>
-              <Typography
-                variant="h2"
-                sx={{
-                  textAlign: "center",
-                  fontSize: { xs: "1.8rem", md: "3rem" },
-                  fontWeight: 800,
-                  mb: 4,
-                  color: theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                  "& span": {
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(90deg, #E67E51 0%, #F9A875 100%)"
-                        : "linear-gradient(90deg, #8C391B 0%, #D45B2B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  },
-                }}
-              >
-                The <span>Spirit</span> Behind Our Work
-              </Typography>
+              <h2 className="text-3xl md:text-5xl font-normal font-times text-center mb-8 text-customBrown">
+                The{" "}
+                <span className="bg-gradient-to-r from-customBrown to-orange-500 bg-clip-text text-transparent">
+                  Spirit
+                </span>{" "}
+                Behind Our Work
+              </h2>
             </motion.div>
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
-                gap: 3,
-                maxWidth: "1400px",
-                mx: "auto",
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {[
                 {
-                  icon: <Brush fontSize={isMobile ? "medium" : "large"} />,
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      />
+                    </svg>
+                  ),
                   title: "Historical Precision",
                   desc: "Every curve of our wagh nakh replicas and every detail in our armor recreations follows documented accounts of the Maratha warriors' equipment.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  color: "text-customBrown dark:text-orange-300",
                 },
                 {
-                  icon: <Insights fontSize={isMobile ? "medium" : "large"} />,
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                  ),
                   title: "Warrior's Spirit",
                   desc: "We infuse each creation with the same dedication shown by the mountain warriors who defended our land.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  color: "text-customBrown dark:text-orange-300",
                 },
                 {
-                  icon: <Diversity2 fontSize={isMobile ? "medium" : "large"} />,
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                  ),
                   title: "Cultural Continuity",
                   desc: "Connecting modern generations with the martial traditions that defined our history.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  color: "text-customBrown dark:text-orange-300",
                 },
               ].map((item, i) => (
                 <motion.div
                   key={item.title}
                   variants={cardFade}
                   custom={i}
-                  whileHover={{ y: isMobile ? 0 : -8 }}
+                  whileHover={{ y: -8 }}
+                  className="h-full"
                 >
-                  <Box
-                    sx={{
-                      height: "100%",
-                      p: 3,
-                      borderRadius: "12px",
-                      background:
-                        theme.palette.mode === "dark"
-                          ? "linear-gradient(145deg, rgba(40,40,40,0.8) 0%, rgba(26,26,26,0.8) 100%)"
-                          : "linear-gradient(145deg, rgba(255,255,255,0.8) 0%, rgba(248,248,248,0.8) 100%)",
-                      backdropFilter: "blur(12px)",
-                      boxShadow: theme.shadows[2],
-                      border:
-                        theme.palette.mode === "dark"
-                          ? "1px solid rgba(255,255,255,0.05)"
-                          : "1px solid rgba(0,0,0,0.05)",
-                      transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-                      "&:hover": {
-                        boxShadow: isMobile
-                          ? theme.shadows[2]
-                          : theme.shadows[6],
-                        transform: isMobile ? "none" : "translateY(-8px)",
-                      },
-                      position: "relative",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: 4,
-                        background: `linear-gradient(90deg, ${item.color} 0%, ${
-                          theme.palette.mode === "dark" ? "#1a1a1a" : "#f9f9f9"
-                        } 100%)`,
-                      }}
-                    />
+                  <div className="h-full p-6 rounded-xl bg-customBrown backdrop-blur-lg shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-400 hover:shadow-lg hover:-translate-y-2 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-customBrown dark:from-orange-300 to-transparent" />
 
-                    <Avatar
-                      sx={{
-                        bgcolor:
-                          theme.palette.mode === "dark"
-                            ? `${item.color}20`
-                            : `${item.color}10`,
-                        color: item.color,
-                        width: { xs: 50, md: 60 },
-                        height: { xs: 50, md: 60 },
-                        mb: 2,
-                        border:
-                          theme.palette.mode === "dark"
-                            ? `1px solid ${item.color}30`
-                            : `1px solid ${item.color}20`,
-                      }}
+                    <div
+                      className={`w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center ${item.color} mb-4 border border-orange-200 dark:border-orange-800`}
                     >
                       {item.icon}
-                    </Avatar>
+                    </div>
 
-                    <Typography
-                      variant="h3"
-                      sx={{
-                        fontSize: { xs: "1.2rem", md: "1.5rem" },
-                        fontWeight: 700,
-                        mb: 1,
-                        color:
-                          theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                      }}
-                    >
+                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                       {item.title}
-                    </Typography>
+                    </h3>
 
-                    <Typography
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark"
-                            ? "rgba(255,255,255,0.7)"
-                            : "rgba(0,0,0,0.7)",
-                        lineHeight: 1.6,
-                        fontSize: { xs: "0.9rem", md: "1rem" },
-                      }}
-                    >
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                       {item.desc}
-                    </Typography>
-                  </Box>
+                    </p>
+                  </div>
                 </motion.div>
               ))}
-            </Box>
+            </div>
           </motion.div>
-        </Box>
+        </div>
 
         {/* Craftsmanship Section - Stacked on mobile */}
-        <Box sx={{ mb: { xs: 6, md: 12 } }}>
+        <div className="mb-12 md:mb-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -514,145 +251,60 @@ const FullAbout = () => {
                 transition: { staggerChildren: 0.2 },
               },
             }}
-            style={{ display: "flex", flexDirection: "column", gap: 4 }}
+            className="flex flex-col gap-8"
           >
             <motion.div variants={cardFade}>
-              <Typography
-                variant="h2"
-                sx={{
-                  fontSize: { xs: "1.8rem", md: "3rem" },
-                  fontWeight: 800,
-                  textAlign: "center",
-                  mb: 4,
-                  color: theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                  "& span": {
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(90deg, #E67E51 0%, #F9A875 100%)"
-                        : "linear-gradient(90deg, #8C391B 0%, #D45B2B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  },
-                }}
-              >
-                <span>Authentic</span> Craftsmanship
-              </Typography>
+              <h2 className="text-3xl md:text-5xl font-normal font-times text-center mb-8 text-customBrown">
+                <span className="bg-gradient-to-r from-customBrown to-orange-500 bg-clip-text text-transparent">
+                  Authentic
+                </span>{" "}
+                Craftsmanship
+              </h2>
             </motion.div>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column-reverse", md: "row" },
-                gap: 4,
-                alignItems: "center",
-              }}
-            >
-              <motion.div variants={cardFade} style={{ flex: 1 }}>
-                <Box
-                  sx={{
-                    p: { xs: 3, md: 5 },
-                    borderRadius: "12px",
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(145deg, rgba(40,40,40,0.8) 0%, rgba(26,26,26,0.8) 100%)"
-                        : "linear-gradient(145deg, rgba(255,255,255,0.8) 0%, rgba(248,248,248,0.8) 100%)",
-                    backdropFilter: "blur(12px)",
-                    boxShadow: theme.shadows[2],
-                    border:
-                      theme.palette.mode === "dark"
-                        ? "1px solid rgba(255,255,255,0.05)"
-                        : "1px solid rgba(0,0,0,0.05)",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "1rem", md: "1.2rem" },
-                      fontWeight: 500,
-                      lineHeight: 1.6,
-                      color:
-                        theme.palette.mode === "dark"
-                          ? "rgba(255,255,255,0.9)"
-                          : "rgba(0,0,0,0.9)",
-                      mb: 2,
-                    }}
-                  >
+            <div className="flex flex-col-reverse md:flex-row gap-8 items-center">
+              <motion.div variants={cardFade} className="flex-1">
+                <div className="p-6 md:p-8 rounded-xl bg-customBrown backdrop-blur-lg shadow-md border border-gray-200 dark:border-gray-700 relative overflow-hidden">
+                  <p className="text-lg md:text-xl leading-relaxed text-gray-900 dark:text-gray-100 relative z-10">
                     Our artisans employ traditional techniques passed down
                     through generations to recreate the weapons and artifacts
                     that once defended the Sahyadri forts.
-                  </Typography>
+                  </p>
 
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
-                      gap: 2,
-                      mt: 3,
-                    }}
-                  >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                     {[
                       "Hand-Forged Metals",
                       "Traditional Joinery",
                       "Historical Accuracy",
                       "Artisanal Detailing",
                     ].map((item, i) => (
-                      <Box
-                        key={i}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: "50%",
-                            background:
-                              theme.palette.mode === "dark"
-                                ? "#E67E51"
-                                : "#8C391B",
-                          }}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: "0.9rem",
-                            color:
-                              theme.palette.mode === "dark"
-                                ? "rgba(255,255,255,0.8)"
-                                : "rgba(0,0,0,0.8)",
-                          }}
-                        >
+                      <div key={i} className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-customBrown dark:bg-orange-300" />
+                        <p className="text-gray-700 dark:text-gray-300">
                           {item}
-                        </Typography>
-                      </Box>
+                        </p>
+                      </div>
                     ))}
-                  </Box>
-                </Box>
+                  </div>
+                </div>
               </motion.div>
 
-              <motion.div variants={cardFade} custom={1} style={{ flex: 1 }}>
-                <Box
-                  sx={{
-                    position: "relative",
-                    height: { xs: 250, md: 400 },
-                    borderRadius: "12px",
-                    overflow: "hidden",
-                    boxShadow: theme.shadows[4],
-                    background: `url(${aboutbg2})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
+              <motion.div
+                variants={cardFade}
+                custom={1}
+                className="flex-1 relative h-64 md:h-96 w-full"
+              >
+                <div
+                  className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg bg-cover bg-center"
+                  style={{ backgroundImage: `url(${aboutbg2})` }}
                 />
               </motion.div>
-            </Box>
+            </div>
           </motion.div>
-        </Box>
+        </div>
 
         {/* Offerings Section - Single column on mobile */}
-        <Box sx={{ mb: { xs: 6, md: 12 } }}>
+        <div className="mb-12 md:mb-24">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -666,301 +318,160 @@ const FullAbout = () => {
             }}
           >
             <motion.div variants={cardFade}>
-              <Typography
-                variant="h2"
-                sx={{
-                  textAlign: "center",
-                  fontSize: { xs: "1.8rem", md: "3rem" },
-                  fontWeight: 800,
-                  mb: 4,
-                  color: theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                  "& span": {
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(90deg, #E67E51 0%, #F9A875 100%)"
-                        : "linear-gradient(90deg, #8C391B 0%, #D45B2B 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  },
-                }}
-              >
-                Inspired by <span>History</span>
-              </Typography>
+              <h2 className="text-3xl md:text-5xl font-normal font-times text-center mb-8 text-customBrown">
+                Inspired by{" "}
+                <span className="bg-gradient-to-r from-customBrown to-orange-500 bg-clip-text text-transparent">
+                  History
+                </span>
+              </h2>
             </motion.div>
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
-                gap: 3,
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
                   icon: (
-                    <MilitaryTech fontSize={isMobile ? "medium" : "large"} />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                      />
+                    </svg>
                   ),
                   title: "Warrior Weapons",
                   desc: "Faithful recreations of traditional arms including Maratha Dhoop(talwars), Katyar, and dand patta swords used by Maharashtra's forces.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  color: "text-customBrown dark:text-orange-300",
                 },
                 {
-                  icon: <History fontSize={isMobile ? "medium" : "large"} />,
-                  title: "Heroic Statues",
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  ),
+                  title: "Legends Statues",
                   desc: "Handcrafted sculptures capturing the dynamic poses and iconic armor of our legendary warriors.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  color: "text-customBrown dark:text-orange-300",
                 },
                 {
-                  icon: <Castle fontSize={isMobile ? "medium" : "large"} />,
-                  title: "Fort Decor",
-                  desc: "Art pieces inspired by the architectural elements of Maharashtra's historic hill forts.",
-                  color: theme.palette.mode === "dark" ? "#E67E51" : "#8C391B",
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zm0 0v4m0 4h.01M12 12v.01M4.93 19.07a10 10 0 1114.14 0M12 12h.01"
+                      />
+                    </svg>
+                  ),
+                  title: "Historical Artifacts",
+                  desc: "Meticulously crafted replicas of coins, seals, and royal insignia from Maharashtra’s glorious history.",
+                  color: "text-customBrown dark:text-orange-300",
                 },
               ].map((item, i) => (
                 <motion.div
                   key={item.title}
                   variants={cardFade}
                   custom={i}
-                  whileHover={{ y: isMobile ? 0 : -8 }}
+                  whileHover={{ y: -8 }}
+                  className="h-full"
                 >
-                  <Box
-                    sx={{
-                      height: "100%",
-                      p: 3,
-                      borderRadius: "12px",
-                      background:
-                        theme.palette.mode === "dark"
-                          ? "linear-gradient(145deg, rgba(40,40,40,0.8) 0%, rgba(26,26,26,0.8) 100%)"
-                          : "linear-gradient(145deg, rgba(255,255,255,0.8) 0%, rgba(248,248,248,0.8) 100%)",
-                      backdropFilter: "blur(12px)",
-                      boxShadow: theme.shadows[2],
-                      border:
-                        theme.palette.mode === "dark"
-                          ? "1px solid rgba(255,255,255,0.05)"
-                          : "1px solid rgba(0,0,0,0.05)",
-                      transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-                      "&:hover": {
-                        boxShadow: isMobile
-                          ? theme.shadows[2]
-                          : theme.shadows[6],
-                        transform: isMobile ? "none" : "translateY(-8px)",
-                      },
-                      position: "relative",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: 4,
-                        background: `linear-gradient(90deg, ${item.color} 0%, ${
-                          theme.palette.mode === "dark" ? "#1a1a1a" : "#f9f9f9"
-                        } 100%)`,
-                      }}
-                    />
+                  <div className="h-full p-6 rounded-xl bg-customBrown backdrop-blur-lg shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-400 hover:shadow-lg hover:-translate-y-2 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-customBrown dark:from-orange-300 to-transparent" />
 
-                    <Avatar
-                      sx={{
-                        bgcolor:
-                          theme.palette.mode === "dark"
-                            ? `${item.color}20`
-                            : `${item.color}10`,
-                        color: item.color,
-                        width: { xs: 50, md: 60 },
-                        height: { xs: 50, md: 60 },
-                        mb: 2,
-                        border:
-                          theme.palette.mode === "dark"
-                            ? `1px solid ${item.color}30`
-                            : `1px solid ${item.color}20`,
-                      }}
+                    <div
+                      className={`w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center ${item.color} mb-4 border border-orange-200 dark:border-orange-800`}
                     >
                       {item.icon}
-                    </Avatar>
+                    </div>
 
-                    <Typography
-                      variant="h3"
-                      sx={{
-                        fontSize: { xs: "1.2rem", md: "1.5rem" },
-                        fontWeight: 700,
-                        mb: 1,
-                        color:
-                          theme.palette.mode === "dark" ? "#fff" : "#1a1a1a",
-                      }}
-                    >
+                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                       {item.title}
-                    </Typography>
+                    </h3>
 
-                    <Typography
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark"
-                            ? "rgba(255,255,255,0.7)"
-                            : "rgba(0,0,0,0.7)",
-                        lineHeight: 1.6,
-                        mb: 2,
-                        fontSize: { xs: "0.9rem", md: "1rem" },
-                      }}
-                    >
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                       {item.desc}
-                    </Typography>
+                    </p>
 
-                    <Link to="/products">
-                      <Box
-                        sx={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 1,
-                          mt: 1,
-                          color: item.color,
-                          fontWeight: 600,
-                          fontSize: "0.9rem",
-                          "&:hover": {
-                            textDecoration: "underline",
-                          },
-                        }}
-                      >
-                        Explore collection
-                        <Box
-                          component="span"
-                          sx={{
-                            display: "inline-flex",
-                            transition: "transform 0.3s",
-                            "div:hover &": {
-                              transform: isMobile ? "none" : "translateX(4px)",
-                            },
-                          }}
-                        >
-                          →
-                        </Box>
-                      </Box>
+                    <Link
+                      to="/products"
+                      className="inline-flex items-center gap-1 mt-2 font-semibold text-customBrown dark:text-orange-300 hover:underline"
+                    >
+                      Explore collection
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
                     </Link>
-                  </Box>
+                  </div>
                 </motion.div>
               ))}
-            </Box>
+            </div>
           </motion.div>
-        </Box>
+        </div>
 
         {/* Legacy Section - Full Width */}
-        <Box sx={{ mb: { xs: 4, md: 8 } }}>
+        <div className="mb-8 md:mb-16">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={cardFade}
           >
-            <Box
-              sx={{
-                p: { xs: 3, md: 8 },
-                borderRadius: "12px",
-                background:
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(145deg, rgba(140,57,27,0.8) 0%, rgba(100,30,10,0.8) 100%)"
-                    : "linear-gradient(145deg, rgba(140,57,27,0.9) 0%, rgba(100,30,10,0.9) 100%)",
-                boxShadow: theme.shadows[4],
-                textAlign: "center",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  background: `url(${weaponsBg})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  opacity: 0.1,
-                  mixBlendMode:
-                    theme.palette.mode === "dark" ? "lighten" : "overlay",
-                }}
+            <div className="p-8 md:p-12 rounded-xl bg-gradient-to-br from-customBrown to-orange-800 shadow-xl text-center relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 w-full h-full bg-cover bg-center opacity-10 mix-blend-overlay"
+                style={{ backgroundImage: `url(${weaponsBg})` }}
               />
 
-              <Box
-                sx={{
-                  position: "relative",
-                  zIndex: 2,
-                  maxWidth: "800px",
-                  mx: "auto",
-                }}
-              >
-                <Typography
-                  variant="h2"
-                  sx={{
-                    fontSize: { xs: "1.8rem", md: "2.5rem" },
-                    fontWeight: 800,
-                    mb: 3,
-                    color: "#fff",
-                    lineHeight: 1.2,
-                    textShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                  }}
-                >
+              <div className="relative z-10 max-w-4xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white leading-tight">
                   Carrying Forward the Warrior Ethos
-                </Typography>
+                </h2>
 
-                <Typography
-                  sx={{
-                    fontSize: { xs: "1rem", md: "1.1rem" },
-                    color: "rgba(255,255,255,0.9)",
-                    lineHeight: 1.6,
-                    mb: 3,
-                    textShadow: "0 1px 2px rgba(0,0,0,0.2)",
-                  }}
-                >
+                <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-6">
                   These creations are more than artifacts — they embody the
                   courage, strategy, and resilience that defined a golden era in
                   our warrior legacy.
-                </Typography>
+                </p>
 
                 <motion.div
-                  whileHover={{ scale: isMobile ? 1 : 1.05 }}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Box
-                    sx={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 1,
-                      px: 3,
-                      py: 1.5,
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      borderRadius: "50px",
-                      color: "#fff",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      transition: "all 0.3s",
-                      fontSize: { xs: "0.9rem", md: "1rem" },
-                      "&:hover": {
-                        background: "rgba(255,255,255,0.2)",
-                      },
-                    }}
-                  >
+                  <button className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 border border-white/20 rounded-full text-white font-semibold transition-all hover:bg-white/20">
                     Discover the Legacy
-                    <Box
-                      component="span"
-                      sx={{
-                        display: "inline-flex",
-                        transition: "transform 0.3s",
-                      }}
-                    >
-                      →
-                    </Box>
-                  </Box>
+                    <span className="transition-transform duration-300">→</span>
+                  </button>
                 </motion.div>
-              </Box>
-            </Box>
+              </div>
+            </div>
           </motion.div>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

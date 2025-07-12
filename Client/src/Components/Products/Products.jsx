@@ -27,7 +27,7 @@ const Product = () => {
   }, []);
 
   const latestProducts = useMemo(() => {
-    return [...products].reverse().slice(0, 8);
+    return [...products].reverse().slice(0, 4);
   }, [products]);
 
   const sendWhatsAppMessage = async (productId) => {
@@ -53,9 +53,9 @@ const Product = () => {
   }
 
   return (
-    <section className="bg-gradient-to-br from-[#fffaf0] to-[#fef6e4] py-16 px-4">
+    <section className="bg-gradient-to-br from-[#fffaf0] to-[#fef6e4] py-16 px-4 font-times">
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-5xl font-bold text-orange-900 mb-2 font-playfair">
+        <h1 className="text-5xl font-normal text-orange-900 mb-2 font-times">
           Featured Products
         </h1>
         <p className="text-gray-600 italic text-lg mb-12">
@@ -76,19 +76,19 @@ const Product = () => {
               />
 
               <div className="p-5 text-left">
-                <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
+                <h2 className="text-xl font-normal text-gray-900 mb-2 line-clamp-1">
                   {product.product_name}
                 </h2>
 
                 <div className="flex justify-between items-center mb-3">
-                  <span className="bg-orange-100 text-orange-700 font-semibold text-sm px-3 py-1 rounded-full">
+                  <span className="bg-orange-100 text-orange-700 font-normal text-sm px-3 py-1 rounded-full">
                     ₹ {product.product_price}
                   </span>
                 </div>
 
                 <button
                   onClick={() => navigate(`/product-details/${product._id}`)}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="w-full bg-customBrown hover:bg-orange-700 text-white font-normal py-2 transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <img
                     src="/images/dhaltalwar.png"
@@ -110,7 +110,7 @@ const Product = () => {
         <div className="mt-14">
           <button
             onClick={() => navigate("/Products")}
-            className="px-6 py-2 border border-orange-600 text-orange-700 hover:bg-orange-100 rounded-md font-medium transition"
+            className="px-6 py-2 border border-orange-600 text-orange-700 hover:bg-orange-100 font-normal transition"
           >
             View All Products
           </button>

@@ -64,7 +64,7 @@ export default function AutoScrollCarousel() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Title */}
-      <h2 className="text-3xl font-bold text-customBrown mb-8 px-8 pt-5">
+      <h2 className="text-3xl font-normal font-time  text-customBrown mb-8 px-8 pt-5">
         Latest Products
       </h2>
 

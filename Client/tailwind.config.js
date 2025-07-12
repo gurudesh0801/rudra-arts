@@ -17,6 +17,7 @@ export default {
         inter: ['"Inter"', "sans-serif"],
         poppins: ['"Poppins"', "sans-serif"],
         nunito: ['"Nunito"', "sans-serif"],
+        times: ["Times New Roman", "serif"],
       },
     },
   },

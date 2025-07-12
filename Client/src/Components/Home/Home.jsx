@@ -97,7 +97,7 @@ const Home = () => {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-5xl md:text-6xl font-semibold font-playfair"
+          className="text-5xl md:text-6xl font-normal font-times"
         >
           Timeless Creations, Crafted with Soul
         </motion.h1>
@@ -122,11 +122,19 @@ const Home = () => {
         >
           <button
             onClick={handleShopNow}
-            className="flex items-center gap-2 bg-white text-black hover:bg-red-900 hover:text-white transition duration-500 px-6 py-2 font-medium rounded"
+            className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-6 py-2 font-medium rounded font-times"
           >
-            <img src="/images/dhaltalwar.png" alt="Icon" className="w-5 h-5" />
+            <img
+              src="/images/dhaltalwar.png"
+              alt="Icon"
+              className="w-5 h-5 invert"
+            />
             Shop Now
-            <img src="/images/dhaltalwar.png" alt="Icon" className="w-5 h-5" />
+            <img
+              src="/images/dhaltalwar.png"
+              alt="Icon"
+              className="w-5 h-5 invert"
+            />
           </button>
         </motion.div>
       </div>

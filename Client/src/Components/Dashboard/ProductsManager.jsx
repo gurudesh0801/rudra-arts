@@ -35,6 +35,7 @@ const ProductManager = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [stockFilter, setStockFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [draggedImageIndex, setDraggedImageIndex] = useState(null);
   const navigate = useNavigate();
 
   const [editFormData, setEditFormData] = useState({
@@ -122,7 +123,7 @@ const ProductManager = () => {
       pprice: product.product_price,
       psize: product.product_size,
       pcategory: product.product_category,
-      pimage: product.product_image,
+      pimage: [...product.product_image], // Create a new array to avoid mutation
       pdiscount: product.product_discount || "",
       inStock: product.inStock !== false,
     });
@@ -179,35 +180,95 @@ const ProductManager = () => {
     }));
   };
 
-  // Handle image upload
-  const handleImageChange = async (e, index) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // Handle image upload when clicked
+  const handleImageClick = async (index) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "rudra-arts");
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dxpf6dhn1/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "rudra-arts");
 
-      const data = await res.json();
-      const newImages = [...editFormData.pimage];
-      newImages[index] = data.secure_url;
+      try {
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dxpf6dhn1/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await res.json();
+        const newImages = [...editFormData.pimage];
+        newImages[index] = data.secure_url;
+        setEditFormData((prev) => ({
+          ...prev,
+          pimage: newImages,
+        }));
+        toast.success("Image updated successfully");
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error("Image upload failed");
+      }
+    };
+
+    input.click();
+  };
+
+  // Drag and drop handlers for image reordering
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("text/plain", index);
+    setDraggedImageIndex(index);
+    e.currentTarget.style.opacity = "0.5";
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.currentTarget.style.border = "2px dashed #1976d2";
+  };
+
+  const handleDragLeave = (e) => {
+    e.currentTarget.style.border = "2px dashed #ccc";
+  };
+
+  const handleDrop = (e, targetIndex) => {
+    e.preventDefault();
+    e.currentTarget.style.border = "2px dashed #ccc";
+
+    const sourceIndex = Number(e.dataTransfer.getData("text/plain"));
+    if (sourceIndex === targetIndex) return;
+
+    // Create a new array without mutating the original
+    const newImages = [...editFormData.pimage];
+
+    // Remove undefined elements if any exist
+    const filteredImages = newImages.filter((img) => img !== undefined);
+
+    // Ensure we have elements at both source and target indices
+    if (
+      sourceIndex < filteredImages.length &&
+      targetIndex < filteredImages.length
+    ) {
+      // Swap the images
+      const temp = filteredImages[sourceIndex];
+      filteredImages[sourceIndex] = filteredImages[targetIndex];
+      filteredImages[targetIndex] = temp;
+
       setEditFormData((prev) => ({
         ...prev,
-        pimage: newImages,
+        pimage: filteredImages,
       }));
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast.error("Image upload failed");
     }
+  };
+
+  const handleDragEnd = (e) => {
+    e.currentTarget.style.opacity = "1";
+    setDraggedImageIndex(null);
   };
 
   // Filter products based on stock status
@@ -454,44 +515,58 @@ const ProductManager = () => {
             {/* Image Upload Section */}
             <Typography variant="subtitle1">Product Images</Typography>
             <Box display="flex" flexWrap="wrap" gap={2}>
-              {[0, 1, 2, 3].map((i) => (
-                <Box
-                  key={i}
-                  width={100}
-                  height={100}
-                  border="2px dashed #ccc"
-                  borderRadius={2}
-                  position="relative"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  overflow="hidden"
-                  bgcolor="#f9f9f9"
-                >
-                  {editFormData.pimage?.[i] ? (
-                    <Avatar
-                      src={editFormData.pimage[i]}
-                      alt={`Product Image ${i + 1}`}
-                      sx={{ width: "100%", height: "100%", borderRadius: 0 }}
-                      variant="square"
-                    />
-                  ) : (
-                    <Button
-                      component="label"
-                      sx={{ fontSize: "0.75rem", textTransform: "none" }}
-                    >
-                      Upload
-                      <input
-                        type="file"
-                        hidden
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(e, i)}
+              {[0, 1, 2, 3].map((i) => {
+                // Ensure we don't try to access undefined indices
+                const imageUrl = editFormData.pimage[i] || null;
+                return (
+                  <Box
+                    key={i}
+                    width={100}
+                    height={100}
+                    border="2px dashed #ccc"
+                    borderRadius={2}
+                    position="relative"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    overflow="hidden"
+                    bgcolor="#f9f9f9"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, i)}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.currentTarget.style.border = "2px dashed #1976d2";
+                    }}
+                    onDragLeave={(e) => {
+                      e.currentTarget.style.border = "2px dashed #ccc";
+                    }}
+                    onDrop={(e) => handleDrop(e, i)}
+                    onDragEnd={handleDragEnd}
+                    style={{
+                      cursor: "move",
+                      opacity: draggedImageIndex === i ? 0.5 : 1,
+                    }}
+                    onClick={() => handleImageClick(i)}
+                  >
+                    {imageUrl ? (
+                      <Avatar
+                        src={imageUrl}
+                        alt={`Product Image ${i + 1}`}
+                        sx={{ width: "100%", height: "100%", borderRadius: 0 }}
+                        variant="square"
                       />
-                    </Button>
-                  )}
-                </Box>
-              ))}
+                    ) : (
+                      <Typography variant="caption" textAlign="center">
+                        Click to upload
+                      </Typography>
+                    )}
+                  </Box>
+                );
+              })}
             </Box>
+            <Typography variant="caption" color="textSecondary">
+              Drag to reorder images • Click to update image
+            </Typography>
 
             {/* Stock Status Switch */}
             <FormControlLabel

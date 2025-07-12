@@ -26,7 +26,7 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Products", path: "/products" },
     { name: "Blog", path: "/blogs" },
-    { name: "Gallary", path: "/lorem" },
+    { name: "Wall of Fame", path: "/lorem" },
     { name: "Hands Behind Rudra arts", path: "/handsbehindrudrarts" },
     { name: "Contact", path: "/contact" },
   ];
@@ -36,7 +36,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isHome && !scrolled
           ? "bg-transparent text-white"
-          : "bg-white text-[#5c3a1d] shadow-sm"
+          : "bg-customBrown text-white shadow-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,11 +47,11 @@ const Navbar = () => {
               src={logo}
               alt="logo"
               className={`h-10 object-contain transition duration-300 ${
-                scrolled || !isHome ? "" : "invert"
+                scrolled || !isHome ? "invert" : "invert"
               }`}
               whileHover={{ scale: 1.05 }}
             />
-            <p className="ml-2 font-playfair font-bold">
+            <p className="ml-2 font-times font-bold">
               Rudra Arts & Handicrafts
             </p>
           </Link>
@@ -63,10 +63,10 @@ const Navbar = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times ${
                     location.pathname === item.path
                       ? "text-[#ff8732] font-semibold"
-                      : "hover:text-[#8a4b1f]"
+                      : "hover:text-orange-500"
                   }`}
                 >
                   {item.name}

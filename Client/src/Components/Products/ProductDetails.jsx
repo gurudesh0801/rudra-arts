@@ -7,59 +7,9 @@ import {
   FiChevronRight,
   FiArrowLeft,
   FiCheck,
+  FiZoomIn,
+  FiZoomOut,
 } from "react-icons/fi";
-
-// ZoomImage component remains exactly the same
-const ZoomImage = ({ src, zoom = 2.5, radius = 180 }) => {
-  const containerRef = useRef();
-  const [showZoom, setShowZoom] = useState(false);
-  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setZoomPosition({ x, y });
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setShowZoom(true)}
-      onMouseLeave={() => setShowZoom(false)}
-      className="relative w-full h-[400px] overflow-hidden border rounded-lg"
-    >
-      <img
-        src={src}
-        alt="Zoom"
-        className="w-full h-full object-cover"
-        draggable={false}
-      />
-      {showZoom && (
-        <div
-          className="absolute pointer-events-none border-2 border-white shadow-2xl rounded-full"
-          style={{
-            width: radius,
-            height: radius,
-            top: zoomPosition.y - radius / 2,
-            left: zoomPosition.x - radius / 2,
-            backgroundImage: `url(${src})`,
-            backgroundSize: `${containerRef.current?.offsetWidth * zoom}px ${
-              containerRef.current?.offsetHeight * zoom
-            }px`,
-            backgroundPosition: `-${zoomPosition.x * zoom - radius / 2}px -${
-              zoomPosition.y * zoom - radius / 2
-            }px`,
-            backgroundRepeat: "no-repeat",
-            transition: "opacity 0.1s ease",
-            zIndex: 10,
-          }}
-        />
-      )}
-    </div>
-  );
-};
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -70,6 +20,11 @@ const ProductDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const thumbnailContainerRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const imageContainerRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const { addToCart } = useCart();
 
@@ -97,6 +52,8 @@ const ProductDetails = () => {
     const nextIndex = (currentImageIndex + 1) % product.product_image.length;
     setCurrentImageIndex(nextIndex);
     setSelectedImage(product.product_image[nextIndex]);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
     scrollThumbnail(nextIndex);
   };
 
@@ -107,6 +64,8 @@ const ProductDetails = () => {
       product.product_image.length;
     setCurrentImageIndex(prevIndex);
     setSelectedImage(product.product_image[prevIndex]);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
     scrollThumbnail(prevIndex);
   };
 
@@ -123,13 +82,93 @@ const ProductDetails = () => {
   const handleThumbnailClick = (img, index) => {
     setSelectedImage(img);
     setCurrentImageIndex(index);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
   };
 
   const handleAddToCart = (product) => {
     addToCart(product);
     setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 3000); // Hide after 3 seconds
+    setTimeout(() => setShowAlert(false), 3000);
   };
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.25, 3));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.25, 1));
+    // Reset position when zooming out to minimum
+    if (zoomLevel - 0.25 <= 1) {
+      setPosition({ x: 0, y: 0 });
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y,
+      });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging && zoomLevel > 1) {
+      const container = imageContainerRef.current;
+      if (!container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const imgWidth = containerRect.width * zoomLevel;
+      const imgHeight = containerRect.height * zoomLevel;
+
+      const maxX = (imgWidth - containerRect.width) / 2;
+      const maxY = (imgHeight - containerRect.height) / 2;
+
+      let newX = e.clientX - dragStart.x;
+      let newY = e.clientY - dragStart.y;
+
+      // Constrain movement to image boundaries
+      newX = Math.min(Math.max(newX, -maxX), maxX);
+      newY = Math.min(Math.max(newY, -maxY), maxY);
+
+      setPosition({ x: newX, y: newY });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleWheel = (e) => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        handleZoomIn();
+      } else {
+        handleZoomOut();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.body.style.cursor = "grabbing";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    } else {
+      document.body.style.cursor = "";
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.body.style.cursor = "";
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, dragStart]);
 
   if (loading) {
     return (
@@ -178,8 +217,56 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image gallery */}
           <div className="space-y-6">
-            <div className="relative rounded-xl overflow-hidden bg-gray-50">
-              <ZoomImage src={selectedImage} />
+            <div
+              className="relative rounded-xl overflow-hidden bg-gray-50"
+              onWheel={handleWheel}
+            >
+              <div
+                ref={imageContainerRef}
+                className="w-full h-[400px] overflow-hidden flex items-center justify-center cursor-grab"
+                onMouseDown={handleMouseDown}
+                style={isDragging ? { cursor: "grabbing" } : {}}
+              >
+                <img
+                  src={selectedImage}
+                  alt="Product"
+                  className="object-contain transition-transform duration-300"
+                  style={{
+                    transform: `translate(${position.x}px, ${position.y}px) scale(${zoomLevel})`,
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                  draggable={false}
+                />
+              </div>
+
+              {/* Zoom controls */}
+              <div className="absolute bottom-4 right-4 flex space-x-2 z-20">
+                <button
+                  onClick={handleZoomOut}
+                  disabled={zoomLevel <= 1}
+                  className={`p-2 rounded-full shadow-md transition-all duration-300 ${
+                    zoomLevel <= 1
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-white/80 text-gray-800 hover:bg-white hover:scale-110"
+                  }`}
+                  aria-label="Zoom out"
+                >
+                  <FiZoomOut size={20} />
+                </button>
+                <button
+                  onClick={handleZoomIn}
+                  disabled={zoomLevel >= 3}
+                  className={`p-2 rounded-full shadow-md transition-all duration-300 ${
+                    zoomLevel >= 3
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-white/80 text-gray-800 hover:bg-white hover:scale-110"
+                  }`}
+                  aria-label="Zoom in"
+                >
+                  <FiZoomIn size={20} />
+                </button>
+              </div>
 
               {product.product_image?.length > 1 && (
                 <>
