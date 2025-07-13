@@ -23,7 +23,7 @@ const AboutUs = () => {
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal font-times border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
           The Story Behind Rudra Arts & Handicrafts
         </h1>
-        <p className="text-base sm:text-lg md:text-xl text-black mt-2">
+        <p className="text-base sm:text-lg font-times md:text-xl text-black mt-2">
           A Journey Through Time: Building Innovation, Preserving Tradition
         </p>
       </motion.div>
@@ -38,7 +38,7 @@ const AboutUs = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="bg-white border-l-4 md:border-l-8 border-[#8b6f47] shadow-lg p-4 sm:p-6 h-auto text-left rounded-l-xl opacity-90"
+              className="bg-white border-l-4 md:border-l-8 border-[#8b6f47] shadow-lg p-4 sm:p-6 h-auto text-left font-times rounded-l-xl opacity-90"
             >
               <h3 className="text-xl sm:text-2xl font-semibold text-[#3e3228] mb-2">
                 {title}

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -59,7 +60,7 @@ const Product = () => {
     <section className="bg-gradient-to-br from-[#fffaf0] to-[#fef6e4] py-16 px-4 font-times">
       <div className="max-w-7xl mx-auto text-center">
         <h1 className="text-5xl font-normal text-orange-900 mb-2 font-times">
-          Featured Products
+          <AnimatedUnderline>Featured Products</AnimatedUnderline>
         </h1>
         <p className="text-gray-600 italic text-lg mb-12">
           Reliving History Through Every Creation
@@ -69,16 +70,16 @@ const Product = () => {
           {latestProducts.map((product) => (
             <div
               key={product._id}
-              className="relative bg-white/70 backdrop-blur-xl shadow-2xl border border-orange-200 rounded-2xl overflow-hidden transition-transform hover:scale-[1.025] duration-300"
+              className="relative bg-white/70 backdrop-blur-xl rounded-xl shadow-2xl border border-orange-200 overflow-hidden transition-transform hover:scale-[1.025] duration-300"
             >
               <img
                 src={product.product_image?.[0] || "/placeholder.jpg"}
                 alt={product.product_name}
-                className="w-full h-48 object-cover cursor-pointer"
+                className="w-full h-[15rem] object-cover cursor-pointer"
                 onClick={() => navigate(`/product-details/${product._id}`)}
               />
 
-              <div className="p-5 text-left">
+              <div className="p-3 text-left">
                 <h2 className="text-xl font-normal text-gray-900 mb-2 line-clamp-1">
                   {product.product_name}
                 </h2>

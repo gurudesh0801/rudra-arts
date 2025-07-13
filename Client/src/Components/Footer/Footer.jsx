@@ -2,7 +2,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-customBrown text-white pt-10 font-times">
+    <footer className="bg-darkBrown text-white pt-10 font-times">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 pb-10">
         {/* Quick Links */}
         <div>
@@ -111,7 +111,7 @@ const Footer = () => {
       <div className="border-t border-[#D4AF37] mx-4"></div>
 
       {/* Copyright */}
-      <div className="bg-customBrown py-4 text-center text-white text-sm">
+      <div className="bg-darkBrown py-4 text-center text-white text-sm">
         &copy; {new Date().getFullYear()} Rudra Arts & Handicrafts. All Rights
         Reserved.
         <br />

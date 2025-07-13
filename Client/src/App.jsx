@@ -56,9 +56,6 @@ const App = () => {
               <Element name="Products">
                 <Products />
               </Element>
-              <Element name="franchise">
-                <FranchiseCarousel />
-              </Element>
               <Element name="news">
                 <News />
               </Element>
@@ -74,6 +71,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Lorem" element={<Lorem />} />
+        <Route path="/franchises" element={<FranchiseCarousel />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />
         <Route path="/ourteam" element={<TeamComponent />} />
         <Route path="/handsbehindrudrarts" element={<BTS />} />

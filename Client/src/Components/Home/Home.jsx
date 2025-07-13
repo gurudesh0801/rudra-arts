@@ -13,9 +13,10 @@ const Home = () => {
   // Replace these with your actual image paths
   const slides = [
     "/images/maharaj1.jpg",
-    "/images/fort2.jpg",
-    "/images/fort3.jpg",
-    "/images/fort4.jpg",
+    // "/images/slide2.jpg",
+    // "/images/slide3.jpg",
+    "/images/slide4.jpg",
+    "/images/slide5.jpg",
   ];
 
   const handleShopNow = () => {
@@ -64,7 +65,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+    <div className="relative w-full h-[700px] flex items-center justify-center overflow-hidden bg-black pt-20 mt-20">
       {/* Image Carousel Background */}
       <div
         ref={sliderRef}
@@ -105,7 +106,7 @@ const Home = () => {
       </button>
 
       {/* Main Content (unchanged from your original) */}
-      <div className="z-10 text-center text-white max-w-5xl px-4 mt-20">
+      {/* <div className="z-10 text-center text-white max-w-5xl px-4 mt-20">
         <motion.h1
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -150,7 +151,7 @@ const Home = () => {
             />
           </button>
         </motion.div>
-      </div>
+      </div> */}
     </div>
   );
 };

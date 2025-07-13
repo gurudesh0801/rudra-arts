@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaInstagram } from "react-icons/fa";
-import aboutBg from "../../assets/images/about-bg.jpg";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const News = () => {
   const [newsData, setNewsData] = useState([]);
@@ -11,15 +11,12 @@ const News = () => {
   const fetchLatestNews = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=3&sort=desc`
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=4&sort=desc`
       );
       const data = await res.json();
-
-      // Assuming backend returns data.newsItems[]
       const filteredNews = (data.newsItems || []).filter(
         (news) => !news.isHide
       );
-
       setNewsData(filteredNews);
     } catch (err) {
       console.error("Failed to fetch news:", err);
@@ -42,8 +39,8 @@ const News = () => {
 
   return (
     <div
-      className="py-20 min-h-screen bg-fixed bg-cover font-outfit bg-center text-white"
-      style={{ backgroundImage: `url(${aboutBg})` }}
+      className="py-16 min-h-screen bg-[#FFF1DE] text-black"
+      style={{ fontFamily: "Times New Roman, serif" }}
     >
       <div className="container mx-auto px-4">
         {/* Heading */}
@@ -52,68 +49,80 @@ const News = () => {
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-5xl text-customBrown font-normal font-times mb-3"
+            className="text-3xl md:text-4xl text-customBrown font-normal mb-3"
           >
-            Rudra Arts & Handicrafts News
+            <AnimatedUnderline>Rudra Arts & Handicrafts News</AnimatedUnderline>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-lg text-gray-700"
+            className="text-base text-gray-600 max-w-2xl mx-auto"
           >
             Discover the rich heritage behind handcrafted art
           </motion.p>
         </div>
 
         {/* News Cards */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {newsData.map((news, index) => (
             <motion.div
               key={news._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.6 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true }}
-              className="relative rounded-xl shadow-xl overflow-hidden group bg-white text-gray-900"
+              className="bg-white rounded-lg shadow-sm overflow-hidden group border border-gray-200 hover:shadow-md transition-all duration-300"
             >
               {/* Image */}
-              <img
-                src={news.image}
-                alt={news.title}
-                className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
-                onError={(e) => {
-                  e.target.src = "/placeholder-news.jpg";
-                }}
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition duration-300" />
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={news.image}
+                  alt={news.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    e.target.src = "/placeholder-news.jpg";
+                  }}
+                />
+              </div>
 
               {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-end z-10 p-6 text-white">
-                <h2 className="text-xl font-bold mb-2">{news.title}</h2>
-                <p className="text-sm line-clamp-3 mb-4">{news.description}</p>
-                <div className="flex justify-between items-center">
+              <div className="p-4">
+                <div className="mb-3">
+                  <h2 className="text-lg font-semibold mb-2 text-customBrown leading-tight">
+                    {news.title}
+                  </h2>
+                  <div className="h-px w-8 bg-customBrown my-2"></div>
+                  <p className="text-gray-600 text-xs mb-3 line-clamp-2 leading-relaxed">
+                    {news.shortDescription ||
+                      news.description.substring(0, 100) + "..."}
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center border-t border-gray-100 pt-3">
                   <button
                     onClick={() =>
                       news.isExternal
                         ? window.open(news.slug, "_blank")
                         : handleShow(news)
                     }
-                    className="bg-customBrown hover:bg-orange-700 text-white text-sm px-4 py-2 font-medium flex items-center justify-center gap-2 transition-all"
+                    className="text-customBrown hover:text-orange-700 text-xs font-medium flex items-center gap-1 transition-colors"
                   >
-                    <img
-                      src="/images/dhaltalwar.png"
-                      alt="Icon Left"
-                      className="w-5 h-5 invert"
-                    />
                     <span>Read More</span>
-                    <img
-                      src="/images/dhaltalwar.png"
-                      alt="Icon Right"
-                      className="w-5 h-5 invert"
-                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
                   </button>
 
                   {news.isExternal && (
@@ -121,7 +130,7 @@ const News = () => {
                       href={news.slug}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white hover:text-orange-300 text-xl transition"
+                      className="text-gray-400 hover:text-customBrown transition-colors text-sm"
                     >
                       <FaInstagram />
                     </a>
@@ -136,50 +145,59 @@ const News = () => {
         <AnimatePresence>
           {showModal && selectedNews && (
             <motion.div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4 py-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="bg-white rounded-xl max-w-xl w-full overflow-hidden text-gray-800 relative"
+                className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 transition={{ duration: 0.3 }}
+                style={{ fontFamily: "Times New Roman, serif" }}
               >
                 {/* Close */}
                 <button
                   onClick={handleClose}
-                  className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-3xl font-light"
+                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
                 >
                   &times;
                 </button>
 
                 {/* Modal Content */}
                 <div className="p-6">
-                  <h2 className="text-2xl font-semibold mb-4">
+                  <h2 className="text-xl font-bold mb-3 text-gray-900">
                     {selectedNews.title}
                   </h2>
-                  <img
-                    src={selectedNews.image}
-                    alt={selectedNews.title}
-                    className="w-full h-60 object-contain mb-4 rounded"
-                  />
-                  <p className="text-gray-700 leading-relaxed">
-                    {selectedNews.description}
-                  </p>
-                  <p className="mt-4 text-sm text-gray-500">
-                    Follow us on Instagram for more!
-                  </p>
-                </div>
-                <div className="px-6 pb-6 flex justify-end">
-                  <button
-                    onClick={handleClose}
-                    className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900 transition"
-                  >
-                    Close
-                  </button>
+
+                  <div className="mb-5">
+                    <img
+                      src={selectedNews.image}
+                      alt={selectedNews.title}
+                      className="w-full h-48 object-cover rounded mb-3"
+                    />
+
+                    <div className="text-sm text-gray-700 leading-relaxed">
+                      {selectedNews.description
+                        .split("\n")
+                        .map((paragraph, i) => (
+                          <p key={i} className="mb-3 last:mb-0">
+                            {paragraph}
+                          </p>
+                        ))}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end border-t border-gray-100 pt-3">
+                    <button
+                      onClick={handleClose}
+                      className="px-4 py-1.5 bg-gray-800 text-white text-sm rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
