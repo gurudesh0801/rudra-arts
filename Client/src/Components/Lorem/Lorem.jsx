@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import { FiZoomIn } from "react-icons/fi";
 
 const images = [
   { src: "/images/IMG-20250617-WA0035.jpg", title: "Mountain View" },
@@ -38,49 +38,110 @@ const images = [
 ];
 
 const fadeIn = {
-  hidden: { opacity: 0, scale: 0.9 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i) => ({
     opacity: 1,
-    scale: 1,
-    transition: { delay: i * 0.05, duration: 0.4 },
+    y: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1], // Smooth easing
+    },
   }),
 };
 
-const Lorem = () => {
+const Gallery = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
-    <section className="px-6 py-12 bg-gray-100 mt-12">
-      <h2 className="text-5xl font-bold font-playfair text-customBrown text-center mb-5 mt-10">
-        <AnimatedUnderline>Collage Gallery</AnimatedUnderline>
-      </h2>
-      <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-        {images.map((img, i) => (
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="py-16 bg-gradient-to-b from-amber-50 to-amber-100"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        {/* Gallery Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-4xl md:text-5xl font-normal text-amber-900 mb-4 font-times">
+            Heritage Gallery
+          </h2>
           <motion.div
-            key={i}
-            className="break-inside-avoid overflow-hidden rounded-xl shadow-md relative group"
-            custom={i}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            whileHover={{ scale: 1.02 }}
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="h-1 bg-amber-700 mx-auto max-w-xs"
+          />
+        </motion.div>
+
+        {/* Masonry Grid */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+          {images.map((img, i) => (
+            <motion.div
+              key={i}
+              className="break-inside-avoid mb-6 relative group"
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "0px 0px -50px 0px" }}
+              variants={fadeIn}
+            >
+              <div className="overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src={img.src}
+                  alt={img.title}
+                  className="w-full h-auto object-cover transition-all duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    whileHover={{ scale: 1 }}
+                    className="p-2 bg-amber-700/80 rounded-full text-white"
+                  >
+                    <FiZoomIn className="text-2xl" />
+                  </motion.div>
+                </div>
+
+                {/* Caption */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="font-medium text-white font-times">
+                    {img.title}
+                  </h3>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* View More Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="flex justify-center mt-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, backgroundColor: "#92400e" }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-amber-700 text-white rounded-lg font-medium transition"
           >
-            <img
-              src={img.src}
-              alt={img.title}
-              className="w-full object-cover transition duration-300 group-hover:brightness-75"
-            />
-            <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/50 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-              {img.title}
-            </div>
-          </motion.div>
-        ))}
+            View More Collections
+          </motion.button>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
-export default Lorem;
+export default Gallery;

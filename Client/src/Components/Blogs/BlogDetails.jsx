@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowLeft } from "react-icons/fi";
-import { Typography, Avatar, Box, Button } from "@mui/material";
-import weaponsBg from "../../assets/images/Weponsbg.jpg";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -30,176 +28,124 @@ const BlogDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-amber-700">Loading...</div>
+      </div>
+    );
   }
 
   if (!blog) {
-    return <div>Blog not found</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-amber-700">Blog not found</div>
+      </div>
+    );
   }
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        py: 10,
-        pt: 14,
-        overflow: "hidden",
-        minHeight: "100vh",
-      }}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 mt-20 pt-10"
     >
-      {/* Background with overlay */}
-      <Box
-        sx={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-          backgroundImage: `url(${weaponsBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            inset: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.92)",
-          },
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "relative",
-          zIndex: 20,
-          maxWidth: "1200px",
-          margin: "0 auto",
-          px: { xs: 3, md: 4 },
-        }}
+      {/* Back Button */}
+      <motion.button
+        whileHover={{ x: -4 }}
+        onClick={() => navigate(-1)}
+        className="absolute top-6 left-6 z-10 flex items-center gap-2 text-amber-800 font-medium"
       >
-        <Button
-          startIcon={<FiArrowLeft />}
-          onClick={() => navigate(-1)}
-          sx={{
-            mb: 4,
-            color: "#8C391B",
-            fontWeight: 500,
-          }}
-        >
-          Back to Blogs
-        </Button>
+        <FiArrowLeft /> Back to Blogs
+      </motion.button>
 
-        <Box
-          sx={{
-            p: 6,
-            backgroundColor: "rgba(255,255,255,0.8)",
-            borderRadius: "12px",
-          }}
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row h-full">
+        {/* Image Section - Full Height */}
+        {blog.image && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="lg:w-1/2 h-screen lg:h-auto lg:min-h-screen sticky top-0"
+          >
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-full max-h-screen object-contain"
+            />
+          </motion.div>
+        )}
+
+        {/* Text Content Section */}
+        <motion.div
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:w-1/2 p-8 md:p-12 lg:p-16 bg-white"
         >
-          <Box sx={{ mb: 4 }}>
-            <Typography
-              sx={{
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                px: "12px",
-                py: "4px",
-                backgroundColor: "rgba(140, 57, 27, 0.1)",
-                color: "#8C391B",
-                borderRadius: "999px",
-                display: "inline-block",
-              }}
-            >
+          {/* Category Tag */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mb-6"
+          >
+            <span className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
               {blog.category || "General"}
-            </Typography>
-          </Box>
+            </span>
+          </motion.div>
 
-          <Typography
-            variant="h2"
-            sx={{
-              fontSize: { xs: "1.8rem", md: "2.2rem" },
-              fontWeight: "bold",
-              mb: 4,
-              color: "#333",
-            }}
+          {/* Title */}
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-3xl md:text-4xl font-normal text-amber-900 mb-6 leading-tight font-times"
           >
             {blog.title}
-          </Typography>
+          </motion.h1>
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              mb: 6,
-            }}
+          {/* Author and Date */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="flex items-center gap-4 mb-8"
           >
-            <Avatar
-              sx={{
-                width: 48,
-                height: 48,
-                backgroundColor: "#8C391B",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
+            <div className="w-12 h-12 rounded-full bg-amber-700 flex items-center justify-center text-white font-medium">
               {blog.author?.[0] || "A"}
-            </Avatar>
-            <Box>
-              <Typography sx={{ fontWeight: 600 }}>
+            </div>
+            <div>
+              <p className="font-medium text-amber-900">
                 {blog.author || "Anonymous"}
-              </Typography>
-              <Typography sx={{ color: "#666", fontSize: "0.875rem" }}>
+              </p>
+              <p className="text-amber-600 text-sm">
                 {new Date(blog.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
-              </Typography>
-            </Box>
-          </Box>
+              </p>
+            </div>
+          </motion.div>
 
-          {blog.image && (
-            <Box
-              sx={{
-                width: "100%",
-                mb: 6,
-                borderRadius: "12px",
-                overflow: "hidden",
-                backgroundColor: "#fff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                p: 2,
-              }}
-            >
-              <img
-                src={blog.image}
-                alt={blog.title}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  maxHeight: "400px",
-                }}
-              />
-            </Box>
-          )}
-
-          <Box sx={{ maxWidth: "100%", overflowWrap: "break-word" }}>
+          {/* Blog Content */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="prose max-w-none text-amber-900"
+          >
             {blog.content.split("\n").map((paragraph, i) => (
-              <Typography
-                key={i}
-                sx={{
-                  mb: 3,
-                  color: "#333",
-                  lineHeight: 1.8,
-                  fontSize: "1.1rem",
-                }}
-              >
+              <p key={i} className="mb-4 leading-relaxed">
                 {paragraph}
-              </Typography>
+              </p>
             ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </motion.div>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 

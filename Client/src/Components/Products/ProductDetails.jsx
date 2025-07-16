@@ -187,7 +187,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="bg-white py-12 px-4 sm:px-6 lg:px-8 mt-10">
+    <div className="bg-gradient-to-b from-amber-50 to-amber-100 py-12 px-4 sm:px-6 lg:px-8 mt-10">
       <AnimatePresence>
         {showAlert && (
           <motion.div
@@ -208,7 +208,7 @@ const ProductDetails = () => {
         {/* Back button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-orange-600 mb-8 transition-colors duration-200"
+          className="flex items-center text-gray-600 hover:text-orange-600 mb-8 transition-colors duration-200 mt-20"
         >
           <FiArrowLeft className="mr-2" />
           Back to Products

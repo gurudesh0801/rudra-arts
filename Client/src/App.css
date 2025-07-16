@@ -11,7 +11,7 @@ body {
   scroll-behavior: smooth;
   transition: 0.5s;
   font-family: outfit;
-  background: #b08968;
+  /* background: linear-gradient(45deg, ); */
 }
 
 .font-outfit {

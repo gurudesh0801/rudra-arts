@@ -57,7 +57,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
             transition={{ duration: 0.3 }}
-            className={`w-full bg-[#FFF1DE] text-black text-white"}`}
+            className={`w-full bg-gradient-to-b from-amber-50 to-amber-100 text-black text-white"}`}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-20 py-2">

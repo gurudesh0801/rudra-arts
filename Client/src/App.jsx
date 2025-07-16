@@ -33,6 +33,8 @@ import FranchiseCarousel from "./Components/FranchiseCarousel/FranchiseCarousel"
 import TeamComponent from "./Components/TeamComponent/TeamComponent";
 import BTS from "./Components/BTS/BTS";
 import ExploreProcess from "./Components/BTS/ExploreProcess";
+import FullScreenVideoPlayer from "./Components/FullScreenVideoPlayer/FullScreenVideoPlayer";
+import SideBySidePortrait from "./Components/PoliticianPhotos/SideBySidePortrait";
 
 const App = () => {
   useEffect(() => {
@@ -50,11 +52,17 @@ const App = () => {
               <Element name="home">
                 <Home />
               </Element>
+              <Element name="products">
+                <Products />
+              </Element>
               <Element name="about">
                 <AboutUs />
               </Element>
-              <Element name="Products">
-                <Products />
+              <Element name="videoSection">
+                <FullScreenVideoPlayer />
+              </Element>
+              <Element name="politician">
+                <SideBySidePortrait />
               </Element>
               <Element name="news">
                 <News />

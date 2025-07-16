@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-export default function AutoScrollCarousel() {
+export default function LatestProducts() {
   const [products, setProducts] = useState([]);
-  const [isHovered, setIsHovered] = useState(false);
-  const controls = useAnimation();
   const navigate = useNavigate();
-  const carouselRef = useRef(null);
 
   useEffect(() => {
     const fetchLatestProducts = async () => {
@@ -21,7 +18,7 @@ export default function AutoScrollCarousel() {
         const sortedProducts = data.sort(
           (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
         );
-        setProducts(sortedProducts.slice(0, 3));
+        setProducts(sortedProducts.slice(0, 4)); // Get first 4 newest products
       } catch (err) {
         console.error("Failed to fetch products", err);
       }
@@ -30,79 +27,52 @@ export default function AutoScrollCarousel() {
     fetchLatestProducts();
   }, []);
 
-  useEffect(() => {
-    const startAnimation = () => {
-      controls.start({
-        x: ["0%", "-100%"],
-        transition: {
-          duration: 40,
-          ease: "linear",
-          repeat: Infinity,
-        },
-      });
-    };
-
-    const stopAnimation = () => {
-      controls.stop();
-    };
-
-    if (isHovered) {
-      stopAnimation();
-    } else {
-      startAnimation();
-    }
-
-    return () => stopAnimation();
-  }, [isHovered, controls]);
-
   if (!products.length) return null;
 
   return (
-    <div
-      className="relative w-full py-12 overflow-hidden bg-transperent"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="w-full py-12 bg-transparent">
       {/* Title */}
-      <h2 className="text-3xl font-normal font-time  text-customBrown mb-8 px-8 pt-5">
+      <h2 className="text-3xl font-normal font-times text-customBrown mb-8 px-8 pt-5">
         Latest Products
       </h2>
 
-      <motion.div className="flex gap-8" animate={controls} ref={carouselRef}>
-        {[...products, ...products].map((product, index) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 px-8">
+        {products.map((product) => (
           <motion.div
-            key={`${product._id}-${index}`}
-            className="relative cursor-pointer min-w-[280px]"
+            key={product._id}
+            className="relative cursor-pointer"
             onClick={() => navigate(`/product-details/${product._id}`)}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden bg-white shadow-md">
               <img
                 src={product.product_image?.[0] || "/placeholder-image.jpg"}
                 alt={product.product_name}
-                className="w-full h-48 object-cover rounded-2xl transform transition-transform duration-500"
+                className="w-full h-48 object-cover"
                 onError={(e) => {
                   e.target.src = "/placeholder-image.jpg";
                 }}
               />
 
               {/* Info overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-sm">
-                <p className="font-semibold truncate">{product.product_name}</p>
-                <p className="text-orange-400 font-bold">
-                  ₹{product.product_price}
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-gray-800 mb-1 truncate">
+                  {product.product_name}
+                </h3>
+                <p className="text-orange-500 font-bold text-lg">
+                  ₹{product.product_price.toLocaleString()}
                 </p>
               </div>
 
-              {index < 3 && (
-                <div className="absolute top-4 right-4 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">
-                  New
-                </div>
-              )}
+              {/* New badge */}
+              <div className="absolute top-4 right-4 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">
+                New
+              </div>
             </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

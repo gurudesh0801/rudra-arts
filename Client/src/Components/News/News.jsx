@@ -17,7 +17,7 @@ const News = () => {
       const filteredNews = (data.newsItems || []).filter(
         (news) => !news.isHide
       );
-      setNewsData(filteredNews);
+      setNewsData(filteredNews.reverse());
     } catch (err) {
       console.error("Failed to fetch news:", err);
     }
@@ -39,7 +39,7 @@ const News = () => {
 
   return (
     <div
-      className="py-16 min-h-screen bg-[#FFF1DE] text-black"
+      className="py-16 min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 text-black"
       style={{ fontFamily: "Times New Roman, serif" }}
     >
       <div className="container mx-auto px-4">
@@ -64,7 +64,7 @@ const News = () => {
         </div>
 
         {/* News Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {newsData.map((news, index) => (
             <motion.div
               key={news._id}
@@ -72,10 +72,10 @@ const News = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-white rounded-lg shadow-sm overflow-hidden group border border-gray-200 hover:shadow-md transition-all duration-300"
+              className="bg-white shadow-sm overflow-hidden group border border-gray-200 hover:shadow-md transition-all duration-300"
             >
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-60 overflow-hidden">
                 <img
                   src={news.image}
                   alt={news.title}

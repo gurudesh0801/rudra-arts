@@ -12,7 +12,7 @@ const cardVariants = {
 
 const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-fixed bg-cover bg-center py-16 px-4 sm:px-6 md:py-24 text-center bg-[#FFF1DE]">
+    <div className="min-h-screen bg-fixed bg-cover bg-center py-16 px-4 sm:px-6 md:py-24 text-center bg-gradient-to-b from-amber-50 to-amber-100">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -38,7 +38,7 @@ const AboutUs = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="bg-white border-l-4 md:border-l-8 border-[#8b6f47] shadow-lg p-4 sm:p-6 h-auto text-left font-times rounded-l-xl opacity-90"
+              className="bg-amber-50 border-l-4 md:border-l-8 border-customBrown shadow-lg p-4 sm:p-6 h-auto text-left font-times rounded-l-xl opacity-90"
             >
               <h3 className="text-xl sm:text-2xl font-semibold text-[#3e3228] mb-2">
                 {title}

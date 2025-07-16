@@ -122,8 +122,8 @@ const Cart = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 mt-20">
-      <div className="flex flex-col md:flex-row gap-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 mt-20 pt-20">
+      <div className="flex flex-col md:flex-row gap-8 mt-10">
         {/* Cart Items */}
         <div className="md:w-2/3">
           <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Cart</h1>
@@ -132,7 +132,7 @@ const Cart = () => {
             {cartItems.map((item) => (
               <div
                 key={item._id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow"
+                className=" rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow"
               >
                 <img
                   src={item.product_image?.[0]}

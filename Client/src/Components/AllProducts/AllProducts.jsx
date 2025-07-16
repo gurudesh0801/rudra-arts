@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FaHeart,
-  FaRegHeart,
-  FaStar,
-  FaSearch,
-  FaFilter,
-} from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaStar, FaSearch } from "react-icons/fa";
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import AutoScrollCarousel from "./Carousel";
 import aboutBg from "/images/border.jpg";
-import { Box, Skeleton, Chip, useTheme, Typography } from "@mui/material";
-import img from "../../assets/images/Weponsbg.jpg";
+import { Box, Skeleton, Chip } from "@mui/material";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -20,10 +13,8 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
-  const [showFilters, setShowFilters] = useState(false);
-  const [visibleProducts, setVisibleProducts] = useState(12); // Initial number of products to show
+  const [visibleProducts, setVisibleProducts] = useState(12);
   const navigate = useNavigate();
-  const theme = useTheme();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -83,12 +74,8 @@ const AllProducts = () => {
     );
   };
 
-  const handleAddToCartAndNavigate = (productId) => {
-    navigate(`/product-details/${productId}`);
-  };
-
   const loadMoreProducts = () => {
-    setVisibleProducts((prev) => prev + 12); // Load 12 more products
+    setVisibleProducts((prev) => prev + 12);
   };
 
   const renderStars = (rating) => {
@@ -97,11 +84,11 @@ const AllProducts = () => {
     const hasHalfStar = rating % 1 >= 0.5;
 
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<FaStar key={`full-${i}`} className="text-yellow-400" />);
+      stars.push(<FaStar key={`full-${i}`} className="text-amber-400" />);
     }
 
     if (hasHalfStar) {
-      stars.push(<FaStar key="half" className="text-yellow-400 opacity-50" />);
+      stars.push(<FaStar key="half" className="text-amber-400 opacity-50" />);
     }
 
     const emptyStars = 5 - stars.length;
@@ -113,604 +100,257 @@ const AllProducts = () => {
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        minHeight: "100vh",
-        py: 4,
-        background:
-          theme.palette.mode === "dark"
-            ? "linear-gradient(135deg, #121212 0%, #1a1a1a 100%)"
-            : "linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%)",
-        overflow: "hidden",
-      }}
-    >
-      {/* Fixed Background */}
-      <Box
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
+    <div className="relative min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 font-times">
+      {/* Background Texture */}
+      <div
+        className="fixed inset-0 z-0 opacity-10"
+        style={{
           backgroundImage: `url(${aboutBg})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
           backgroundAttachment: "fixed",
-          backgroundRepeat: "no-repeat",
         }}
       />
 
-      {/* Content Container */}
-      <Box
-        sx={{
-          position: "relative",
-          zIndex: 10,
-          maxWidth: "1600px",
-          margin: "0 auto",
-          px: { xs: 2, sm: 4, lg: 6 },
-        }}
-      >
+      {/* Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-3">
+        {/* Carousel */}
         <AutoScrollCarousel />
 
         {/* Hero Section */}
-        <Box
-          sx={{
-            textAlign: "center",
-            mb: 8,
-            mt: { xs: 4, md: 8 },
-            position: "relative",
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 mt-8"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Typography
-              variant="h1"
-              sx={{
-                fontSize: { xs: "2.5rem", md: "3.5rem", lg: "4rem" },
-                mb: 2,
-                lineHeight: 1.1,
-                letterSpacing: "-1px",
-                fontFamily: '"Times New Roman", serif',
-              }}
-              className="text-customBrown"
-            >
-              Heritage Artisans Collection
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "1rem", md: "1.2rem" },
-                color:
-                  theme.palette.mode === "dark"
-                    ? "rgba(255,255,255,0.8)"
-                    : "rgba(0,0,0,0.8)",
-                maxWidth: "800px",
-                mx: "auto",
-                mb: 4,
-                lineHeight: 1.7,
-              }}
-            >
-              Handcrafted with devotion, each piece tells a story of our
-              glorious past and spiritual traditions.
-            </Typography>
-          </motion.div>
-        </Box>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-amber-900 mb-6 leading-tight">
+            Heritage Artisans Collection
+          </h1>
+          <p className="text-lg md:text-xl text-amber-800 max-w-3xl mx-auto leading-relaxed">
+            Handcrafted with devotion, each piece tells a story of our glorious
+            past and spiritual traditions.
+          </p>
+        </motion.div>
 
-        {/* Controls Section */}
-        <Box
-          sx={{
-            mb: 6,
-            position: "relative",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              gap: 3,
-              alignItems: { xs: "stretch", md: "center" },
-              justifyContent: "space-between",
-              mb: 3,
-            }}
-          >
+        {/* Search and Filter Section */}
+        <div className="mb-12">
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
             {/* Search Bar */}
-            <Box
-              sx={{
-                position: "relative",
-                flexGrow: 1,
-                maxWidth: "600px",
-              }}
-            >
-              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <div className="relative w-full md:w-1/2">
+              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-amber-600" />
               <input
                 type="text"
-                placeholder="Search products by name or description..."
+                placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white/80 backdrop-blur-sm text-gray-800"
+                className="w-full pl-12 pr-4 py-3 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80 text-amber-900 placeholder-amber-400 transition-all duration-300"
               />
-            </Box>
+            </div>
 
-            {/* Filter Button (Mobile) */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="md:hidden flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/80 backdrop-blur-sm shadow-sm border-none focus:outline-none focus:ring-2 focus:ring-orange-500"
-            >
-              <FaFilter />
-              <span>Filters</span>
-            </button>
-
-            {/* Sort Dropdown (Desktop) */}
-            <Box
-              sx={{
-                display: { xs: "none", md: "block" },
-                minWidth: "200px",
-              }}
-            >
+            {/* Sort Dropdown */}
+            <div className="w-full md:w-auto">
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white/80 backdrop-blur-sm text-gray-800 appearance-none"
+                className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80 text-amber-900 transition-all duration-300"
               >
                 <option value="newest">Newest First</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
                 <option value="rating">Highest Rated</option>
               </select>
-            </Box>
-          </Box>
+            </div>
+          </div>
 
-          {/* Category Filters */}
-          <AnimatePresence>
-            <Box
-              sx={{
-                maxWidth: 300,
-                mb: 4,
-              }}
+          {/* Category Filter */}
+          <div className="mb-6 w-50">
+            <label className="block text-amber-800 mb-2 font-medium">
+              Filter by Category
+            </label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80 text-amber-900 transition-all duration-300"
             >
-              <Typography
-                sx={{
-                  fontWeight: 600,
-                  mb: 1,
-                  fontSize: "0.9rem",
-                  color:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.8)"
-                      : "rgba(0,0,0,0.8)",
-                }}
-              >
-                Filter by Category
-              </Typography>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border-none shadow-sm focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white/80 backdrop-blur-sm text-gray-800 appearance-none"
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </Box>
-          </AnimatePresence>
-        </Box>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         {/* Products Grid */}
-        <Box
-          sx={{
-            position: "relative",
-            minHeight: "500px",
-          }}
-        >
-          {loading ? (
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr 1fr", // 2 columns on mobile
-                  sm: "1fr 1fr",
-                  md: "1fr 1fr 1fr",
-                  lg: "1fr 1fr 1fr 1fr",
-                },
-                gap: 3, // Reduced gap for mobile
-              }}
-            >
-              {Array.from({ length: 8 }).map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: idx * 0.05 }}
-                >
-                  <Box
-                    sx={{
-                      backgroundColor:
-                        theme.palette.mode === "dark"
-                          ? "rgba(255,255,255,0.05)"
-                          : "rgba(0,0,0,0.05)",
-                      borderRadius: "16px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Skeleton variant="rectangular" width="100%" height={220} />
-                    <Box sx={{ p: 3 }}>
-                      <Skeleton width="80%" height={24} />
-                      <Skeleton width="60%" height={20} sx={{ mt: 1 }} />
-                      <Skeleton width="40%" height={20} sx={{ mt: 2 }} />
-                      <Skeleton width="70%" height={36} sx={{ mt: 2 }} />
-                    </Box>
-                  </Box>
-                </motion.div>
-              ))}
-            </Box>
-          ) : filteredProducts.length > 0 ? (
-            <>
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, idx) => (
               <motion.div
-                layout
-                className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                key={idx}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: idx * 0.05 }}
               >
-                <AnimatePresence>
-                  {filteredProducts.slice(0, visibleProducts).map((product) => (
-                    <motion.div
-                      key={product._id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
-                      whileHover={{
-                        y: -8,
-                        boxShadow:
-                          theme.palette.mode === "dark"
-                            ? "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)"
-                            : "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                      }}
-                      className="relative group"
-                    >
-                      {/* Product Card */}
-                      <Link
-                        to={`/product-details/${product._id}`}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Box
-                          sx={{
-                            height: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                            backgroundColor: "white",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            backgroundRepeat: "no-repeat",
-                            backdropFilter: "blur(2rem)",
-                            borderRadius: "12px", // Slightly smaller radius for mobile
-                            overflow: "hidden",
-                            boxShadow: theme.shadows[1], // Lighter shadow for mobile
-                            border:
-                              theme.palette.mode === "dark"
-                                ? "1px solid rgba(255,255,255,0.05)"
-                                : "1px solid rgba(0,0,0,0.05)",
-                            transition: "all 0.3s ease-out",
-                          }}
-                        >
-                          {/* Image Container */}
-                          <Box
-                            sx={{
-                              position: "relative",
-                              width: "100%",
-                              height: { xs: "180px", sm: "220px" }, // Smaller height on mobile
-                              overflow: "hidden",
-                              backgroundColor:
-                                theme.palette.mode === "dark"
-                                  ? "rgba(30,30,30,0.5)"
-                                  : "rgba(250,250,250,0.5)",
-                            }}
-                          >
-                            <img
-                              src={product.product_image[0]}
-                              alt={product.product_name}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              loading="lazy"
-                              style={{ objectFit: "cover" }} // Changed from object-contain to object-cover
-                            />
-
-                            {/* Badges */}
-                            <Box
-                              sx={{
-                                position: "absolute",
-                                top: 12,
-                                left: 12,
-                                display: "flex",
-                                gap: 1,
-                                zIndex: 2,
-                              }}
-                            >
-                              {product.isNew && (
-                                <Chip
-                                  label="New"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: "#10B981",
-                                    color: "white",
-                                    fontWeight: "bold",
-                                    fontSize: "0.7rem",
-                                  }}
-                                />
-                              )}
-                              {product.product_price > 5000 && (
-                                <Chip
-                                  label="Premium"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor:
-                                      theme.palette.mode === "dark"
-                                        ? "#E67E51"
-                                        : "#8C391B",
-                                    color: "white",
-                                    fontWeight: "bold",
-                                    fontSize: "0.7rem",
-                                  }}
-                                />
-                              )}
-                            </Box>
-
-                            {/* Favorite Button */}
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                toggleFavorite(product._id);
-                              }}
-                              aria-label="Toggle Favorite"
-                              className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-md hover:bg-white transition"
-                            >
-                              {product.isFavorite ? (
-                                <FaHeart className="text-red-500" />
-                              ) : (
-                                <FaRegHeart className="text-gray-700 hover:text-red-500 transition" />
-                              )}
-                            </button>
-                          </Box>
-
-                          {/* Product Info */}
-                          <Box
-                            sx={{
-                              p: { xs: 2, sm: 3 }, // Smaller padding on mobile
-                              flexGrow: 1,
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <Typography
-                              variant="h3"
-                              sx={{
-                                fontSize: { xs: "1rem", sm: "1.1rem" }, // Smaller font on mobile
-                                fontWeight: 700,
-                                mb: 1,
-                                color:
-                                  theme.palette.mode === "dark"
-                                    ? "#fff"
-                                    : "#1a1a1a",
-                                lineHeight: 1.3,
-                                fontFamily: '"Times New Roman", serif',
-                              }}
-                            >
-                              {product.product_name}
-                            </Typography>
-
-                            <Typography
-                              sx={{
-                                fontSize: { xs: "0.75rem", sm: "0.875rem" }, // Smaller font on mobile
-                                color:
-                                  theme.palette.mode === "dark"
-                                    ? "rgba(255,255,255,0.7)"
-                                    : "rgba(0,0,0,0.7)",
-                                mb: 2,
-                                flexGrow: 1,
-                                lineHeight: 1.5,
-                                fontFamily: '"Times New Roman", serif',
-                              }}
-                            >
-                              {product.product_description.length > 80
-                                ? `${product.product_description.substring(
-                                    0,
-                                    80
-                                  )}...`
-                                : product.product_description}
-                            </Typography>
-
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                                mb: 1,
-                              }}
-                            >
-                              <Box sx={{ display: "flex" }}>
-                                {renderStars(product.rating)}
-                              </Box>
-                              <Typography
-                                sx={{
-                                  fontSize: "0.8rem",
-                                  color:
-                                    theme.palette.mode === "dark"
-                                      ? "rgba(255,255,255,0.6)"
-                                      : "rgba(0,0,0,0.6)",
-                                  ml: 0.5,
-                                }}
-                              >
-                                ({product.rating.toFixed(1)})
-                              </Typography>
-                            </Box>
-
-                            <Typography
-                              sx={{
-                                fontSize: "0.875rem",
-                                color:
-                                  theme.palette.mode === "dark"
-                                    ? "rgba(255,255,255,0.8)"
-                                    : "rgba(0,0,0,0.8)",
-                                mb: 2,
-                                fontFamily: '"Times New Roman", serif',
-                              }}
-                            >
-                              Size: {product.product_size}
-                            </Typography>
-
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                mt: "auto",
-                                flexDirection: { xs: "column", sm: "row" }, // Stack on mobile
-                                gap: { xs: 1, sm: 0 }, // Add gap when stacked
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  fontSize: { xs: "1rem", sm: "1.25rem" }, // Smaller font on mobile
-                                  fontWeight: 700,
-                                  color:
-                                    theme.palette.mode === "dark"
-                                      ? "#E67E51"
-                                      : "#8C391B",
-                                  fontFamily: '"Times New Roman", serif',
-                                }}
-                              >
-                                ₹{product.product_price.toLocaleString()}
-                              </Typography>
-
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold transition bg-customBrown text-white" // Smaller button on mobile
-                              >
-                                <ShoppingCart size={14} /> {/* Smaller icon */}
-                                <span className="hidden sm:inline">
-                                  View Details
-                                </span>
-                                <span className="sm:hidden">Details</span>{" "}
-                                {/* Shorter text on mobile */}
-                              </motion.button>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Link>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                <div className="bg-white/80 rounded-xl overflow-hidden shadow-sm border border-amber-100">
+                  <Skeleton variant="rectangular" className="w-full h-48" />
+                  <div className="p-4">
+                    <Skeleton className="w-3/4 h-6 mb-2" />
+                    <Skeleton className="w-1/2 h-4 mb-4" />
+                    <Skeleton className="w-full h-10" />
+                  </div>
+                </div>
               </motion.div>
-
-              {/* Load More Button */}
-              {visibleProducts < filteredProducts.length && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    mt: 6,
-                  }}
-                >
-                  <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={loadMoreProducts}
-                    className="px-8 py-3 rounded-full font-outfit transition bg-customBrown text-white"
-                    style={{
-                      color:
-                        theme.palette.mode === "dark"
-                          ? "rgba(255,255,255,0.8)"
-                          : "rgba(0,0,0,0.8)",
-                      border:
-                        theme.palette.mode === "dark"
-                          ? "1px solid rgba(255,255,255,0.1)"
-                          : "1px solid rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    Load More
-                  </motion.button>
-                </Box>
-              )}
-            </>
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "300px",
-                textAlign: "center",
-                p: 4,
-                backgroundColor:
-                  theme.palette.mode === "dark"
-                    ? "rgba(255,255,255,0.05)"
-                    : "rgba(0,0,0,0.05)",
-                borderRadius: "16px",
-              }}
+            ))}
+          </div>
+        ) : filteredProducts.length > 0 ? (
+          <>
+            <motion.div
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontSize: "1.5rem",
-                  fontWeight: 600,
-                  mb: 2,
-                  color:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.8)"
-                      : "rgba(0,0,0,0.8)",
-                }}
-              >
-                No products found
-              </Typography>
-              <Typography
-                sx={{
-                  color:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.6)"
-                      : "rgba(0,0,0,0.6)",
-                  mb: 3,
-                  maxWidth: "500px",
-                }}
-              >
-                Try adjusting your search or filter criteria to find what you're
-                looking for.
-              </Typography>
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("All");
-                  setSortOption("newest");
-                }}
-                className="flex items-center gap-2 px-6 py-3 rounded-full font-medium transition"
-                style={{
-                  background:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(0,0,0,0.05)",
-                  color:
-                    theme.palette.mode === "dark"
-                      ? "rgba(255,255,255,0.8)"
-                      : "rgba(0,0,0,0.8)",
-                  border:
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255,255,255,0.1)"
-                      : "1px solid rgba(0,0,0,0.1)",
-                }}
-              >
-                Reset filters
-                <ArrowRight size={16} />
-              </button>
-            </Box>
-          )}
-        </Box>
-      </Box>
-    </Box>
+              <AnimatePresence>
+                {filteredProducts.slice(0, visibleProducts).map((product) => (
+                  <motion.div
+                    key={product._id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                    whileHover={{
+                      y: -5,
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+                    }}
+                    className="relative group"
+                  >
+                    <Link
+                      to={`/product-details/${product._id}`}
+                      className="block h-full"
+                    >
+                      <div className="h-full flex flex-col bg-white/90 backdrop-blur-sm overflow-hidden border border-amber-100 transition-all duration-300 group-hover:shadow-lg">
+                        {/* Product Image */}
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={product.product_image[0]}
+                            alt={product.product_name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+
+                          {/* Badges */}
+                          <div className="absolute top-3 left-3 flex gap-2">
+                            {product.isNew && (
+                              <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+                                New
+                              </span>
+                            )}
+                            {product.product_price > 5000 && (
+                              <span className="bg-amber-800 text-white text-xs px-2 py-1 rounded-full">
+                                Premium
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Favorite Button */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toggleFavorite(product._id);
+                            }}
+                            className="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition"
+                          >
+                            {product.isFavorite ? (
+                              <FaHeart className="text-red-500" />
+                            ) : (
+                              <FaRegHeart className="text-amber-700 hover:text-red-500 transition" />
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-4 flex flex-col flex-grow">
+                          <h3 className="text-lg font-semibold text-amber-900 mb-1">
+                            {product.product_name}
+                          </h3>
+                          <p className="text-sm text-amber-700 mb-3 line-clamp-2">
+                            {product.product_description}
+                          </p>
+
+                          {/* Rating */}
+                          <div className="flex items-center mb-3">
+                            <div className="flex mr-1">
+                              {renderStars(product.rating)}
+                            </div>
+                            <span className="text-xs text-amber-600">
+                              ({product.rating.toFixed(1)})
+                            </span>
+                          </div>
+
+                          {/* Size */}
+                          <p className="text-sm text-amber-600 mb-4">
+                            Size: {product.product_size}
+                          </p>
+
+                          {/* Price and CTA */}
+                          <div className="mt-auto flex justify-between items-center">
+                            <span className="text-xl font-medium text-amber-800">
+                              ₹{product.product_price.toLocaleString()}
+                            </span>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="flex items-center gap-1 px-3 py-2 text-sm font-medium bg-amber-700 text-white rounded-lg transition"
+                            >
+                              <ShoppingCart size={16} />
+                              <span className="hidden sm:inline">View</span>
+                            </motion.button>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Load More Button */}
+            {visibleProducts < filteredProducts.length && (
+              <div className="mt-12 flex justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={loadMoreProducts}
+                  className="px-8 py-3 bg-amber-700 text-white rounded-full font-medium transition hover:bg-amber-800"
+                >
+                  Load More
+                </motion.button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-16 bg-white/80 rounded-xl">
+            <h3 className="text-2xl font-medium text-amber-900 mb-3">
+              No products found
+            </h3>
+            <p className="text-amber-700 mb-6 max-w-md mx-auto">
+              Try adjusting your search or filter criteria to find what you're
+              looking for.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("All");
+                setSortOption("newest");
+              }}
+              className="flex items-center gap-2 px-6 py-3 bg-amber-100 text-amber-800 rounded-full font-medium transition hover:bg-amber-200 mx-auto"
+            >
+              Reset filters
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
