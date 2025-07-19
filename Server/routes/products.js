@@ -35,6 +35,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// fetch by category
+router.get("/category/:category", async (req, res) => {
+  try {
+    const category = req.params.category;
+    const products = await Product.find({
+      product_category: category,
+    });
+    if (products.length === 0) {
+      return res.status(404).json({ error: "No products in this category" });
+    }
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch products by category" });
+  }
+});
+
 // Update
 // Add upload middleware
 router.put("/:id", upload.single("pimage"), async (req, res) => {

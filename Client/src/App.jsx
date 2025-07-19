@@ -35,6 +35,7 @@ import BTS from "./Components/BTS/BTS";
 import ExploreProcess from "./Components/BTS/ExploreProcess";
 import FullScreenVideoPlayer from "./Components/FullScreenVideoPlayer/FullScreenVideoPlayer";
 import SideBySidePortrait from "./Components/PoliticianPhotos/SideBySidePortrait";
+import HeritageExperience from "./Components/HeritageExperience/HeritageExperience";
 
 const App = () => {
   useEffect(() => {
@@ -74,6 +75,7 @@ const App = () => {
         <Route path="/Blogs" element={<Blogs />} />
         <Route path="/news" element={<FullNews />} />
         <Route path="/Products" element={<AllProducts />} />
+        <Route path="/products/category/:category" element={<AllProducts />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/product-details/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
@@ -84,6 +86,7 @@ const App = () => {
         <Route path="/ourteam" element={<TeamComponent />} />
         <Route path="/handsbehindrudrarts" element={<BTS />} />
         <Route path="/explore-process" element={<ExploreProcess />} />
+        <Route path="/maharaj" element={<HeritageExperience />} />
 
         <Route
           path="/admin/dashboard"

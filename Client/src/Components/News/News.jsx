@@ -11,7 +11,7 @@ const News = () => {
   const fetchLatestNews = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=4&sort=desc`
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=3&sort=desc`
       );
       const data = await res.json();
       const filteredNews = (data.newsItems || []).filter(
@@ -44,15 +44,30 @@ const News = () => {
     >
       <div className="container mx-auto px-4">
         {/* Heading */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-3xl md:text-4xl text-customBrown font-normal mb-3"
           >
-            <AnimatedUnderline>Rudra Arts & Handicrafts News</AnimatedUnderline>
+            <div className="flex items-center justify-center gap-3">
+              <img
+                src="/images/dhaltalwar.png"
+                alt="Left Icon"
+                className="w-10 h-10"
+              />
+              <AnimatedUnderline>
+                Rudra Arts & Handicrafts News
+              </AnimatedUnderline>
+              <img
+                src="/images/dhaltalwar.png"
+                alt="Right Icon"
+                className="w-10 h-10"
+              />
+            </div>
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -64,7 +79,7 @@ const News = () => {
         </div>
 
         {/* News Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {newsData.map((news, index) => (
             <motion.div
               key={news._id}
@@ -72,54 +87,56 @@ const News = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-white shadow-sm overflow-hidden group border border-gray-200 hover:shadow-md transition-all duration-300"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform hover:-translate-y-1 hover:shadow-xl"
             >
-              {/* Image */}
-              <div className="relative h-60 overflow-hidden">
+              {/* Top Image */}
+              <div className="relative">
                 <img
                   src={news.image}
                   alt={news.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-52 object-cover"
                   onError={(e) => {
                     e.target.src = "/placeholder-news.jpg";
                   }}
                 />
+                <div className="absolute top-3 right-3 bg-amber-600 text-white text-xs px-3 py-1 rounded-full shadow">
+                  Latest
+                </div>
               </div>
 
               {/* Content */}
-              <div className="p-4">
-                <div className="mb-3">
-                  <h2 className="text-lg font-semibold mb-2 text-customBrown leading-tight">
+              <div className="p-5 flex flex-col justify-between h-[260px]">
+                <div>
+                  <h3 className="text-lg font-semibold text-customBrown mb-2 line-clamp-2">
                     {news.title}
-                  </h2>
-                  <div className="h-px w-8 bg-customBrown my-2"></div>
-                  <p className="text-gray-600 text-xs mb-3 line-clamp-2 leading-relaxed">
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3">
                     {news.shortDescription ||
                       news.description.substring(0, 100) + "..."}
                   </p>
                 </div>
 
-                <div className="flex justify-between items-center border-t border-gray-100 pt-3">
+                {/* Actions */}
+                <div className="mt-4 flex items-center justify-between">
                   <button
                     onClick={() =>
                       news.isExternal
                         ? window.open(news.slug, "_blank")
                         : handleShow(news)
                     }
-                    className="text-customBrown hover:text-orange-700 text-xs font-medium flex items-center gap-1 transition-colors"
+                    className="group inline-flex items-center gap-1 text-amber-700 text-sm font-medium hover:text-amber-900 transition"
                   >
                     <span>Read More</span>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3 w-3"
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
                         d="M14 5l7 7m0 0l-7 7m7-7H3"
                       />
                     </svg>
@@ -130,7 +147,7 @@ const News = () => {
                       href={news.slug}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-customBrown transition-colors text-sm"
+                      className="text-amber-700 hover:text-amber-900 transition text-lg"
                     >
                       <FaInstagram />
                     </a>
@@ -151,7 +168,7 @@ const News = () => {
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto"
+                className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
@@ -161,42 +178,42 @@ const News = () => {
                 {/* Close */}
                 <button
                   onClick={handleClose}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow"
                 >
                   &times;
                 </button>
 
                 {/* Modal Content */}
-                <div className="p-6">
-                  <h2 className="text-xl font-bold mb-3 text-gray-900">
-                    {selectedNews.title}
-                  </h2>
-
-                  <div className="mb-5">
+                <div>
+                  <div className="relative h-64 w-full">
                     <img
                       src={selectedNews.image}
                       alt={selectedNews.title}
-                      className="w-full h-48 object-cover rounded mb-3"
+                      className="w-full h-full object-cover"
                     />
+                  </div>
 
-                    <div className="text-sm text-gray-700 leading-relaxed">
+                  <div className="p-8">
+                    <h2 className="text-2xl font-bold mb-4 text-gray-900">
+                      {selectedNews.title}
+                    </h2>
+
+                    <div className="text-gray-700 leading-relaxed space-y-4">
                       {selectedNews.description
                         .split("\n")
                         .map((paragraph, i) => (
-                          <p key={i} className="mb-3 last:mb-0">
-                            {paragraph}
-                          </p>
+                          <p key={i}>{paragraph}</p>
                         ))}
                     </div>
-                  </div>
 
-                  <div className="flex justify-end border-t border-gray-100 pt-3">
-                    <button
-                      onClick={handleClose}
-                      className="px-4 py-1.5 bg-gray-800 text-white text-sm rounded hover:bg-gray-700 transition-colors"
-                    >
-                      Close
-                    </button>
+                    <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
+                      <button
+                        onClick={handleClose}
+                        className="px-6 py-2 bg-amber-700 text-white text-sm rounded hover:bg-amber-800 transition-colors"
+                      >
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Grid, useTheme, useMediaQuery } from "@mui/material";
 import { motion } from "framer-motion";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const FranchiseCard = ({ franchise, index }) => {
   const theme = useTheme();
@@ -47,16 +48,8 @@ const FranchiseCard = ({ franchise, index }) => {
               width: isMobile ? "120px" : "100%",
               height: isMobile ? "60px" : "auto",
               objectFit: "contain",
-              filter: "grayscale(100%)",
-              opacity: 0.9,
               transition: "filter 0.3s ease",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.filter = "grayscale(0%)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.filter = "grayscale(100%)")
-            }
           />
         </Box>
 
@@ -94,37 +87,6 @@ const FranchiseCard = ({ franchise, index }) => {
               {franchise.description}
             </Typography>
           </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                color: "text.secondary",
-                display: "flex",
-                alignItems: "center",
-                fontSize: "0.75rem",
-              }}
-            >
-              <Box
-                component="span"
-                sx={{
-                  display: "inline-block",
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: theme.palette.primary.main,
-                  mr: 1,
-                }}
-              />
-              {franchise.location}
-            </Typography>
-          </Box>
         </Box>
 
         {/* Image Section - Hidden on mobile, right on desktop */}
@@ -134,17 +96,6 @@ const FranchiseCard = ({ franchise, index }) => {
               flex: "0 0 30%",
               position: "relative",
               overflow: "hidden",
-              "&:before": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background:
-                  "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
-                zIndex: 1,
-              },
             }}
           >
             <img
@@ -153,18 +104,9 @@ const FranchiseCard = ({ franchise, index }) => {
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                objectFit: "contain",
                 objectPosition: "center",
-                filter: "brightness(0.95)",
                 transition: "transform 0.5s ease, filter 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.filter = "brightness(1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.filter = "brightness(0.95)";
               }}
             />
           </Box>
@@ -177,36 +119,46 @@ const FranchiseCard = ({ franchise, index }) => {
 const FranchiseCarousel = () => {
   const franchises = [
     {
-      logo: "/images/franchise-logo1.png",
+      logo: "/images/pratikrutiArts.jpg",
       image: "/images/franchise1.png",
-      name: "Franchise Name 1",
+      name: "Pratikruti Arts",
       description:
-        "Specializing in artisanal craftsmanship with a focus on sustainable materials and timeless design.",
-      location: "New York, USA",
+        "Parshuram Apartment, Opposite Lokamanya Vachnalaya, Navi Peth, Pune, Maharashtra 411030, India",
     },
     {
-      logo: "/images/franchise-logo2.png",
+      logo: "/images/rayriArts.jpg",
       image: "/images/franchise3.png",
-      name: "Franchise Name 2",
+      name: "Rayari Arts",
       description:
-        "Innovative culinary experiences blending traditional techniques with modern flavors.",
-      location: "London, UK",
+        "House no 31/A, Vijayalankar Society, Taljai Rd, Dhankawadi, Pune, Maharashtra 411043",
     },
     {
-      logo: "/images/franchise-logo3.png",
+      logo: "/images/gajaiArts.jpg",
       image: "/images/franchise5.png",
-      name: "Franchise Name 3",
+      name: "Gajai Arts",
       description:
-        "Luxury wellness retreats offering personalized holistic treatments and mindfulness programs.",
-      location: "Paris, France",
+        "Shop No-12, Anmol Terrace Chs Ltd., Plot no - 20, Sector 5 Kopar Khairane Rd, Sector 5, Kopar Khairane, Navi Mumbai, Maharashtra 400709",
     },
     {
-      logo: "/images/franchise-logo4.png",
+      logo: "/images/kitabwala.jpg",
       image: "/images/franchise6.png",
-      name: "Franchise Name 4",
+      name: "Kitabwala",
       description:
-        "Cutting-edge technology solutions for modern businesses seeking digital transformation.",
-      location: "Tokyo, Japan",
+        "Kitabwala Store and Arts, Arvind Apartment, infront of Mantri Hospital, Erandwana Gaothan, Erandwane, Pune, Maharashtra 411004",
+    },
+    {
+      logo: "/images/rudraArtsDighi.jpg",
+      image: "/images/franchise13.png",
+      name: "Rudra Arts Dhighi",
+      description:
+        "Survey No. 4, Hrishikesh Building, Parandenagar ( Samarthnagar) Dighi, Pune 411015, Behind Bikaner Sweets, Pune, Maharashtra 411015",
+    },
+    {
+      logo: "/images/kaladalanByCanus.jpg",
+      image: "/images/franchise9.png",
+      name: "Kaladalan By Canus",
+      description:
+        "B-1-A, Deepa Arihant building, near maneklal ground, ghatkopar west, Mumbai, Maharashtra 400086",
     },
   ];
 
@@ -233,13 +185,13 @@ const FranchiseCarousel = () => {
             textAlign: "center",
             mb: 6,
             mt: 10,
-            color: "text.primary",
             fontSize: { xs: "2rem", md: "2.5rem" },
             letterSpacing: "0.5px",
             fontFamily: "Times New Roman, serif",
           }}
+          className="text-customBrown"
         >
-          Our Franchises and Dealerships
+          <AnimatedUnderline>Our Franchises and Dealerships</AnimatedUnderline>
         </Typography>
       </motion.div>
 

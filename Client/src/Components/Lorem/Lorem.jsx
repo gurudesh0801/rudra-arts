@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiZoomIn } from "react-icons/fi";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const images = [
   { src: "/images/IMG-20250617-WA0035.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0022.jpg", title: "Mountain View" },
-  { src: "/images/IMG-20250617-WA0006.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0007.jpg", title: "Mountain View" },
+  { src: "/images/IMG-20250617-WA0006.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0011.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0043.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0008.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0034.jpg", title: "Mountain View" },
+  { src: "/images/img3.webp", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0009.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0013.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0015.jpg", title: "Mountain View" },
@@ -19,15 +21,19 @@ const images = [
   { src: "/images/IMG-20250617-WA0017.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0029.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0030.jpg", title: "Mountain View" },
+  { src: "/images/img1.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0018.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0021.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0019.jpg", title: "Mountain View" },
+  { src: "/images/img5.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0020.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0023.jpg", title: "Mountain View" },
+  { src: "/images/img4.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0024.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0025.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0026.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0027.jpg", title: "Mountain View" },
+  { src: "/images/img6.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0028.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0010.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0033.jpg", title: "Mountain View" },
@@ -35,6 +41,12 @@ const images = [
   { src: "/images/IMG-20250617-WA0031.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0032.jpg", title: "Mountain View" },
   { src: "/images/IMG-20250617-WA0042.jpg", title: "Mountain View" },
+  { src: "/images/img2.jpg", title: "Mountain View" },
+  { src: "/images/img8.jpg", title: "Mountain View" },
+  { src: "/images/img9.jpg", title: "Mountain View" },
+  { src: "/images/img10.jpg", title: "Mountain View" },
+  { src: "/images/img11.jpg", title: "Mountain View" },
+  { src: "/images/img12 .jpg", title: "Mountain View" },
 ];
 
 const fadeIn = {
@@ -71,14 +83,8 @@ const Gallery = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-normal text-amber-900 mb-4 font-times">
-            Heritage Gallery
+            <AnimatedUnderline>Heritage Gallery</AnimatedUnderline>
           </h2>
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="h-1 bg-amber-700 mx-auto max-w-xs"
-          />
         </motion.div>
 
         {/* Masonry Grid */}
@@ -122,23 +128,6 @@ const Gallery = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* View More Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex justify-center mt-12"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "#92400e" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-amber-700 text-white rounded-lg font-medium transition"
-          >
-            View More Collections
-          </motion.button>
-        </motion.div>
       </div>
     </motion.section>
   );

@@ -6,12 +6,13 @@ import {
   FaHandsHelping,
 } from "react-icons/fa";
 import { GiRoyalLove } from "react-icons/gi";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const TeamComponent = () => {
   const teamMembers = [
     {
       id: 1,
-      name: "Satyajeet Vaidya",
+      name: "Satyajeet Arun Vaidya",
       role: "Managing Director",
       description:
         "A proud descendant of traditional artisans, Satyajeet leads Rudra Arts with a vision to preserve, promote, and innovate handcrafted cultural weaponry and artifacts.",
@@ -21,7 +22,7 @@ const TeamComponent = () => {
     },
     {
       id: 2,
-      name: "Mam",
+      name: "Smita Satyajeet Vaidya",
       role: "Operational Head",
       description:
         "With an eye for detail and a passion for legacy crafts, Mam oversees daily operations, blending age-old techniques with modern production standards.",
@@ -70,9 +71,8 @@ const TeamComponent = () => {
       <div className="max-w-7xl mx-auto">
         {/* Historical Header */}
         <div className="text-center mb-16 mt-10">
-          <h2 className="text-5xl font-serif font-bold text-amber-800 mb-4 relative inline-block">
-            <span className="absolute -bottom-2 left-0 w-full h-1 bg-amber-600"></span>
-            The Keepers of Tradition
+          <h2 className="text-5xl font-times font-normal text-amber-800 mb-4 relative inline-block">
+            <AnimatedUnderline>Brains Behind Rudra Arts</AnimatedUnderline>
           </h2>
           <p className="text-lg italic text-amber-700 max-w-3xl mx-auto">
             “Rudra Arts carries forward the sacred traditions of master
@@ -206,7 +206,7 @@ const TeamComponent = () => {
         <div className="mt-16 text-center border-t border-customBrown pt-12">
           <div className="max-w-4xl mx-auto">
             <h3 className="text-2xl font-serif text-amber-800 mb-6">
-              "The hands that craft today, honor the masters of yesterday"
+              "The Brains that craft today, honor the masters of yesterday"
             </h3>
             <p className="text-amber-700 mb-8">
               Our team continues the unbroken lineage of artisans who have

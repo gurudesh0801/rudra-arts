@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 // Card animation variants
 const cardFade = {
@@ -33,7 +34,9 @@ const FullAbout = () => {
             className="w-full"
           >
             <h1 className="mb-6 text-5xl sm:text-6xl font-normal text-customBrown">
-              Chhatrapati's Legacy in Every Creation
+              <AnimatedUnderline>
+                Chhatrapati's Legacy in Every Creation
+              </AnimatedUnderline>
             </h1>
 
             <motion.div
@@ -49,11 +52,11 @@ const FullAbout = () => {
                 statues, and historical replicas.
               </p>
 
-              <div className="p-4 bg-neutral-100 rounded-lg border-l-4 border-orange-500 inline-block">
-                <p className="text-sm font-semibold text-orange-600">
+              <div className="p-4 bg-amber-50 rounded-lg inline-block">
+                <p className="text-xl font-normal text-orange-600">
                   Managing Director
                 </p>
-                <h3 className="text-2xl font-bold text-gray-800">
+                <h3 className="text-2xl font-normal text-gray-800">
                   Satyajeet Arun Vaidya
                 </h3>
               </div>
@@ -99,7 +102,7 @@ const FullAbout = () => {
             </motion.div>
 
             <motion.div variants={cardFade} className="max-w-3xl mx-auto">
-              <div className="p-6 bg-gray-50 rounded-lg shadow-sm">
+              <div className="p-6 bg-orange-50 rounded-lg shadow-sm">
                 <p className="text-lg text-gray-700">
                   To preserve the warrior ethos through historically accurate
                   recreations of the weapons, armor, and artifacts that shaped
@@ -151,7 +154,7 @@ const FullAbout = () => {
                   variants={cardFade}
                   custom={i}
                   whileHover={{ y: -5 }}
-                  className="p-8 bg-white rounded-lg shadow-sm border border-gray-100 text-center"
+                  className="p-8 bg-orange-50 rounded-lg shadow-sm border border-gray-100 text-center"
                 >
                   <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 mb-4 mx-auto text-2xl font-bold">
                     {i + 1}
@@ -263,7 +266,7 @@ const FullAbout = () => {
                   variants={cardFade}
                   custom={i}
                   whileHover={{ y: -5 }}
-                  className="p-8 bg-white rounded-lg shadow-sm border border-gray-100 text-center"
+                  className="p-8 bg-orange-50 rounded-lg shadow-sm border border-gray-100 text-center"
                 >
                   <h3 className="text-2xl font-normal mb-4 text-gray-800">
                     {item.title}

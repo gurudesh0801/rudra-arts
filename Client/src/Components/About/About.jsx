@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import aboutBg from "../../assets/images/about-bg.jpg";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -18,11 +19,26 @@ const AboutUs = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="max-w-3xl mx-auto px-4"
+        className="max-w-4xl mx-auto px-4"
       >
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal font-times border-b-4 pb-2 border-[#b08968] inline-block text-customBrown mb-4">
-          The Story Behind Rudra Arts & Handicrafts
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal font-times text-customBrown mb-4">
+          <div className="flex items-center justify-center gap-3">
+            <img
+              src="/images/dhaltalwar.png"
+              alt="Left Icon"
+              className="w-10 h-10"
+            />
+            <AnimatedUnderline>
+              The Story Behind Rudra Arts & Handicrafts
+            </AnimatedUnderline>
+            <img
+              src="/images/dhaltalwar.png"
+              alt="Right Icon"
+              className="w-10 h-10"
+            />
+          </div>
         </h1>
+
         <p className="text-base sm:text-lg font-times md:text-xl text-black mt-2">
           A Journey Through Time: Building Innovation, Preserving Tradition
         </p>

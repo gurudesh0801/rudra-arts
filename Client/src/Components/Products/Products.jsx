@@ -59,9 +59,20 @@ const Product = () => {
   return (
     <section className="bg-gradient-to-br from-[#fffaf0] to-[#fef6e4] py-16 px-4 font-times">
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-5xl font-normal text-orange-900 mb-2 font-times">
+        <h1 className="text-5xl font-normal text-orange-900 mb-4 font-times flex items-center justify-center gap-3">
+          <img
+            src="/images/dhaltalwar.png"
+            alt="Left Icon"
+            className="w-10 h-10"
+          />
           <AnimatedUnderline>Featured Products</AnimatedUnderline>
+          <img
+            src="/images/dhaltalwar.png"
+            alt="Right Icon"
+            className="w-10 h-10"
+          />
         </h1>
+
         <p className="text-gray-600 italic text-lg mb-12">
           Reliving History Through Every Creation
         </p>

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import bg from "/images/border.jpg";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -147,7 +148,7 @@ const Blogs = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-amber-900 mb-6 leading-tight">
-              The Cultural Roots Blog
+              <AnimatedUnderline>The Cultural Roots Blog</AnimatedUnderline>
             </h1>
             <p className="text-lg md:text-xl text-amber-800 max-w-3xl mx-auto leading-relaxed mb-8">
               Discover the world of traditional craftsmanship and stories behind

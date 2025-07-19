@@ -2,19 +2,29 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaRegHeart, FaStar, FaSearch } from "react-icons/fa";
 import { ShoppingCart, ArrowRight } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AutoScrollCarousel from "./Carousel";
 import aboutBg from "/images/border.jpg";
 import { Box, Skeleton, Chip } from "@mui/material";
+import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const AllProducts = () => {
+  const { category } = useParams();
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [visibleProducts, setVisibleProducts] = useState(12);
+  const [selectedCategory, setSelectedCategory] = useState(category || "All");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    } else {
+      setSelectedCategory("All");
+    }
+  }, [category]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -124,7 +134,7 @@ const AllProducts = () => {
           className="text-center mb-16 mt-8"
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-amber-900 mb-6 leading-tight">
-            Heritage Artisans Collection
+            <AnimatedUnderline>Heritage Artisans Collection</AnimatedUnderline>
           </h1>
           <p className="text-lg md:text-xl text-amber-800 max-w-3xl mx-auto leading-relaxed">
             Handcrafted with devotion, each piece tells a story of our glorious
@@ -162,6 +172,24 @@ const AllProducts = () => {
             </div>
           </div>
 
+          {category && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-3xl md:text-4xl font-normal text-amber-900 capitalize">
+                {category}
+              </h2>
+              <p className="text-amber-700 mt-2">
+                {filteredProducts.length}{" "}
+                {filteredProducts.length === 1 ? "item" : "items"} in this
+                collection
+              </p>
+            </motion.div>
+          )}
+
           {/* Category Filter */}
           <div className="mb-6 w-50">
             <label className="block text-amber-800 mb-2 font-medium">
@@ -169,14 +197,25 @@ const AllProducts = () => {
             </label>
             <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={(e) => {
+                const newCategory = e.target.value;
+                setSelectedCategory(newCategory);
+                if (newCategory === "All") {
+                  navigate("/products");
+                } else {
+                  navigate(`/products/category/${newCategory}`);
+                }
+              }}
               className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80 text-amber-900 transition-all duration-300"
             >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
+              <option value="All">All Categories</option>
+              <option value="Maharaj Idol Series">Maharaj Idol Series</option>
+              <option value="Miniature Weapon Sets & Figurines">
+                Miniature Weapon Sets & Figurines
+              </option>
+              <option value="Mavale & Warrior Statues">
+                Mavale & Warrior Statues
+              </option>
             </select>
           </div>
         </div>

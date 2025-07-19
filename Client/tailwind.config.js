@@ -19,6 +19,7 @@ export default {
         poppins: ['"Poppins"', "sans-serif"],
         nunito: ['"Nunito"', "sans-serif"],
         times: ["Times New Roman", "serif"],
+        amita: ['"Amita"', "cursive"],
       },
     },
   },

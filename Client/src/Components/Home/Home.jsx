@@ -10,24 +10,56 @@ const Home = () => {
   const sliderRef = useRef(null);
   const intervalRef = useRef(null);
 
-  // Replace these with your actual image paths
   const slides = [
-    "/images/maharaj1.jpg",
-    // "/images/slide2.jpg",
-    // "/images/slide3.jpg",
-    "/images/slide4.jpg",
-    "/images/slide5.jpg",
+    {
+      type: "product",
+      image: "/images/WhatsApp Image 2025-07-19 at 15.32.21_918c279f.jpg",
+      title: "Explore Our Collection",
+      // description:
+      //   "Discover exquisite handcrafted pieces that tell a story of tradition and artistry.",
+      buttonText: "View Products",
+    },
+    {
+      type: "achievement",
+      image: "/images/IMG-20250617-WA0022.jpg",
+      title: "Honored to Meet the President",
+      description:
+        "We were privileged to present our handcrafted talwar to the Honorable President of India, a moment of great pride for our artisans and tradition.",
+      buttonText: "Read More",
+    },
+    {
+      type: "about",
+      image: "/images/img8.jpg",
+      title: "A Tribute to Valor and Legacy ",
+      description:
+        "Inspired by the indomitable spirit of Chhatrapati Shivaji Maharaj, this memento honors the courage, leadership, and sacrifice that defines our armed forces. A timeless symbol of bravery, crafted for those who serve the nation with pride.",
+      buttonText: "Our Story",
+    },
+    {
+      type: "about",
+      image: "/images/talwarImg.jpg",
+      title: "A Tribute to Valor and Legacy ",
+      description:
+        "Inspired by the indomitable spirit of Chhatrapati Shivaji Maharaj, this memento honors the courage, leadership, and sacrifice that defines our armed forces. A timeless symbol of bravery, crafted for those who serve the nation with pride.",
+      buttonText: "Our Story",
+    },
   ];
 
-  const handleShopNow = () => {
-    navigate("/Products");
+  const handleSlideAction = () => {
+    if (slides[currentSlide].type === "product") {
+      navigate("/Products");
+    } else if (slides[currentSlide].type === "achievement") {
+      navigate("/About");
+    } else {
+      navigate("/About");
+    }
   };
 
   const startSlider = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000); // Change slide every 5 seconds
+    }, 10000); // Change slide every 5 seconds
   };
 
   const stopSlider = () => {
@@ -78,7 +110,7 @@ const Home = () => {
           {slides.map((slide, index) => (
             <div key={index} className="w-full h-full flex-shrink-0 relative">
               <img
-                src={slide}
+                src={slide.image}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover brightness-[0.6]"
               />
@@ -87,7 +119,14 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Play/Pause Button (replacing mute button) */}
+      {/* Play/Pause Button */}
+      <button
+        onClick={togglePlay}
+        className="absolute top-24 right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition"
+        aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+      >
+        {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+      </button>
 
       {/* Navigation Arrows */}
       <button
@@ -105,53 +144,106 @@ const Home = () => {
         <FaChevronRight size={20} />
       </button>
 
-      {/* Main Content (unchanged from your original) */}
-      {/* <div className="z-10 text-center text-white max-w-5xl px-4 mt-20">
-        <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-5xl md:text-6xl font-normal font-times"
-        >
-          Timeless Creations, Crafted with Soul
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 1 }}
-          className="mt-4 text-lg leading-relaxed font-times"
-        >
-          Discover the essence of heritage and artistry in every masterpiece. At
-          Rudra Arts & Handicrafts, we bring stories <br />
-          to life through intricate designs, preserving tradition while
-          embracing creativity.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="mt-6 flex justify-center"
-        >
-          <button
-            onClick={handleShopNow}
-            className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-6 py-2 font-medium rounded font-times"
+      {/* Slide Content */}
+      <div className="z-10 text-white w-full px-8 md:px-16 lg:px-24">
+        {slides.map((slide, index) => (
+          <motion.div
+            key={index}
+            className={`absolute inset-0 flex items-center ${
+              currentSlide === index ? "block" : "hidden"
+            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentSlide === index ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <img
-              src="/images/dhaltalwar.png"
-              alt="Icon"
-              className="w-5 h-5 invert"
-            />
-            Shop Now
-            <img
-              src="/images/dhaltalwar.png"
-              alt="Icon"
-              className="w-5 h-5 invert"
-            />
-          </button>
-        </motion.div>
-      </div> */}
+            <div className="w-full h-full flex flex-col justify-center">
+              {/* Split title only for first slide */}
+              {index === 0 ? (
+                <div className="w-full pl-8 md:pl-16 lg:pl-24">
+                  <motion.div
+                    className="flex flex-col items-start mb-4"
+                    initial={{ opacity: 0, y: -40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1 }}
+                  >
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal font-times">
+                      Explore <br />
+                      Our Collection
+                    </h1>
+                  </motion.div>
+
+                  <motion.p
+                    className="text-left text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-8 max-w-2xl"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 1 }}
+                  >
+                    {slide.description}
+                  </motion.p>
+
+                  <motion.div
+                    className="flex justify-start"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.5 }}
+                  >
+                    <button
+                      onClick={handleSlideAction}
+                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                    >
+                      <img
+                        src="/images/dhaltalwar.png"
+                        alt="Icon"
+                        className="w-5 h-5 invert"
+                      />
+                      {slide.buttonText}
+                      <img
+                        src="/images/dhaltalwar.png"
+                        alt="Icon"
+                        className="w-5 h-5 invert"
+                      />
+                    </button>
+                  </motion.div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <motion.h1
+                    initial={{ opacity: 0, y: -40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1 }}
+                    className="text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-4"
+                  >
+                    {slide.title}
+                  </motion.h1>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 1 }}
+                    className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-8 max-w-3xl mx-auto"
+                  >
+                    {slide.description}
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.5 }}
+                    className="flex justify-center"
+                  >
+                    <button
+                      onClick={handleSlideAction}
+                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                    >
+                      {slide.buttonText}
+                    </button>
+                  </motion.div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };

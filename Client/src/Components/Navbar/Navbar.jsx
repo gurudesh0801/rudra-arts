@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { FiMenu, FiX, FiSearch } from "react-icons/fi";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  FiMenu,
+  FiX,
+  FiSearch,
+  FiChevronDown,
+  FiChevronUp,
+} from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
 import { FaShoppingCart } from "react-icons/fa";
@@ -11,10 +17,11 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [openDropdown, setOpenDropdown] = useState(null);
   const searchInputRef = useRef(null);
-
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
   const location = useLocation();
-  const isHome = location.pathname === "/";
   const { cartItems } = useCart();
 
   useEffect(() => {
@@ -31,20 +38,68 @@ const Navbar = () => {
     }
   }, [searchOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Products", path: "/products" },
+    // In your Navbar component, update the Products dropdown items:
+    {
+      name: "Products",
+      path: "/products",
+      dropdown: [
+        { name: "All Products", path: "/products" },
+        {
+          name: "Maharaj Idol Series",
+          path: "/products/category/Maharaj Idol Series",
+        },
+        {
+          name: "Miniature Weapon Sets & Figurines",
+          path: "/products/category/Miniature Weapon Sets & Figurines",
+        },
+        {
+          name: "Mavale & Warrior Statues",
+          path: "/products/category/Mavale & Warrior Statues",
+        },
+      ],
+    },
     { name: "Blog", path: "/blogs" },
+    { name: "Maharaj", path: "/maharaj" },
     { name: "Wall of Fame", path: "/lorem" },
     { name: "Franchise", path: "/franchises" },
-    { name: "Our Team", path: "/handsbehindrudrarts" },
+    {
+      name: "Our Team",
+      path: "/handsbehindrudrarts",
+    },
     { name: "Contact", path: "/contact" },
   ];
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
+    navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+    setSearchQuery("");
+    setSearchOpen(false);
+  };
+
+  const toggleDropdown = (itemName) => {
+    setOpenDropdown(openDropdown === itemName ? null : itemName);
+  };
+
+  const isActive = (path, dropdownItems = []) => {
+    return (
+      location.pathname === path ||
+      dropdownItems.some((item) => location.pathname === item.path)
+    );
   };
 
   return (
@@ -152,17 +207,67 @@ const Navbar = () => {
           <div className="hidden md:block border-t border-gray-200 border-opacity-20 pt-2 pb-1">
             <div className="flex items-center justify-center space-x-2">
               {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase ${
-                    location.pathname === item.path
-                      ? "text-[#ff8732] font-semibold"
-                      : "hover:text-orange-500"
-                  }`}
-                >
-                  {item.name}
-                </Link>
+                <div key={item.name} className="relative" ref={dropdownRef}>
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => toggleDropdown(item.name)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase flex items-center ${
+                          isActive(item.path, item.dropdown)
+                            ? "text-[#ff8732] font-semibold"
+                            : "hover:text-orange-500"
+                        }`}
+                      >
+                        {item.name}
+                        {openDropdown === item.name ? (
+                          <FiChevronUp className="ml-1" />
+                        ) : (
+                          <FiChevronDown className="ml-1" />
+                        )}
+                      </button>
+
+                      <AnimatePresence>
+                        {openDropdown === item.name && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                          >
+                            <div className="py-1">
+                              {item.dropdown.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  to={subItem.path}
+                                  className={`block px-4 py-2 text-sm ${
+                                    location.pathname === subItem.path
+                                      ? "bg-amber-100 text-darkBrown"
+                                      : "text-gray-700 hover:bg-amber-50 hover:text-darkBrown"
+                                  }`}
+                                  onClick={() => setOpenDropdown(null)}
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase ${
+                        location.pathname === item.path
+                          ? "text-[#ff8732] font-semibold"
+                          : "hover:text-orange-500"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
               ))}
             </div>
           </div>
@@ -180,18 +285,69 @@ const Navbar = () => {
             >
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium ${
-                      location.pathname === item.path
-                        ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                        : "hover:bg-gray-50 hover:text-[#8a4b1f]"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
+                  <div key={item.name}>
+                    {item.dropdown ? (
+                      <>
+                        <button
+                          onClick={() => toggleDropdown(item.name)}
+                          className={`w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium ${
+                            isActive(item.path, item.dropdown)
+                              ? "bg-[#f3e9dd] text-[#8a4b1f]"
+                              : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                          }`}
+                        >
+                          {item.name}
+                          {openDropdown === item.name ? (
+                            <FiChevronUp className="ml-1" />
+                          ) : (
+                            <FiChevronDown className="ml-1" />
+                          )}
+                        </button>
+
+                        <AnimatePresence>
+                          {openDropdown === item.name && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="pl-4"
+                            >
+                              {item.dropdown.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  to={subItem.path}
+                                  onClick={() => {
+                                    setIsOpen(false);
+                                    setOpenDropdown(null);
+                                  }}
+                                  className={`block px-3 py-2 rounded-md text-sm ${
+                                    location.pathname === subItem.path
+                                      ? "bg-[#f3e9dd] text-[#8a4b1f]"
+                                      : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                                  }`}
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <Link
+                        to={item.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-3 py-2 rounded-md text-base font-medium ${
+                          location.pathname === item.path
+                            ? "bg-[#f3e9dd] text-[#8a4b1f]"
+                            : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             </motion.div>
