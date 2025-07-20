@@ -21,7 +21,12 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://rudra-arts.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://rudra-arts.vercel.app",
+      "https://rudraartsandhandicrafts.in",
+      "https://www.rudraartsandhandicrafts.in",
+    ],
     credentials: true,
   })
 );
