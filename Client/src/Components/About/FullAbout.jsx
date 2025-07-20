@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import AwardsComponent from "../AwardsComponent/AwardsComponent";
 
 // Card animation variants
 const cardFade = {
@@ -284,6 +285,36 @@ const FullAbout = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Awards Section */}
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
+          className="mb-16"
+        >
+          <motion.div variants={cardFade} className="mb-12 text-center">
+            <h2 className="text-4xl font-normal text-gray-900 mb-2">
+              Recognitions & <span className="text-orange-500">Awards</span>
+            </h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              Celebrating our achievements in preserving history and promoting
+              Indian craftsmanship.
+            </p>
+          </motion.div>
+
+          <div className="w-full mx-auto">
+            <AwardsComponent />
+          </div>
+        </motion.div>
 
         {/* CTA - Centered */}
         <motion.div

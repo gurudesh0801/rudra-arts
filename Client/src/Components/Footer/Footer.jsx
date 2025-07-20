@@ -69,7 +69,7 @@ const Footer = () => {
               <FaFacebook />
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/rudra_arts30/?hl=en"
               target="_blank"
               rel="noreferrer"
               className="hover:text-white"
@@ -93,8 +93,8 @@ const Footer = () => {
             Contact Us
           </h3>
           <p className="text-white mt-4">
-            Famous Chowk, Kirti Nagar Ln No. 1, Ganesh Nagar, Samata Nagar, New
-            Sangavi, Pune, Pimpri-Chinchwad, Maharashtra 411027
+            Famous Chowk, Kirti Nagar Lane No. 1, Ganesh Nagar, Samata Nagar,
+            New Sangavi, Pune, Pimpri-Chinchwad, Maharashtra 411027
           </p>
           <a
             href="https://wa.me/917028996666"

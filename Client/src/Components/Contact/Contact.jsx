@@ -130,7 +130,9 @@ const ContactSection = () => {
                 <div>
                   <h4 className="font-medium">Address</h4>
                   <p className="text-amber-800 text-sm">
-                    Famous Chowk, Kirti Nagar, Pune, Maharashtra 411027
+                    Famous Chowk, Kirti Nagar Ln No. 1, Ganesh Nagar, Samata
+                    Nagar, New Sangavi, Pune, Pimpri-Chinchwad,
+                    Maharashtra 411027
                   </p>
                 </div>
               </div>
@@ -145,7 +147,7 @@ const ContactSection = () => {
                     href="mailto:contact@rudraarts.com"
                     className="text-amber-800 text-sm hover:text-amber-600"
                   >
-                    contact@rudraarts.com
+                    rudra.arts30@gmail.com
                   </a>
                 </div>
               </div>

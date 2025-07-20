@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay, FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -33,15 +33,15 @@ const Home = () => {
       title: "A Tribute to Valor and Legacy ",
       description:
         "Inspired by the indomitable spirit of Chhatrapati Shivaji Maharaj, this memento honors the courage, leadership, and sacrifice that defines our armed forces. A timeless symbol of bravery, crafted for those who serve the nation with pride.",
-      buttonText: "Our Story",
+      buttonText: "Read More",
     },
     {
       type: "about",
       image: "/images/talwarImg.jpg",
-      title: "A Tribute to Valor and Legacy ",
-      description:
-        "Inspired by the indomitable spirit of Chhatrapati Shivaji Maharaj, this memento honors the courage, leadership, and sacrifice that defines our armed forces. A timeless symbol of bravery, crafted for those who serve the nation with pride.",
-      buttonText: "Our Story",
+      image: "/images/dhoop.jpg",
+      title: "Explore Our Dhoop Collection",
+
+      buttonText: "Shop Now",
     },
   ];
 
@@ -159,51 +159,101 @@ const Home = () => {
             <div className="w-full h-full flex flex-col justify-center">
               {/* Split title only for first slide */}
               {index === 0 ? (
-                <div className="w-full pl-8 md:pl-16 lg:pl-24">
-                  <motion.div
-                    className="flex flex-col items-start mb-4"
-                    initial={{ opacity: 0, y: -40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                  >
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal font-times">
+                // LEFT aligned layout for first slide
+                <div className="w-full flex justify-start items-center pl-8 md:pl-16 lg:pl-24 h-full">
+                  <div className="flex flex-col items-start text-left space-y-6 max-w-2xl">
+                    <motion.h1
+                      className="text-4xl md:text-5xl lg:text-6xl font-normal font-times"
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 1 }}
+                    >
                       Explore <br />
                       Our Collection
-                    </h1>
-                  </motion.div>
+                    </motion.h1>
 
-                  <motion.p
-                    className="text-left text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-8 max-w-2xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 1 }}
-                  >
-                    {slide.description}
-                  </motion.p>
-
-                  <motion.div
-                    className="flex justify-start"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 0.5 }}
-                  >
-                    <button
-                      onClick={handleSlideAction}
-                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                    <motion.p
+                      className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3, duration: 1 }}
                     >
-                      <img
-                        src="/images/dhaltalwar.png"
-                        alt="Icon"
-                        className="w-5 h-5 invert"
-                      />
-                      {slide.buttonText}
-                      <img
-                        src="/images/dhaltalwar.png"
-                        alt="Icon"
-                        className="w-5 h-5 invert"
-                      />
-                    </button>
-                  </motion.div>
+                      {slide.description}
+                    </motion.p>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.6, duration: 0.6 }}
+                    >
+                      <Link to="/Products">
+                        <button
+                          onClick={handleSlideAction}
+                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                        >
+                          <img
+                            src="/images/dhaltalwar.png"
+                            alt="Left Icon"
+                            className="w-5 h-5 invert"
+                          />
+                          {slide.buttonText}
+                          <img
+                            src="/images/dhaltalwar.png"
+                            alt="Right Icon"
+                            className="w-5 h-5 invert"
+                          />
+                        </button>
+                      </Link>
+                    </motion.div>
+                  </div>
+                </div>
+              ) : index === 3 ? (
+                // RIGHT aligned layout for fourth slide
+                <div className="w-full flex justify-end items-center pr-8 md:pr-16 lg:pr-24 h-full">
+                  <div className="flex flex-col items-end text-right space-y-6 max-w-2xl">
+                    <motion.h1
+                      className="text-4xl md:text-5xl lg:text-6xl font-normal font-times"
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 1 }}
+                    >
+                      {slide.title}
+                    </motion.h1>
+
+                    <motion.p
+                      className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3, duration: 1 }}
+                    >
+                      {slide.description}
+                    </motion.p>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.6, duration: 0.6 }}
+                    >
+                      <Link to="/Products">
+                        <button
+                          onClick={handleSlideAction}
+                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                        >
+                          <img
+                            src="/images/dhaltalwar.png"
+                            alt="Left Icon"
+                            className="w-5 h-5 invert"
+                          />
+                          {slide.buttonText}
+                          <img
+                            src="/images/dhaltalwar.png"
+                            alt="Right Icon"
+                            className="w-5 h-5 invert"
+                          />
+                        </button>
+                      </Link>
+                    </motion.div>
+                  </div>
                 </div>
               ) : (
                 <div className="text-center">
@@ -211,7 +261,7 @@ const Home = () => {
                     initial={{ opacity: 0, y: -40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-4"
+                    className="text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-4 mt-[10rem]"
                   >
                     {slide.title}
                   </motion.h1>

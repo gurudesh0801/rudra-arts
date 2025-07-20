@@ -76,6 +76,7 @@ const Navbar = () => {
     { name: "Blog", path: "/blogs" },
     { name: "Maharaj", path: "/maharaj" },
     { name: "Wall of Fame", path: "/lorem" },
+    // { name: "Awards", path: "/awards" },
     { name: "Franchise", path: "/franchises" },
     {
       name: "Our Team",

@@ -30,29 +30,6 @@ const FranchiseCard = ({ franchise, index }) => {
         }}
         className="bg-amber-50"
       >
-        {/* Logo Section - Top on mobile, left on desktop */}
-        <Box
-          sx={{
-            flex: isMobile ? "0 0 auto" : "0 0 25%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            p: isMobile ? 3 : 4,
-            backgroundColor: "#f8f9fa",
-          }}
-        >
-          <img
-            src={franchise.logo}
-            alt={`${franchise.name} logo`}
-            style={{
-              width: isMobile ? "120px" : "100%",
-              height: isMobile ? "60px" : "auto",
-              objectFit: "contain",
-              transition: "filter 0.3s ease",
-            }}
-          />
-        </Box>
-
         {/* Content Section */}
         <Box
           sx={{
@@ -63,28 +40,57 @@ const FranchiseCard = ({ franchise, index }) => {
             justifyContent: "space-between",
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              flex: 1,
+              p: isMobile ? 3 : 4,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <AnimatedUnderline>
+              <img
+                src={franchise.logo}
+                alt={`${franchise.name} logo`}
+                style={{
+                  width: isMobile ? "10rem" : "15rem",
+                  height: "auto",
+                  objectFit: "contain",
+                  marginBottom: "0.5rem",
+                }}
+              />
+            </AnimatedUnderline>
             <Typography
-              variant="h6"
               sx={{
-                fontWeight: 700,
                 mb: 1,
-                color: "text.primary",
-                fontSize: isMobile ? "1.1rem" : "1.25rem",
+                fontSize: isMobile ? "1.1rem" : "3rem",
+                fontFamily: "Times New Roman, serif",
               }}
+              className="text-customBrown"
             >
               {franchise.name}
             </Typography>
+
             <Typography
               variant="body2"
               sx={{
-                mb: 2,
                 color: "text.secondary",
                 lineHeight: 1.6,
-                fontSize: isMobile ? "0.875rem" : "1rem",
+                fontSize: isMobile ? "0.875rem" : "1.2rem",
+                fontFamily: "Times New Roman, serif",
               }}
             >
-              {franchise.description}
+              {(Array.isArray(franchise.description)
+                ? franchise.description
+                : [franchise.description]
+              ).map((address, idx) => (
+                <Box key={idx} sx={{ mb: 1 }}>
+                  • {address}
+                </Box>
+              ))}
             </Typography>
           </Box>
         </Box>
@@ -119,43 +125,45 @@ const FranchiseCard = ({ franchise, index }) => {
 const FranchiseCarousel = () => {
   const franchises = [
     {
-      logo: "/images/pratikrutiArts.jpg",
-      image: "/images/franchise1.png",
+      logo: "/images/rudra_arts_logo_single.png",
+      image: "/images/rudraArtsDighi.jpg",
+      name: "Rudra Arts Dighi",
+      description:
+        "Survey No. 4, Hrishikesh Building, Parandenagar ( Samarthnagar) Dighi, Pune 411015, Behind Bikaner Sweets, Pune, Maharashtra 411015",
+    },
+    {
+      logo: "/images/franchise14.png",
+      image: "/images/pratikrutiArts.jpg",
       name: "Pratikruti Arts",
       description:
         "Parshuram Apartment, Opposite Lokamanya Vachnalaya, Navi Peth, Pune, Maharashtra 411030, India",
     },
     {
-      logo: "/images/rayriArts.jpg",
-      image: "/images/franchise3.png",
+      logo: "/images/franchise6.png",
+      image: "/images/kitabwala1.jpg",
+      name: "Kitabwala",
+      description: [
+        "Kitabwala Store and Arts, Arvind Apartment, in front of Mantri Hospital, Erandwana Gaothan, Erandwane, Pune, Maharashtra 411004",
+        "Warden Vakil Chawl 2, 3rd floor, Veer Santaji Lane, Ganpatrao Kadam Marg, Lower Parel, Mumbai, Maharashtra 400013",
+      ],
+    },
+    {
+      logo: "/images/franchise3.png",
+      image: "/images/rayriArts.jpg",
       name: "Rayari Arts",
       description:
         "House no 31/A, Vijayalankar Society, Taljai Rd, Dhankawadi, Pune, Maharashtra 411043",
     },
     {
-      logo: "/images/gajaiArts.jpg",
-      image: "/images/franchise5.png",
+      logo: "/images/franchise5.png",
+      image: "/images/gajaiArts1.jpg",
       name: "Gajai Arts",
       description:
         "Shop No-12, Anmol Terrace Chs Ltd., Plot no - 20, Sector 5 Kopar Khairane Rd, Sector 5, Kopar Khairane, Navi Mumbai, Maharashtra 400709",
     },
     {
-      logo: "/images/kitabwala.jpg",
-      image: "/images/franchise6.png",
-      name: "Kitabwala",
-      description:
-        "Kitabwala Store and Arts, Arvind Apartment, infront of Mantri Hospital, Erandwana Gaothan, Erandwane, Pune, Maharashtra 411004",
-    },
-    {
-      logo: "/images/rudraArtsDighi.jpg",
-      image: "/images/franchise13.png",
-      name: "Rudra Arts Dhighi",
-      description:
-        "Survey No. 4, Hrishikesh Building, Parandenagar ( Samarthnagar) Dighi, Pune 411015, Behind Bikaner Sweets, Pune, Maharashtra 411015",
-    },
-    {
-      logo: "/images/kaladalanByCanus.jpg",
-      image: "/images/franchise9.png",
+      logo: "/images/franchise15.png",
+      image: "/images/kaladalanByCanus.jpg",
       name: "Kaladalan By Canus",
       description:
         "B-1-A, Deepa Arihant building, near maneklal ground, ghatkopar west, Mumbai, Maharashtra 400086",

@@ -36,6 +36,7 @@ import ExploreProcess from "./Components/BTS/ExploreProcess";
 import FullScreenVideoPlayer from "./Components/FullScreenVideoPlayer/FullScreenVideoPlayer";
 import SideBySidePortrait from "./Components/PoliticianPhotos/SideBySidePortrait";
 import HeritageExperience from "./Components/HeritageExperience/HeritageExperience";
+import AwardsComponent from "./Components/AwardsComponent/AwardsComponent";
 
 const App = () => {
   useEffect(() => {
@@ -87,6 +88,7 @@ const App = () => {
         <Route path="/handsbehindrudrarts" element={<BTS />} />
         <Route path="/explore-process" element={<ExploreProcess />} />
         <Route path="/maharaj" element={<HeritageExperience />} />
+        <Route path="/awards" element={<AwardsComponent />} />
 
         <Route
           path="/admin/dashboard"
