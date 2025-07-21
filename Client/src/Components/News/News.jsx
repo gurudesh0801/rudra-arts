@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaInstagram } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaInstagram, FaYoutube, FaExternalLinkAlt } from "react-icons/fa";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const News = () => {
   const [newsData, setNewsData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedNews, setSelectedNews] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchLatestNews = async () => {
     try {
@@ -20,6 +19,8 @@ const News = () => {
       setNewsData(filteredNews.reverse());
     } catch (err) {
       console.error("Failed to fetch news:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,35 +28,44 @@ const News = () => {
     fetchLatestNews();
   }, []);
 
-  const handleShow = (news) => {
-    setSelectedNews(news);
-    setShowModal(true);
+  const isYouTubeLink = (url) => {
+    return url?.includes("youtube.com") || url?.includes("youtu.be");
   };
 
-  const handleClose = () => {
-    setSelectedNews(null);
-    setShowModal(false);
+  const isExternalLink = (url) => {
+    return url?.startsWith("http") || url?.startsWith("www");
   };
+
+  const getLinkIcon = (url) => {
+    if (isYouTubeLink(url)) return <FaYoutube />;
+    if (isExternalLink(url)) return <FaExternalLinkAlt />;
+    return <FaExternalLinkAlt />;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="py-16 min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 text-black"
-      style={{ fontFamily: "Times New Roman, serif" }}
-    >
-      <div className="container mx-auto px-4">
+    <div className="py-12 sm:py-16 bg-gradient-to-b from-amber-50 to-amber-100 text-black font-times">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Heading */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 sm:mb-16">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl text-customBrown font-normal mb-3"
+            className="text-2xl sm:text-3xl md:text-4xl text-customBrown font-normal mb-3"
           >
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-2 sm:gap-3">
               <img
                 src="/images/dhaltalwar.png"
                 alt="Left Icon"
-                className="w-10 h-10"
+                className="w-8 h-8 sm:w-10 sm:h-10"
               />
               <AnimatedUnderline>
                 Rudra Arts & Handicrafts News
@@ -63,7 +73,7 @@ const News = () => {
               <img
                 src="/images/dhaltalwar.png"
                 alt="Right Icon"
-                className="w-10 h-10"
+                className="w-8 h-8 sm:w-10 sm:h-10"
               />
             </div>
           </motion.h1>
@@ -72,63 +82,64 @@ const News = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-base text-gray-600 max-w-2xl mx-auto"
+            className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto"
           >
             Discover the rich heritage behind handcrafted art
           </motion.p>
         </div>
 
         {/* News Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {newsData.map((news, index) => (
             <motion.div
               key={news._id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform hover:-translate-y-1 hover:shadow-xl"
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               {/* Top Image */}
               <div className="relative">
                 <img
                   src={news.image}
                   alt={news.title}
-                  className="w-full h-52 object-cover"
+                  className="w-full h-40 sm:h-52 object-cover"
                   onError={(e) => {
                     e.target.src = "/placeholder-news.jpg";
                   }}
+                  loading="lazy"
                 />
-                <div className="absolute top-3 right-3 bg-amber-600 text-white text-xs px-3 py-1 rounded-full shadow">
+                <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-amber-600 text-white text-xs px-2 sm:px-3 py-1 rounded-full shadow">
                   Latest
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-5 flex flex-col justify-between h-[260px]">
+              <div className="p-4 sm:p-5 flex flex-col justify-between h-[220px] sm:h-[260px]">
                 <div>
-                  <h3 className="text-lg font-semibold text-customBrown mb-2 line-clamp-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-customBrown mb-2 line-clamp-2">
                     {news.title}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">
+                  <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">
                     {news.shortDescription ||
-                      news.description.substring(0, 100) + "..."}
+                      (news.description &&
+                        news.description.substring(0, 100) + "...") ||
+                      "No description available"}
                   </p>
                 </div>
 
                 {/* Actions */}
-                <div className="mt-4 flex items-center justify-between">
-                  <button
-                    onClick={() =>
-                      news.isExternal
-                        ? window.open(news.slug, "_blank")
-                        : handleShow(news)
-                    }
-                    className="group inline-flex items-center gap-1 text-amber-700 text-sm font-medium hover:text-amber-900 transition"
+                <div className="mt-3 sm:mt-4 flex items-center justify-between">
+                  <a
+                    href={news.slug || news.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-1 text-amber-700 text-xs sm:text-sm font-medium hover:text-amber-900 transition"
                   >
                     <span>Read More</span>
                     <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -140,16 +151,21 @@ const News = () => {
                         d="M14 5l7 7m0 0l-7 7m7-7H3"
                       />
                     </svg>
-                  </button>
+                  </a>
 
-                  {news.isExternal && (
+                  {(news.slug || news.link) && (
                     <a
-                      href={news.slug}
+                      href={news.slug || news.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-amber-700 hover:text-amber-900 transition text-lg"
+                      className="text-amber-700 hover:text-amber-900 transition text-sm sm:text-lg"
+                      title={
+                        isYouTubeLink(news.slug)
+                          ? "Watch on YouTube"
+                          : "View External Link"
+                      }
                     >
-                      <FaInstagram />
+                      {getLinkIcon(news.slug || news.link)}
                     </a>
                   )}
                 </div>
@@ -157,69 +173,6 @@ const News = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Modal */}
-        <AnimatePresence>
-          {showModal && selectedNews && (
-            <motion.div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4 py-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                style={{ fontFamily: "Times New Roman, serif" }}
-              >
-                {/* Close */}
-                <button
-                  onClick={handleClose}
-                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow"
-                >
-                  &times;
-                </button>
-
-                {/* Modal Content */}
-                <div>
-                  <div className="relative h-64 w-full">
-                    <img
-                      src={selectedNews.image}
-                      alt={selectedNews.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="p-8">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-900">
-                      {selectedNews.title}
-                    </h2>
-
-                    <div className="text-gray-700 leading-relaxed space-y-4">
-                      {selectedNews.description
-                        .split("\n")
-                        .map((paragraph, i) => (
-                          <p key={i}>{paragraph}</p>
-                        ))}
-                    </div>
-
-                    <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
-                      <button
-                        onClick={handleClose}
-                        className="px-6 py-2 bg-amber-700 text-white text-sm rounded hover:bg-amber-800 transition-colors"
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );

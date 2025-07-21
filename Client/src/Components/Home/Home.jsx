@@ -22,8 +22,6 @@ const Home = () => {
       type: "product",
       image: "/images/WhatsApp Image 2025-07-19 at 15.32.21_918c279f.jpg",
       title: "Explore Our Collection",
-      // description:
-      //   "Discover exquisite handcrafted pieces that tell a story of tradition and artistry.",
       buttonText: "View Products",
     },
     {
@@ -44,10 +42,8 @@ const Home = () => {
     },
     {
       type: "about",
-      image: "/images/talwarImg.jpg",
       image: "/images/dhoop.jpg",
       title: "Explore Our Dhoop Collection",
-
       buttonText: "Shop Now",
     },
   ];
@@ -55,8 +51,6 @@ const Home = () => {
   const handleSlideAction = () => {
     if (slides[currentSlide].type === "product") {
       navigate("/Products");
-    } else if (slides[currentSlide].type === "achievement") {
-      navigate("/About");
     } else {
       navigate("/About");
     }
@@ -66,7 +60,7 @@ const Home = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 10000); // Change slide every 5 seconds
+    }, 10000);
   };
 
   const stopSlider = () => {
@@ -103,12 +97,37 @@ const Home = () => {
     return () => stopSlider();
   }, []);
 
+  // Handle touch events for mobile swipe
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 50) {
+      goToNext();
+    }
+
+    if (touchStart - touchEnd < -50) {
+      goToPrev();
+    }
+  };
+
   return (
-    <div className="relative w-full h-[700px] flex items-center justify-center overflow-hidden bg-black pt-20 mt-20">
+    <div className="relative w-full h-[80vh] md:h-[700px] flex items-center justify-center overflow-hidden bg-black pt-16 md:pt-20 mt-16 md:mt-20">
       {/* Image Carousel Background */}
       <div
         ref={sliderRef}
         className="absolute top-0 left-0 w-full h-full z-10 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <div
           className="flex h-full transition-transform duration-1000 ease-in-out"
@@ -120,22 +139,48 @@ const Home = () => {
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover brightness-[0.6]"
+                loading={index === 0 ? "eager" : "lazy"}
               />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Play/Pause Button */}
+      {/* Play/Pause Button - Mobile */}
       <button
         onClick={togglePlay}
-        className="absolute top-24 right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition"
+        className="absolute top-20 right-4 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
+        aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+      >
+        {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
+      </button>
+
+      {/* Play/Pause Button - Desktop */}
+      <button
+        onClick={togglePlay}
+        className="absolute top-24 right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
         aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
       >
         {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
       </button>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - Mobile */}
+      <button
+        onClick={goToPrev}
+        className="absolute left-2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
+        aria-label="Previous slide"
+      >
+        <FaChevronLeft size={16} />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute right-2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
+        aria-label="Next slide"
+      >
+        <FaChevronRight size={16} />
+      </button>
+
+      {/* Navigation Arrows - Desktop */}
       <button
         onClick={goToPrev}
         className="absolute left-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
@@ -152,7 +197,7 @@ const Home = () => {
       </button>
 
       {/* Slide Content */}
-      <div className="z-10 text-white w-full px-8 md:px-16 lg:px-24">
+      <div className="z-10 text-white w-full px-4 md:px-8 lg:px-16 xl:px-24">
         {slides.map((slide, index) => (
           <motion.div
             key={index}
@@ -167,10 +212,10 @@ const Home = () => {
               {/* Split title only for first slide */}
               {index === 0 ? (
                 // LEFT aligned layout for first slide
-                <div className="w-full flex justify-start items-center pl-8 md:pl-16 lg:pl-24 h-full">
-                  <div className="flex flex-col items-start text-left space-y-6 max-w-2xl">
+                <div className="w-full flex justify-start items-center px-4 sm:pl-8 md:pl-16 lg:pl-24 h-full">
+                  <div className="flex flex-col items-start text-left space-y-4 sm:space-y-6 max-w-2xl">
                     <motion.h1
-                      className="text-4xl md:text-5xl lg:text-6xl font-normal font-times"
+                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times"
                       initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
@@ -179,14 +224,16 @@ const Home = () => {
                       Our Collection
                     </motion.h1>
 
-                    <motion.p
-                      className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3, duration: 1 }}
-                    >
-                      {slide.description}
-                    </motion.p>
+                    {slide.description && (
+                      <motion.p
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3, duration: 1 }}
+                      >
+                        {slide.description}
+                      </motion.p>
+                    )}
 
                     <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -196,18 +243,18 @@ const Home = () => {
                       <Link to="/Products">
                         <button
                           onClick={handleSlideAction}
-                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
                         >
                           <img
                             src="/images/dhaltalwar.png"
                             alt="Left Icon"
-                            className="w-5 h-5 invert"
+                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
                           />
                           {slide.buttonText}
                           <img
                             src="/images/dhaltalwar.png"
                             alt="Right Icon"
-                            className="w-5 h-5 invert"
+                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
                           />
                         </button>
                       </Link>
@@ -216,10 +263,10 @@ const Home = () => {
                 </div>
               ) : index === 3 ? (
                 // RIGHT aligned layout for fourth slide
-                <div className="w-full flex justify-end items-center pr-8 md:pr-16 lg:pr-24 h-full">
-                  <div className="flex flex-col items-end text-right space-y-6 max-w-2xl">
+                <div className="w-full flex justify-end items-center px-4 sm:pr-8 md:pr-16 lg:pr-24 h-full">
+                  <div className="flex flex-col items-end text-right space-y-4 sm:space-y-6 max-w-2xl">
                     <motion.h1
-                      className="text-4xl md:text-5xl lg:text-6xl font-normal font-times"
+                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times"
                       initial={{ opacity: 0, x: 50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
@@ -227,14 +274,16 @@ const Home = () => {
                       {slide.title}
                     </motion.h1>
 
-                    <motion.p
-                      className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3, duration: 1 }}
-                    >
-                      {slide.description}
-                    </motion.p>
+                    {slide.description && (
+                      <motion.p
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3, duration: 1 }}
+                      >
+                        {slide.description}
+                      </motion.p>
+                    )}
 
                     <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -244,18 +293,18 @@ const Home = () => {
                       <Link to="/Products">
                         <button
                           onClick={handleSlideAction}
-                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
                         >
                           <img
                             src="/images/dhaltalwar.png"
                             alt="Left Icon"
-                            className="w-5 h-5 invert"
+                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
                           />
                           {slide.buttonText}
                           <img
                             src="/images/dhaltalwar.png"
                             alt="Right Icon"
-                            className="w-5 h-5 invert"
+                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
                           />
                         </button>
                       </Link>
@@ -263,24 +312,26 @@ const Home = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center">
+                <div className="text-center px-4">
                   <motion.h1
                     initial={{ opacity: 0, y: -40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-4 mt-[10rem]"
+                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-3 sm:mb-4 mt-[6rem] sm:mt-[10rem]"
                   >
                     {slide.title}
                   </motion.h1>
 
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 1 }}
-                    className="text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-8 max-w-3xl mx-auto"
-                  >
-                    {slide.description}
-                  </motion.p>
+                  {slide.description && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3, duration: 1 }}
+                      className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-6 sm:mb-8 max-w-3xl mx-auto"
+                    >
+                      {slide.description}
+                    </motion.p>
+                  )}
 
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -290,7 +341,7 @@ const Home = () => {
                   >
                     <button
                       onClick={handleSlideAction}
-                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-8 py-3 font-medium rounded font-times text-lg"
+                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
                     >
                       {slide.buttonText}
                     </button>
