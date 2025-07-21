@@ -33,7 +33,7 @@ const ScrollToTopButton = () => {
       <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
         {/* WhatsApp Button */}
         <a
-          href="https://wa.me/918668494090?text=Hello%20Rudra%20Arts!%20I%20am%20interested%20in%20your%20products."
+          href="https://wa.me/917028996666?text=Hello%20Rudra%20Arts!%20I%20am%20interested%20in%20your%20products."
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center p-3 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 transition-all duration-300"
