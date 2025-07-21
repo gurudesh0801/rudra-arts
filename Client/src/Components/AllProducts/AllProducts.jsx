@@ -9,6 +9,13 @@ import { Box, Skeleton, Chip } from "@mui/material";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const AllProducts = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const { category } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);

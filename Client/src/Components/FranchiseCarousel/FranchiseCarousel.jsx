@@ -2,8 +2,16 @@ import React from "react";
 import { Box, Typography, Grid, useTheme, useMediaQuery } from "@mui/material";
 import { motion } from "framer-motion";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import { useEffect } from "react";
 
 const FranchiseCard = ({ franchise, index }) => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 

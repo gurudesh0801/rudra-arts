@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Home = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);

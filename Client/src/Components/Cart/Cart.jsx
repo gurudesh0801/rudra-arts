@@ -1,10 +1,19 @@
+import { useEffect } from "react";
 import { useCart } from "../../Contexts/Contexts";
 import { useState } from "react";
 import { FaCartArrowDown, FaWhatsapp } from "react-icons/fa";
 import { FiTrash2, FiShoppingBag } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Cart = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const { cartItems, removeFromCart, isCartLoading } = useCart();
   const [isBuying, setIsBuying] = useState(false);
   const navigate = useNavigate();
@@ -26,7 +35,6 @@ const Cart = () => {
   const handleBuyAll = async () => {
     setIsBuying(true);
     try {
-      // Prepare the product data we need to send
       const productsData = cartItems.map((item) => ({
         id: item._id,
         name: item.product_name,
@@ -34,10 +42,8 @@ const Cart = () => {
         size: item.product_size,
         image: item.product_image?.[0],
       }));
-
-      // Create the WhatsApp message on the client side
       const message = createWhatsAppMessage(productsData);
-      const phoneNumber = "917028996666"; // Replace with your business number
+      const phoneNumber = "917028996666";
       const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
         message
       )}`;
@@ -53,7 +59,7 @@ const Cart = () => {
 
   const createWhatsAppMessage = (products) => {
     const total = products.reduce((sum, product) => sum + product.price, 0);
-    const messageId = generateMessageId(); // Unique ID
+    const messageId = generateMessageId();
 
     let message = `*Purchase Inquiry - ${messageId}*\n\nHello! I'm interested in buying the following products:\n`;
 
@@ -89,148 +95,242 @@ const Cart = () => {
     return cartItems.reduce((total, item) => total + item.product_price, 0);
   };
 
-  // ... rest of your component remains exactly the same ...
   if (isCartLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex justify-center items-center min-h-[60vh]"
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"
+        ></motion.div>
+      </motion.div>
     );
   }
 
   if (!isCartLoading && cartItems.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-[60vh] text-center p-6">
-        <div className="bg-gray-100 p-8 rounded-full mb-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col justify-center items-center min-h-[60vh] text-center p-6 bg-gradient-to-b from-amber-50 to-amber-100"
+      >
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200 }}
+          className="bg-gray-100 p-8 rounded-full mb-6"
+        >
           <FiShoppingBag className="text-gray-400 text-5xl" />
-        </div>
-        <h2 className="text-2xl font-medium text-gray-700 mb-2">
+        </motion.div>
+        <motion.h2
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          className="text-2xl font-medium text-gray-700 mb-2"
+        >
           Your cart is empty
-        </h2>
-        <p className="text-gray-500 max-w-md mb-6">
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-gray-500 max-w-md mb-6"
+        >
           Looks like you haven't added anything to your cart yet. Start shopping
           to see items here.
-        </p>
-        <button
+        </motion.p>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => navigate("/products")}
           className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
         >
           Shop Now
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 mt-20 pt-20">
-      <div className="flex flex-col md:flex-row gap-8 mt-10">
-        {/* Cart Items */}
-        <div className="md:w-2/3">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Cart</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="px-4 sm:px-6 py-12 pt-20 pb-32 bg-gradient-to-b from-amber-50 to-amber-100 font-times font-normal"
+    >
+      {/* Mobile Header */}
+      <div className="md:hidden top-0 z-10 bg-customBrown text-white p-4 mb-6 shadow-md">
+        <h1 className="text-3xl font-normal text-center">Your Cart</h1>
+      </div>
 
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div
-                key={item._id}
-                className=" rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-4 hover:shadow-md transition-shadow"
-              >
-                <img
-                  src={item.product_image?.[0]}
-                  alt={item.product_name}
-                  className="w-24 h-24 rounded-lg object-cover self-center"
-                />
+      <div className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto">
+        {/* Cart Items - Full width on mobile */}
+        <div className="w-full md:w-2/3">
+          <motion.h1
+            initial={{ x: -20 }}
+            animate={{ x: 0 }}
+            transition={{ type: "spring" }}
+            className="hidden md:block text-3xl md:text-4xl font-normal text-customBrown mb-6"
+          >
+            Your Cart
+          </motion.h1>
 
-                <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    {item.product_name}
-                  </h2>
-                  <p className="text-orange-600 font-medium mt-1">
-                    {new Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                      maximumFractionDigits: 0,
-                    }).format(item.product_price)}
-                  </p>
-                </div>
-
-                <div className="flex gap-2 self-center sm:self-end">
-                  <button
-                    onClick={() => handleBuyNow(item._id)}
-                    className="flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-800 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                    title="Buy via WhatsApp"
+          <div className="space-y-3">
+            <AnimatePresence>
+              {cartItems.map((item) => (
+                <motion.div
+                  key={item._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.3 }}
+                  layout
+                  className="rounded-lg shadow-sm border border-gray-100 p-3 flex gap-3 hover:shadow-md transition-shadow bg-white"
+                >
+                  <Link
+                    to={`/product-details/${item._id}`}
+                    className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24"
                   >
-                    <FaWhatsapp className="text-green-600" />
-                    <span className="hidden sm:inline">Buy</span>
-                  </button>
-                  <button
-                    onClick={() => removeFromCart(item._id)}
-                    className="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                    title="Remove item"
-                  >
-                    <FiTrash2 />
-                    <span className="hidden sm:inline">Remove</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+                    <motion.img
+                      whileHover={{ scale: 1.05 }}
+                      src={item.product_image?.[0]}
+                      alt={item.product_name}
+                      className="w-full h-full rounded-lg object-cover"
+                    />
+                  </Link>
+
+                  <div className="flex-1 flex flex-col">
+                    <h2 className="text-lg sm:text-xl font-normal text-gray-800 line-clamp-2">
+                      {item.product_name}
+                    </h2>
+                    <p className="text-orange-600 font-bold mt-1 text-sm sm:text-base">
+                      {formatPrice(item.product_price)}
+                    </p>
+
+                    <div className="mt-auto flex justify-end">
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => removeFromCart(item._id)}
+                        className="flex items-center gap-1 bg-red-400 hover:bg-red-500 text-white px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium transition-colors rounded"
+                        title="Remove item"
+                      >
+                        <FiTrash2 className="text-sm" />
+                        <span className="hidden xs:inline">Remove</span>
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Order Summary */}
-        <div className="md:w-1/3">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        {/* Order Summary - Sticky at bottom on mobile */}
+        <div className="w-full md:w-1/3">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:sticky md:top-8"
+          >
+            <h2 className="text-xl sm:text-2xl font-normal text-gray-800 mb-3">
               Order Summary
             </h2>
 
-            <div className="space-y-3 mb-6">
-              <div className="flex justify-between">
+            <div className="space-y-3 mb-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="flex justify-between text-sm sm:text-base"
+              >
                 <span className="text-gray-600">
                   Items ({cartItems.length})
                 </span>
-                <span className="font-medium">
-                  {new Intl.NumberFormat("en-IN", {
-                    style: "currency",
-                    currency: "INR",
-                    maximumFractionDigits: 0,
-                  }).format(calculateTotal())}
+                <span className="font-bold">
+                  {formatPrice(calculateTotal())}
                 </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
-                <span className="font-medium">FREE</span>
-              </div>
-              <div className="border-t border-gray-200 my-2"></div>
-              <div className="flex justify-between text-lg font-bold">
-                <span>Total</span>
-                <span className="text-orange-600">
-                  {new Intl.NumberFormat("en-IN", {
-                    style: "currency",
-                    currency: "INR",
-                    maximumFractionDigits: 0,
-                  }).format(calculateTotal())}
+              </motion.div>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                className="border-t border-gray-200 my-2"
+              ></motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="flex justify-between items-center"
+              >
+                <span className="text-lg sm:text-xl font-normal">Total</span>
+                <span className="text-orange-600 font-bold text-lg sm:text-xl">
+                  {formatPrice(calculateTotal())}
                 </span>
-              </div>
+              </motion.div>
             </div>
 
-            <button
+            <motion.button
+              whileTap={{ scale: 0.98 }}
               onClick={handleBuyAll}
               disabled={isBuying}
-              className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
             >
-              <FaCartArrowDown />
+              <motion.span
+                animate={isBuying ? { rotate: 360 } : {}}
+                transition={
+                  isBuying
+                    ? { repeat: Infinity, duration: 1, ease: "linear" }
+                    : {}
+                }
+              >
+                <FaCartArrowDown />
+              </motion.span>
               {isBuying
                 ? "Processing..."
-                : `Checkout (${cartItems.length} items)`}
-            </button>
+                : `Checkout (${cartItems.length} ${
+                    cartItems.length > 1 ? "items" : "item"
+                  })`}
+            </motion.button>
 
-            <p className="text-xs text-gray-500 mt-4 text-center">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-xs text-gray-500 mt-3 text-center"
+            >
               You'll complete your purchase on WhatsApp
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Checkout Bar - Fixed at bottom */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 p-3 z-20">
+        <div className="flex justify-between items-center max-w-7xl mx-auto">
+          <div>
+            <p className="text-sm text-gray-600">Total</p>
+            <p className="text-lg font-bold text-orange-600">
+              {formatPrice(calculateTotal())}
+            </p>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={handleBuyAll}
+            disabled={isBuying}
+            className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-medium flex items-center gap-2 text-sm"
+          >
+            <FaCartArrowDown />
+            {isBuying ? "Processing..." : "Checkout"}
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
 import { FaShoppingCart } from "react-icons/fa";
 import logo from "../../../public/images/rudralogo.png";
+import { useMediaQuery } from "react-responsive";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +24,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { cartItems } = useCart();
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,13 +110,13 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 w-full z-[9999]">
       {/* Top Header */}
       <AnimatePresence>
-        {!scrolled && (
+        {(isMobile || !scrolled) && (
           <motion.div
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
             transition={{ duration: 0.3 }}
-            className={`w-full bg-gradient-to-b from-amber-50 to-amber-100 text-black text-white"}`}
+            className="w-full bg-gradient-to-b from-amber-50 to-amber-100 text-black"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-20 py-2">
@@ -282,7 +285,7 @@ const Navbar = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden bg-customBrown shadow-lg"
+              className="md:hidden fixed top-0 left-0 w-full z-50 bg-customBrown shadow-lg"
             >
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {navItems.map((item) => (

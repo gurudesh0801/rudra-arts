@@ -12,6 +12,13 @@ import {
 } from "react-icons/fi";
 
 const ProductDetails = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -187,7 +194,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-amber-50 to-amber-100 py-12 px-4 sm:px-6 lg:px-8 mt-10">
+    <div className="bg-gradient-to-b from-amber-50 to-amber-100 py-12 px-4 sm:px-6 lg:px-8 mt-10 font-times font-normal">
       <AnimatePresence>
         {showAlert && (
           <motion.div
@@ -320,7 +327,7 @@ const ProductDetails = () => {
           {/* Product info */}
           <div className="lg:pt-8">
             <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+              <h1 className="text-4xl text-gray-900 tracking-tight">
                 {product.product_name}
               </h1>
 

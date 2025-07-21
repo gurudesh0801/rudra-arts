@@ -7,6 +7,7 @@ import {
   FaPhone,
 } from "react-icons/fa";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import { useEffect } from "react";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -14,6 +15,13 @@ const fadeIn = {
 };
 
 const ContactSection = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,7 +40,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="min-h-screen py-16 px-6 bg-gradient-to-b from-amber-50 to-amber-100">
+    <section className="min-h-screen py-16 px-6 font-times font-normal bg-gradient-to-b from-amber-50 to-amber-100">
       <div className="max-w-4xl mx-auto">
         {/* Section Heading */}
         <motion.div
@@ -61,9 +69,7 @@ const ContactSection = () => {
             variants={fadeIn}
             className="bg-white p-6 rounded-lg shadow-md"
           >
-            <h3 className="text-xl font-semibold mb-4 text-amber-900">
-              Send a Message
-            </h3>
+            <h3 className="text-2xl mb-4 text-amber-900">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <input
@@ -118,9 +124,7 @@ const ContactSection = () => {
             variants={fadeIn}
             className="bg-white p-6 rounded-lg shadow-md"
           >
-            <h3 className="text-xl font-semibold mb-4 text-amber-900">
-              Our Information
-            </h3>
+            <h3 className="text-2xl mb-4 text-amber-900">Our Information</h3>
 
             <div className="space-y-5">
               <div className="flex items-start gap-3">

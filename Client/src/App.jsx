@@ -7,6 +7,7 @@ import Products from "./Components/Products/Products";
 import Contact from "./Components/Contact/Contact";
 import AllProducts from "./Components/AllProducts/AllProducts";
 import News from "./Components/News/News";
+import { useLocation } from "react-router-dom";
 
 import "./App.css";
 import Login from "./Components/Login/Login";
@@ -39,6 +40,17 @@ import HeritageExperience from "./Components/HeritageExperience/HeritageExperien
 import AwardsComponent from "./Components/AwardsComponent/AwardsComponent";
 
 const App = () => {
+  const location = useLocation();
+  const hideScrollButtonPaths = [
+    "/cart",
+    "/product-details",
+    "/admindashboard",
+  ];
+
+  const shouldShowScrollButton = !hideScrollButtonPaths.includes(
+    location.pathname
+  );
+
   useEffect(() => {
     const token = Cookies.get();
     console.log(token);
@@ -187,8 +199,8 @@ const App = () => {
         />
       </Routes>
 
-      {/* Add the ScrollToTopButton below all routes */}
-      <ScrollToTopButton />
+      {/* Conditionally render ScrollToTopButton */}
+      {shouldShowScrollButton && <ScrollToTopButton />}
     </>
   );
 };

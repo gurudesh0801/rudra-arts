@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const InformationCards = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const cardData = [
     {
       id: 1,

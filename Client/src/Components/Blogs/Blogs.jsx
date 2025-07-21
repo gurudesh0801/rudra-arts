@@ -13,6 +13,13 @@ import bg from "/images/border.jpg";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const Blogs = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const [blogs, setBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
