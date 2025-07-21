@@ -19,18 +19,30 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://rudra-arts.vercel.app",
+  "https://rudraartsandhandicrafts.in",
+  "https://www.rudraartsandhandicrafts.in",
+  "https://api.rudraartsandhandicrafts.in",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://rudra-arts.vercel.app",
-      "https://rudraartsandhandicrafts.in",
-      "https://www.rudraartsandhandicrafts.in",
-      "https://api.rudraartsandhandicrafts.in",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
+// Handle preflight requests globally
+app.options("*", cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
