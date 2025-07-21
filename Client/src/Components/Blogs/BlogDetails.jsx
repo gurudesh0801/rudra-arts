@@ -48,48 +48,49 @@ const BlogDetail = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 mt-20 pt-10"
+      className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 pt-20 pb-10"
     >
-      {/* Back Button */}
+      {/* Back Button - Fixed position for mobile */}
       <motion.button
         whileHover={{ x: -4 }}
         onClick={() => navigate(-1)}
-        className="absolute top-6 left-6 z-10 flex items-center gap-2 text-amber-800 font-medium"
+        className="fixed top-4 left-4 z-20 flex items-center gap-2 text-amber-800 font-medium bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm"
       >
-        <FiArrowLeft /> Back to Blogs
+        <FiArrowLeft />
+        <span className="hidden sm:inline">Back to Blogs</span>
       </motion.button>
 
-      {/* Main Content */}
-      <div className="flex flex-col lg:flex-row h-full">
-        {/* Image Section - Full Height */}
+      {/* Main Content - Column layout for mobile */}
+      <div className="flex flex-col lg:flex-row">
+        {/* Image Section - Full width on mobile, fixed height */}
         {blog.image && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="lg:w-1/2 h-screen lg:h-auto lg:min-h-screen sticky top-0"
+            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen"
           >
             <img
               src={blog.image}
               alt={blog.title}
-              className="w-full h-full max-h-screen object-contain"
+              className="w-full h-auto max-h-[50vh] lg:max-h-screen lg:h-full object-contain object-center bg-white p-4"
             />
           </motion.div>
         )}
 
-        {/* Text Content Section */}
+        {/* Text Content Section - Full width on mobile */}
         <motion.div
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:w-1/2 p-8 md:p-12 lg:p-16 bg-white"
+          className="lg:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 bg-white lg:min-h-screen"
         >
           {/* Category Tag */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="mb-6"
+            className="mb-4 sm:mb-6"
           >
             <span className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
               {blog.category || "General"}
@@ -101,7 +102,7 @@ const BlogDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-3xl md:text-4xl font-normal text-amber-900 mb-6 leading-tight font-times"
+            className="text-2xl sm:text-3xl md:text-4xl font-normal text-amber-900 mb-4 sm:mb-6 leading-tight font-times"
           >
             {blog.title}
           </motion.h1>
@@ -111,16 +112,16 @@ const BlogDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-4 mb-6 sm:mb-8"
           >
-            <div className="w-12 h-12 rounded-full bg-amber-700 flex items-center justify-center text-white font-medium">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-700 flex items-center justify-center text-white font-medium">
               {blog.author?.[0] || "A"}
             </div>
             <div>
-              <p className="font-medium text-amber-900">
+              <p className="font-medium text-amber-900 text-sm sm:text-base">
                 {blog.author || "Anonymous"}
               </p>
-              <p className="text-amber-600 text-sm">
+              <p className="text-amber-600 text-xs sm:text-sm">
                 {new Date(blog.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
@@ -135,7 +136,7 @@ const BlogDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="prose max-w-none text-amber-900"
+            className="prose max-w-none text-amber-900 text-sm sm:text-base"
           >
             {blog.content.split("\n").map((paragraph, i) => (
               <p key={i} className="mb-4 leading-relaxed">

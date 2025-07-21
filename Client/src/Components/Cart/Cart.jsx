@@ -37,7 +37,7 @@ const Cart = () => {
 
       // Create the WhatsApp message on the client side
       const message = createWhatsAppMessage(productsData);
-      const phoneNumber = "918668494090"; // Replace with your business number
+      const phoneNumber = "917028996666"; // Replace with your business number
       const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
         message
       )}`;

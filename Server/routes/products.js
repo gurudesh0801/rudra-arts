@@ -143,7 +143,7 @@ router.get("/bulk/whatsapp-message", async (req, res) => {
     message += `Total Items: ${products.length}\n`;
     message += `Total Price: ₹${totalPrice}`;
 
-    const whatsappURL = `https://wa.me/918668494090?text=${encodeURIComponent(
+    const whatsappURL = `https://wa.me/917028996666?text=${encodeURIComponent(
       message
     )}`;
 
