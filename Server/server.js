@@ -26,6 +26,7 @@ app.use(
       "https://rudra-arts.vercel.app",
       "https://rudraartsandhandicrafts.in",
       "https://www.rudraartsandhandicrafts.in",
+      "https://api.rudraartsandhandicrafts.in",
     ],
     credentials: true,
   })
