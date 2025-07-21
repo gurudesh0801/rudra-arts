@@ -10,6 +10,9 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Reset scroll position on component mount
+    window.scrollTo(0, 0);
+
     const fetchBlog = async () => {
       try {
         const res = await fetch(
@@ -62,30 +65,30 @@ const BlogDetail = () => {
 
       {/* Main Content - Column layout for mobile */}
       <div className="flex flex-col lg:flex-row">
-        {/* Image Section - Full width on mobile, fixed height */}
+        {/* Image Section - Modified sticky behavior */}
         {blog.image && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen"
+            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-[100vh] lg:overflow-y-auto"
           >
             <img
               src={blog.image}
               alt={blog.title}
-              className="w-full h-auto max-h-[50vh] lg:max-h-screen lg:h-full object-contain object-center bg-white p-4"
+              className="w-full h-auto max-h-[50vh] lg:max-h-[90vh] lg:object-contain lg:mx-auto lg:py-4 bg-white p-4"
             />
           </motion.div>
         )}
 
-        {/* Text Content Section - Full width on mobile */}
+        {/* Text Content Section */}
         <motion.div
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 bg-white lg:min-h-screen"
+          className="lg:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 bg-white"
         >
-          {/* Category Tag */}
+          {/* Rest of your content remains the same */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -97,7 +100,6 @@ const BlogDetail = () => {
             </span>
           </motion.div>
 
-          {/* Title */}
           <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -107,7 +109,6 @@ const BlogDetail = () => {
             {blog.title}
           </motion.h1>
 
-          {/* Author and Date */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -131,7 +132,6 @@ const BlogDetail = () => {
             </div>
           </motion.div>
 
-          {/* Blog Content */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
