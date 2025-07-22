@@ -19,14 +19,20 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://www.rudraartsandhandicrafts.in",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://rudra-arts.vercel.app",
-      "https://rudraartsandhandicrafts.in",
-      "https://www.rudraartsandhandicrafts.in",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
