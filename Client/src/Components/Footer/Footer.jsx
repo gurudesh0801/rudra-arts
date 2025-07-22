@@ -44,12 +44,20 @@ const Footer = () => {
             Our Location
           </h3>
           <div className="rounded overflow-hidden shadow-lg">
-            <iframe
+            {/* <iframe
               title="Rudra Arts & Handicrafts – New Sangvi"
               className="w-full h-40"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.XXXX!2d73.XXXXXXXX!3d18.XXXXX!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2cXXXXXXX%3A0xYYYYYYYYYYYYYYYY!2sRudra%20Arts%20and%20Handicrafts!5e0!3m2!1sen!2sin!4v1689999999999!5m2!1sen!2sin"
               allowFullScreen
               loading="lazy"
+            ></iframe> */}
+
+            <iframe
+              title="Rudra Arts & Handicrafts – New Sangvi"
+              className="w-full h-40"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.8436858126847!2d73.80883807608997!3d18.58108466732117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9218f0add23%3A0x7422895aede328d4!2sRudra%20Arts%20And%20Handicrafts!5e0!3m2!1sen!2sin!4v1753176580133!5m2!1sen!2sin"
+              loading="lazy"
+              allowFullScreen
             ></iframe>
           </div>
         </div>

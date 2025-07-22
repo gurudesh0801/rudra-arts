@@ -20,6 +20,7 @@ export default {
         nunito: ['"Nunito"', "sans-serif"],
         times: ["Times New Roman", "serif"],
         amita: ['"Amita"', "cursive"],
+        yatra: ['"Yatra One"', "cursive"],
       },
     },
   },

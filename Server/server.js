@@ -20,8 +20,8 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://www.rudraartsandhandicrafts.in",
+  "https://www.rudraartsandhandicrafts.in", // your production frontend
+  "http://localhost:5173", // your local frontend
 ];
 
 app.use(
@@ -33,11 +33,10 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: false,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

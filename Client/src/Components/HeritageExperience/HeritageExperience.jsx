@@ -57,14 +57,14 @@ const InformationCards = () => {
   };
 
   return (
-    <div className="mx-auto font-amita px-4 sm:px-6 lg:px-8 py-12 mt-20 bg-gradient-to-b from-amber-50 to-amber-100">
+    <div className="mx-auto font-yatra px-4 sm:px-6 lg:px-8 py-12 mt-20 bg-gradient-to-b from-amber-50 to-amber-100">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl font-bold font-amita text-amber-800 mb-4 pt-10">
+        <h2 className="text-4xl font-normal font-yatra text-amber-800 mb-4 pt-10">
           छत्रपती शिवाजी महाराज प्रतिमा
         </h2>
         <div className="w-24 h-1 bg-amber-600 mx-auto"></div>
@@ -103,11 +103,11 @@ const InformationCards = () => {
               <div className="space-y-6">
                 <motion.h3
                   whileHover={{ x: 5 }}
-                  className="text-3xl font-bold text-amber-700 border-b-2 border-amber-400 pb-2"
+                  className="text-3xl font-normal text-amber-700 border-b-2 border-amber-400 pb-2"
                 >
                   {card.title}
                 </motion.h3>
-                <p className="text-gray-700 font-bold text-justify leading-relaxed text-lg">
+                <p className="text-gray-700 font-normal text-justify leading-relaxed text-lg">
                   {card.description}
                 </p>
               </div>
