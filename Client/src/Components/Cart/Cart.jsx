@@ -160,14 +160,14 @@ const Cart = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="px-4 sm:px-6 py-12 pt-20 pb-32 bg-gradient-to-b from-amber-50 to-amber-100 font-times font-normal"
+      className="px-4 sm:px-6 py-12 pt-20 pb-32 bg-gradient-to-b from-amber-50 to-amber-100 font-times font-normal mt-10"
     >
       {/* Mobile Header */}
       <div className="md:hidden top-0 z-10 bg-customBrown text-white p-4 mb-6 shadow-md">
         <h1 className="text-3xl font-normal text-center">Your Cart</h1>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto mt-20">
         {/* Cart Items - Full width on mobile */}
         <div className="w-full md:w-2/3">
           <motion.h1

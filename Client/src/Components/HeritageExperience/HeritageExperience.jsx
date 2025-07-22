@@ -107,7 +107,7 @@ const InformationCards = () => {
                 >
                   {card.title}
                 </motion.h3>
-                <p className="text-gray-700 font-normal text-justify leading-relaxed text-lg">
+                <p className="text-gray-700 font-normal  text-justify leading-relaxed text-lg">
                   {card.description}
                 </p>
               </div>

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useMediaQuery } from "react-responsive";
 
 const Home = () => {
   useEffect(() => {
@@ -16,17 +17,22 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
   const intervalRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const slides = [
     {
       type: "product",
-      image: "/images/WhatsApp Image 2025-07-19 at 15.32.21_918c279f.jpg",
+      image: isMobile
+        ? "/images/mobile/WhatsApp-Image-2025-07-19-at-15.32.21_918c279f-mobile.jpg"
+        : "/images/WhatsApp Image 2025-07-19 at 15.32.21_918c279f.jpg",
       title: "Explore Our Collection",
       buttonText: "View Products",
     },
     {
       type: "achievement",
-      image: "/images/IMG-20250617-WA0022.jpg",
+      image: isMobile
+        ? "/images/mobile/IMG-20250617-WA0022-mobile.jpg"
+        : "/images/IMG-20250617-WA0022.jpg",
       title: "Honored to Meet the President",
       description:
         "We were privileged to present our handcrafted talwar to the Honorable President of India, a moment of great pride for our artisans and tradition.",
@@ -34,15 +40,15 @@ const Home = () => {
     },
     {
       type: "about",
-      image: "/images/img8.jpg",
-      title: "A Tribute to Valor and Legacy ",
+      image: isMobile ? "/images/mobile/img8-mobile.jpg" : "/images/img8.jpg",
+      title: "A Tribute to Valor and Legacy",
       description:
         "Inspired by the indomitable spirit of Chhatrapati Shivaji Maharaj, this memento honors the courage, leadership, and sacrifice that defines our armed forces. A timeless symbol of bravery, crafted for those who serve the nation with pride.",
       buttonText: "Read More",
     },
     {
       type: "about",
-      image: "/images/dhoop.jpg",
+      image: isMobile ? "/images/mobile/dhoop-mobile.jpg" : "/images/dhoop.jpg",
       title: "Explore Our Dhoop Collection",
       buttonText: "Shop Now",
     },
@@ -58,9 +64,12 @@ const Home = () => {
 
   const startSlider = () => {
     clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 10000);
+    intervalRef.current = setInterval(
+      () => {
+        setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+      },
+      isMobile ? 7000 : 10000
+    ); // Faster rotation on mobile
   };
 
   const stopSlider = () => {
@@ -97,12 +106,13 @@ const Home = () => {
     return () => stopSlider();
   }, []);
 
-  // Handle touch events for mobile swipe
+  // Enhanced touch handling for mobile
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
+    stopSlider(); // Pause during swipe
   };
 
   const handleTouchMove = (e) => {
@@ -110,17 +120,17 @@ const Home = () => {
   };
 
   const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 50) {
+    if (touchStart - touchEnd > 75) {
+      // More precise swipe threshold
       goToNext();
-    }
-
-    if (touchStart - touchEnd < -50) {
+    } else if (touchStart - touchEnd < -75) {
       goToPrev();
     }
+    if (isPlaying) startSlider(); // Resume if playing
   };
 
   return (
-    <div className="relative w-full h-[80vh] md:h-[700px] flex items-center justify-center overflow-hidden bg-black pt-16 md:pt-20 mt-16 md:mt-20">
+    <div className="relative w-full h-[70vh] md:h-[700px] flex items-center justify-center overflow-hidden bg-black pt-16 md:pt-20 mt-16 md:mt-20">
       {/* Image Carousel Background */}
       <div
         ref={sliderRef}
@@ -130,7 +140,7 @@ const Home = () => {
         onTouchEnd={handleTouchEnd}
       >
         <div
-          className="flex h-full transition-transform duration-1000 ease-in-out"
+          className="flex h-full transition-transform duration-500 ease-out" // Faster transition on mobile
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
           {slides.map((slide, index) => (
@@ -140,61 +150,66 @@ const Home = () => {
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover brightness-[0.6]"
                 loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
               />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Play/Pause Button - Mobile */}
-      <button
-        onClick={togglePlay}
-        className="absolute top-20 right-4 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
-        aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
-      >
-        {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
-      </button>
+      {/* Mobile Controls - Positioned for thumb reach */}
+      {isMobile && (
+        <>
+          <button
+            onClick={togglePlay}
+            className="absolute top-24 right-4 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
+            aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+          >
+            {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
+          </button>
+          <button
+            onClick={goToPrev}
+            className="absolute left-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
+            aria-label="Previous slide"
+          >
+            <FaChevronLeft size={16} />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
+            aria-label="Next slide"
+          >
+            <FaChevronRight size={16} />
+          </button>
+        </>
+      )}
 
-      {/* Play/Pause Button - Desktop */}
-      <button
-        onClick={togglePlay}
-        className="absolute top-24 right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
-        aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
-      >
-        {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
-      </button>
-
-      {/* Navigation Arrows - Mobile */}
-      <button
-        onClick={goToPrev}
-        className="absolute left-2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
-        aria-label="Previous slide"
-      >
-        <FaChevronLeft size={16} />
-      </button>
-      <button
-        onClick={goToNext}
-        className="absolute right-2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition md:hidden"
-        aria-label="Next slide"
-      >
-        <FaChevronRight size={16} />
-      </button>
-
-      {/* Navigation Arrows - Desktop */}
-      <button
-        onClick={goToPrev}
-        className="absolute left-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
-        aria-label="Previous slide"
-      >
-        <FaChevronLeft size={20} />
-      </button>
-      <button
-        onClick={goToNext}
-        className="absolute right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition hidden md:block"
-        aria-label="Next slide"
-      >
-        <FaChevronRight size={20} />
-      </button>
+      {/* Desktop Controls (unchanged) */}
+      {!isMobile && (
+        <>
+          <button
+            onClick={togglePlay}
+            className="absolute top-24 right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition"
+            aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+          >
+            {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+          </button>
+          <button
+            onClick={goToPrev}
+            className="absolute left-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition"
+            aria-label="Previous slide"
+          >
+            <FaChevronLeft size={20} />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-6 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/80 transition"
+            aria-label="Next slide"
+          >
+            <FaChevronRight size={20} />
+          </button>
+        </>
+      )}
 
       {/* Slide Content */}
       <div className="z-10 text-white w-full px-4 md:px-8 lg:px-16 xl:px-24">
@@ -209,22 +224,40 @@ const Home = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="w-full h-full flex flex-col justify-center">
-              {/* Split title only for first slide */}
               {index === 0 ? (
-                // LEFT aligned layout for first slide
-                <div className="w-full flex justify-start items-center px-4 sm:pl-8 md:pl-16 lg:pl-24 h-full">
-                  <div className="flex flex-col items-start text-left space-y-4 sm:space-y-6 max-w-2xl">
+                <div
+                  className={`w-full flex ${
+                    isMobile
+                      ? "justify-center text-center"
+                      : "justify-start text-left"
+                  } items-center px-4 sm:pl-8 md:pl-16 lg:pl-24 h-full`}
+                >
+                  <div
+                    className={`flex flex-col ${
+                      isMobile ? "items-center" : "items-start"
+                    } space-y-4 sm:space-y-6 max-w-2xl`}
+                  >
                     <motion.h1
-                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times"
-                      initial={{ opacity: 0, x: -50 }}
+                      className={`${
+                        isMobile
+                          ? "text-2xl"
+                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+                      } font-normal font-times`}
+                      initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
                     >
-                      Explore <br />
-                      Our Collection
+                      {isMobile ? (
+                        "Explore Our Collection"
+                      ) : (
+                        <>
+                          Explore <br />
+                          Our Collection
+                        </>
+                      )}
                     </motion.h1>
 
-                    {slide.description && (
+                    {slide.description && !isMobile && (
                       <motion.p
                         className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
                         initial={{ opacity: 0, x: -50 }}
@@ -243,38 +276,59 @@ const Home = () => {
                       <Link to="/Products">
                         <button
                           onClick={handleSlideAction}
-                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
+                          className={`flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 ${
+                            isMobile
+                              ? "px-4 py-1.5 text-sm"
+                              : "px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg"
+                          } font-medium rounded font-times`}
                         >
-                          <img
-                            src="/images/dhaltalwar.png"
-                            alt="Left Icon"
-                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
-                          />
+                          {!isMobile && (
+                            <img
+                              src="/images/dhaltalwar.png"
+                              alt="Left Icon"
+                              className="w-4 h-4 sm:w-5 sm:h-5 invert"
+                            />
+                          )}
                           {slide.buttonText}
-                          <img
-                            src="/images/dhaltalwar.png"
-                            alt="Right Icon"
-                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
-                          />
+                          {!isMobile && (
+                            <img
+                              src="/images/dhaltalwar.png"
+                              alt="Right Icon"
+                              className="w-4 h-4 sm:w-5 sm:h-5 invert"
+                            />
+                          )}
                         </button>
                       </Link>
                     </motion.div>
                   </div>
                 </div>
               ) : index === 3 ? (
-                // RIGHT aligned layout for fourth slide
-                <div className="w-full flex justify-end items-center px-4 sm:pr-8 md:pr-16 lg:pr-24 h-full">
-                  <div className="flex flex-col items-end text-right space-y-4 sm:space-y-6 max-w-2xl">
+                <div
+                  className={`w-full flex ${
+                    isMobile
+                      ? "justify-center text-center"
+                      : "justify-end text-right"
+                  } items-center px-4 sm:pr-8 md:pr-16 lg:pr-24 h-full`}
+                >
+                  <div
+                    className={`flex flex-col ${
+                      isMobile ? "items-center" : "items-end"
+                    } space-y-4 sm:space-y-6 max-w-2xl`}
+                  >
                     <motion.h1
-                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times"
-                      initial={{ opacity: 0, x: 50 }}
+                      className={`${
+                        isMobile
+                          ? "text-2xl"
+                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+                      } font-normal font-times`}
+                      initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
                     >
                       {slide.title}
                     </motion.h1>
 
-                    {slide.description && (
+                    {slide.description && !isMobile && (
                       <motion.p
                         className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times"
                         initial={{ opacity: 0, x: 50 }}
@@ -293,19 +347,27 @@ const Home = () => {
                       <Link to="/Products">
                         <button
                           onClick={handleSlideAction}
-                          className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
+                          className={`flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 transition duration-500 ${
+                            isMobile
+                              ? "px-4 py-1.5 text-sm"
+                              : "px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg"
+                          } font-medium rounded font-times`}
                         >
-                          <img
-                            src="/images/dhaltalwar.png"
-                            alt="Left Icon"
-                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
-                          />
+                          {!isMobile && (
+                            <img
+                              src="/images/dhaltalwar.png"
+                              alt="Left Icon"
+                              className="w-4 h-4 sm:w-5 sm:h-5 invert"
+                            />
+                          )}
                           {slide.buttonText}
-                          <img
-                            src="/images/dhaltalwar.png"
-                            alt="Right Icon"
-                            className="w-4 h-4 sm:w-5 sm:h-5 invert"
-                          />
+                          {!isMobile && (
+                            <img
+                              src="/images/dhaltalwar.png"
+                              alt="Right Icon"
+                              className="w-4 h-4 sm:w-5 sm:h-5 invert"
+                            />
+                          )}
                         </button>
                       </Link>
                     </motion.div>
@@ -317,7 +379,11 @@ const Home = () => {
                     initial={{ opacity: 0, y: -40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal font-times mb-3 sm:mb-4 mt-[6rem] sm:mt-[10rem]"
+                    className={`${
+                      isMobile
+                        ? "text-2xl mt-20"
+                        : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-[6rem] sm:mt-[10rem]"
+                    } font-normal font-times mb-3 sm:mb-4`}
                   >
                     {slide.title}
                   </motion.h1>
@@ -327,7 +393,11 @@ const Home = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3, duration: 1 }}
-                      className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed font-times mb-6 sm:mb-8 max-w-3xl mx-auto"
+                      className={`${
+                        isMobile
+                          ? "text-sm line-clamp-3"
+                          : "text-base sm:text-lg md:text-xl lg:text-2xl"
+                      } leading-relaxed font-times mb-4 sm:mb-8 max-w-3xl mx-auto`}
                     >
                       {slide.description}
                     </motion.p>
@@ -341,7 +411,11 @@ const Home = () => {
                   >
                     <button
                       onClick={handleSlideAction}
-                      className="flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 px-6 py-2 sm:px-8 sm:py-3 font-medium rounded font-times text-base sm:text-lg"
+                      className={`flex items-center gap-2 bg-customBrown text-white hover:bg-red-900 hover:text-white transition duration-500 ${
+                        isMobile
+                          ? "px-4 py-1.5 text-sm"
+                          : "px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg"
+                      } font-medium rounded font-times`}
                     >
                       {slide.buttonText}
                     </button>

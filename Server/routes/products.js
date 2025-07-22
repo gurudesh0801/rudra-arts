@@ -54,49 +54,53 @@ router.get("/category/:category", async (req, res) => {
 
 // Update
 // Add upload middleware
-router.put("/:id", upload.single("pimage"), async (req, res) => {
-  const { pname, pid, pprice, pdescription, psize, pcategory, pdiscount } =
-    req.body;
-
-  let pimage = req.body.pimage;
-
-  // If file was uploaded, use its buffer/base64 (or save to disk/Cloudinary here)
-  if (req.file) {
-    // Example: base64 encoding (not ideal for prod)
-    const imageBuffer = req.file.buffer;
-    const base64Image = `data:${
-      req.file.mimetype
-    };base64,${imageBuffer.toString("base64")}`;
-    pimage = base64Image;
-
-    // Or: Upload to Cloudinary using cloudinary.uploader.upload_stream()
-  }
+router.put("/:id", async (req, res) => {
+  const {
+    product_name,
+    product_price,
+    product_size,
+    product_category,
+    product_image,
+    product_discount,
+    inStock,
+  } = req.body;
 
   try {
+    // First get the existing product
+    const existingProduct = await Product.findById(req.params.id);
+    if (!existingProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Prepare update object
+    const updateData = {
+      product_name: product_name || existingProduct.product_name,
+      product_price: product_price || existingProduct.product_price,
+      product_size: product_size || existingProduct.product_size,
+      product_category: product_category || existingProduct.product_category,
+      product_discount:
+        product_discount || existingProduct.product_discount || 0,
+      inStock:
+        typeof inStock !== "undefined" ? inStock : existingProduct.inStock,
+      product_image: product_image || existingProduct.product_image,
+    };
+
+    // Update the product
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      {
-        product_name: pname,
-        product_id: pid,
-        product_price: pprice,
-        product_image: Array.isArray(pimage) ? pimage : [pimage],
-        product_description: pdescription,
-        product_size: psize,
-        product_category: pcategory,
-        product_discount: pdiscount || 0, // ← here
-      },
+      updateData,
       { new: true }
     );
-    if (!updatedProduct)
-      return res.status(404).json({ error: "Product not found" });
 
-    res.json({ message: "Product updated successfully", updatedProduct });
+    res.json({
+      message: "Product updated successfully",
+      updatedProduct,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update product" });
   }
 });
-
 // Delete
 router.delete("/:id", async (req, res) => {
   try {

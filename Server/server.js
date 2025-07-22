@@ -21,6 +21,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://www.rudraartsandhandicrafts.in", // your production frontend
+  "https://rudraartsandhandicrafts.in", // your production frontend
   "http://localhost:5173", // your local frontend
 ];
 

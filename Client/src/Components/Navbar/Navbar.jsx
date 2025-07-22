@@ -26,6 +26,13 @@ const Navbar = () => {
   const { cartItems } = useCart();
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isTablet = useMediaQuery({ maxWidth: 1024 });
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+    setSearchOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +63,6 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    // In your Navbar component, update the Products dropdown items:
     {
       name: "Products",
       path: "/products",
@@ -67,7 +73,7 @@ const Navbar = () => {
           path: "/products/category/Maharaj Idol Series",
         },
         {
-          name: "Miniature Weapon Sets & Figurines",
+          name: "Miniature Weapon Sets",
           path: "/products/category/Miniature Weapon Sets & Figurines",
         },
         {
@@ -79,20 +85,18 @@ const Navbar = () => {
     { name: "Blog", path: "/blogs" },
     { name: "Maharaj", path: "/maharaj" },
     { name: "Wall of Fame", path: "/lorem" },
-    // { name: "Awards", path: "/awards" },
     { name: "Franchise", path: "/franchises" },
-    {
-      name: "Our Team",
-      path: "/handsbehindrudrarts",
-    },
+    { name: "Our Team", path: "/handsbehindrudrarts" },
     { name: "Contact", path: "/contact" },
   ];
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-    setSearchQuery("");
-    setSearchOpen(false);
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setSearchOpen(false);
+    }
   };
 
   const toggleDropdown = (itemName) => {
@@ -108,62 +112,32 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[9999]">
-      {/* Top Header */}
+      {/* Top Header - Always visible on mobile, conditionally visible on desktop */}
       <AnimatePresence>
-        {(isMobile || !scrolled) && (
+        {(!scrolled || isMobile) && (
           <motion.div
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: isMobile ? 0.1 : 0.3 }}
             className="w-full bg-gradient-to-b from-amber-50 to-amber-100 text-black"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-20 py-2">
-                {/* LEFT: Search icon + input */}
-                <div className="flex-1 flex items-center justify-start relative">
-                  <button
-                    onClick={() => setSearchOpen(!searchOpen)}
-                    className="p-2 rounded-full hover:bg-gray-200/40 transition"
-                  >
-                    <FiSearch className="h-5 w-5" />
-                  </button>
-
-                  <AnimatePresence>
-                    {searchOpen && (
-                      <motion.form
-                        onSubmit={handleSearch}
-                        initial={{ width: 0, opacity: 0 }}
-                        animate={{ width: "12rem", opacity: 1 }}
-                        exit={{ width: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="ml-2 relative"
-                      >
-                        <input
-                          ref={searchInputRef}
-                          type="text"
-                          placeholder="Search..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-4 pr-4 py-1 rounded-full text-sm text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-300 w-full"
-                        />
-                      </motion.form>
-                    )}
-                  </AnimatePresence>
-                </div>
-
+              <div className="flex items-center justify-between h-16 md:h-20 py-2">
                 {/* CENTER: Logo */}
                 <div className="flex-shrink-0 flex items-center justify-center">
                   <Link to="/" className="flex items-center">
                     <motion.img
                       src={logo}
-                      alt="logo"
-                      className="h-14 object-contain"
-                      whileHover={{ scale: 1.05 }}
+                      alt="Rudra Arts Logo"
+                      className="h-10 md:h-14 object-contain"
+                      whileHover={{ scale: isMobile ? 1 : 1.05 }}
                     />
-                    <p className="ml-2 text-xl font-times font-normal hidden md:block">
-                      Rudra Arts & Handicrafts
-                    </p>
+                    {!isMobile && (
+                      <p className="ml-2 text-xl font-times font-normal">
+                        Rudra Arts & Handicrafts
+                      </p>
+                    )}
                   </Link>
                 </div>
 
@@ -172,6 +146,7 @@ const Navbar = () => {
                   <Link
                     to="/cart"
                     className="relative p-2 rounded-full hover:bg-gray-100 hover:bg-opacity-10 transition-colors"
+                    aria-label="Shopping Cart"
                   >
                     <FaShoppingCart className="h-5 w-5" />
                     {cartItems.length > 0 && (
@@ -184,7 +159,7 @@ const Navbar = () => {
                   <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="md:hidden ml-4 inline-flex items-center justify-center p-2 rounded-md focus:outline-none"
-                    aria-label="Main menu"
+                    aria-label="Menu"
                   >
                     {isOpen ? (
                       <FiX className="h-6 w-6" />
@@ -221,6 +196,7 @@ const Navbar = () => {
                             ? "text-[#ff8732] font-semibold"
                             : "hover:text-orange-500"
                         }`}
+                        aria-expanded={openDropdown === item.name}
                       >
                         {item.name}
                         {openDropdown === item.name ? (
@@ -284,8 +260,9 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
               className="md:hidden fixed top-0 left-0 w-full z-50 bg-customBrown shadow-lg"
+              style={{ marginTop: isMobile ? "4rem" : scrolled ? "0" : "4rem" }}
             >
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {navItems.map((item) => (
@@ -294,11 +271,12 @@ const Navbar = () => {
                       <>
                         <button
                           onClick={() => toggleDropdown(item.name)}
-                          className={`w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium ${
+                          className={`w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium ${
                             isActive(item.path, item.dropdown)
                               ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                              : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                              : "text-white hover:bg-[#5a3e2a]"
                           }`}
+                          aria-expanded={openDropdown === item.name}
                         >
                           {item.name}
                           {openDropdown === item.name ? (
@@ -314,7 +292,7 @@ const Navbar = () => {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2 }}
+                              transition={{ duration: 0.15 }}
                               className="pl-4"
                             >
                               {item.dropdown.map((subItem) => (
@@ -325,10 +303,10 @@ const Navbar = () => {
                                     setIsOpen(false);
                                     setOpenDropdown(null);
                                   }}
-                                  className={`block px-3 py-2 rounded-md text-sm ${
+                                  className={`block px-3 py-3 rounded-md text-sm ${
                                     location.pathname === subItem.path
                                       ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                                      : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                                      : "text-gray-200 hover:bg-[#5a3e2a] hover:text-white"
                                   }`}
                                 >
                                   {subItem.name}
@@ -342,10 +320,10 @@ const Navbar = () => {
                       <Link
                         to={item.path}
                         onClick={() => setIsOpen(false)}
-                        className={`block px-3 py-2 rounded-md text-base font-medium ${
+                        className={`block px-3 py-3 rounded-md text-base font-medium ${
                           location.pathname === item.path
                             ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                            : "hover:bg-gray-50 hover:text-[#8a4b1f]"
+                            : "text-white hover:bg-[#5a3e2a]"
                         }`}
                       >
                         {item.name}

@@ -147,7 +147,7 @@ const BTS = () => {
   };
 
   return (
-    <section className="px-4 py-8 bg-gradient-to-b from-amber-50 to-amber-100">
+    <section className="px-4 py-8 bg-gradient-to-b from-amber-50 to-amber-100 pt-14">
       <TeamComponent />
 
       <div className="max-w-7xl mx-auto">

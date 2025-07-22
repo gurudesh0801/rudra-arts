@@ -225,7 +225,7 @@ const ProductDetails = () => {
           {/* Image gallery */}
           <div className="space-y-6">
             <div
-              className="relative rounded-xl overflow-hidden bg-gray-50"
+              className="relative rounded-xl overflow-hidden bg-transparent"
               onWheel={handleWheel}
             >
               <div

@@ -23,11 +23,20 @@ import {
   Switch,
   Chip,
   InputAdornment,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
-import { Delete, Edit, CheckCircle, Cancel } from "@mui/icons-material";
+import {
+  Delete as DeleteIcon,
+  Edit,
+  CheckCircle,
+  Cancel,
+} from "@mui/icons-material";
 import DashboardLayout from "./DashboardLayout";
 import { toast } from "react-toastify";
-import { Search } from "lucide-react";
+import { Delete, Search } from "lucide-react";
 
 const ProductManager = () => {
   const [products, setProducts] = useState([]);
@@ -37,6 +46,20 @@ const ProductManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
   const navigate = useNavigate();
+
+  const categories = [
+    "Mavale & Warrior Statues",
+    "Maharaj Idol Series",
+    "Miniature Weapon Sets & Figurines",
+    "Spiritual Statues",
+    "Car Dashboard & Desk Decor",
+    "Signature Frames",
+    "Shilekhana (Weapon Vault) Series",
+    "Symbolic & Cultural Artefacts",
+    "Sanch (Royal Court Replicas)",
+    "Historical Warriors",
+    "Badges & Collectibles",
+  ];
 
   const [editFormData, setEditFormData] = useState({
     pname: "",
@@ -146,7 +169,7 @@ const ProductManager = () => {
             product_price: editFormData.pprice,
             product_size: editFormData.psize,
             product_category: editFormData.pcategory,
-            product_image: editFormData.pimage,
+            product_image: editFormData.pimage.filter((img) => img), // Remove any undefined/null images
             product_discount: editFormData.pdiscount || 0,
             inStock: editFormData.inStock,
           }),
@@ -157,6 +180,7 @@ const ProductManager = () => {
         throw new Error("Failed to update product");
       }
 
+      const data = await res.json();
       setEditProduct(null);
       fetchProducts();
       toast.success("Product updated successfully");
@@ -218,6 +242,15 @@ const ProductManager = () => {
     };
 
     input.click();
+  };
+
+  const handleImageDelete = (index) => {
+    const newImages = [...editFormData.pimage];
+    newImages[index] = null; // Set to null instead of removing to maintain positions
+    setEditFormData((prev) => ({
+      ...prev,
+      pimage: newImages,
+    }));
   };
 
   // Drag and drop handlers for image reordering
@@ -504,19 +537,29 @@ const ProductManager = () => {
               fullWidth
               type="number"
             />
-            <TextField
-              label="Product Category"
-              name="pcategory"
-              value={editFormData.pcategory}
-              onChange={handleEditChange}
-              fullWidth
-            />
+
+            {/* Category Dropdown */}
+            <FormControl fullWidth>
+              <InputLabel id="category-label">Product Category</InputLabel>
+              <Select
+                labelId="category-label"
+                name="pcategory"
+                value={editFormData.pcategory}
+                label="Product Category"
+                onChange={handleEditChange}
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             {/* Image Upload Section */}
             <Typography variant="subtitle1">Product Images</Typography>
             <Box display="flex" flexWrap="wrap" gap={2}>
               {[0, 1, 2, 3].map((i) => {
-                // Ensure we don't try to access undefined indices
                 const imageUrl = editFormData.pimage[i] || null;
                 return (
                   <Box
@@ -546,26 +589,63 @@ const ProductManager = () => {
                       cursor: "move",
                       opacity: draggedImageIndex === i ? 0.5 : 1,
                     }}
-                    onClick={() => handleImageClick(i)}
                   >
                     {imageUrl ? (
-                      <Avatar
-                        src={imageUrl}
-                        alt={`Product Image ${i + 1}`}
-                        sx={{ width: "100%", height: "100%", borderRadius: 0 }}
-                        variant="square"
-                      />
+                      <>
+                        <Avatar
+                          src={imageUrl}
+                          alt={`Product Image ${i + 1}`}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: 0,
+                          }}
+                          variant="square"
+                          onClick={() => handleImageClick(i)}
+                        />
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleImageDelete(i);
+                          }}
+                          sx={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            color: "white",
+                            "&:hover": {
+                              backgroundColor: "rgba(0,0,0,0.7)",
+                            },
+                          }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </>
                     ) : (
-                      <Typography variant="caption" textAlign="center">
-                        Click to upload
-                      </Typography>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleImageClick(i)}
+                      >
+                        <Typography variant="caption" textAlign="center">
+                          Click to upload
+                        </Typography>
+                      </Box>
                     )}
                   </Box>
                 );
               })}
             </Box>
             <Typography variant="caption" color="textSecondary">
-              Drag to reorder images • Click to update image
+              Drag to reorder images • Click to update image • Click X to delete
             </Typography>
 
             {/* Stock Status Switch */}
