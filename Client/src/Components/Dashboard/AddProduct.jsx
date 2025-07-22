@@ -206,6 +206,7 @@ const AddProduct = ({ onProductAdded }) => {
                 <option value="Miniature Weapon Sets & Figurines">
                   Miniature Weapon Sets & Figurines
                 </option>
+                <option value="Spiritual Statues">Spiritual Statues</option>
                 <option value="Car Dashboard & Desk Decor">
                   Car Dashboard & Desk Decor
                 </option>

@@ -24,7 +24,6 @@ const allowedOrigins = [
   "https://rudra-arts.vercel.app",
   "https://rudraartsandhandicrafts.in",
   "https://www.rudraartsandhandicrafts.in",
-  "https://api.rudraartsandhandicrafts.in",
 ];
 
 app.use(
@@ -39,9 +38,6 @@ app.use(
     credentials: true,
   })
 );
-
-// Handle preflight requests globally
-app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
