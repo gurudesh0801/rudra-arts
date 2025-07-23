@@ -65,6 +65,8 @@ router.put("/:id", async (req, res) => {
     inStock,
   } = req.body;
 
+  console.log(req.body);
+
   try {
     // First get the existing product
     const existingProduct = await Product.findById(req.params.id);
@@ -74,15 +76,14 @@ router.put("/:id", async (req, res) => {
 
     // Prepare update object
     const updateData = {
-      product_name: product_name || existingProduct.product_name,
-      product_price: product_price || existingProduct.product_price,
-      product_size: product_size || existingProduct.product_size,
-      product_category: product_category || existingProduct.product_category,
-      product_discount:
-        product_discount || existingProduct.product_discount || 0,
+      product_name,
+      product_price,
+      product_size,
+      product_category,
+      product_discount: product_discount || 0,
       inStock:
         typeof inStock !== "undefined" ? inStock : existingProduct.inStock,
-      product_image: product_image || existingProduct.product_image,
+      product_image, // Always update image with what's received from frontend
     };
 
     // Update the product

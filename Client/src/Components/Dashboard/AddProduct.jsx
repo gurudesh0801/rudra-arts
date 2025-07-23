@@ -199,31 +199,22 @@ const AddProduct = ({ onProductAdded }) => {
                 className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-amber-500"
               >
                 <option value="">Select a Category</option>
-                <option value="Mavale & Warrior Statues">
-                  Mavale & Warrior Statues
-                </option>
-                <option value="Maharaj Idol Series">Maharaj Idol Series</option>
-                <option value="Miniature Weapon Sets & Figurines">
-                  Miniature Weapon Sets & Figurines
-                </option>
+                <option value="Mavala">Mavala</option>
+                <option value="Maharaj">Maharaj</option>
+                <option value="Miniature Shastra">Miniature Shastra</option>
+                <option value="Maniatures">Maniatures</option>
                 <option value="Spiritual Statues">Spiritual Statues</option>
-                <option value="Car Dashboard & Desk Decor">
-                  Car Dashboard & Desk Decor
-                </option>
-                <option value="Signature Frames">Signature Frames</option>
-                <option value="Shilekhana (Weapon Vault) Series">
-                  Shilekhana (Weapon Vault) Series
+                <option value="Car Dashboard">Car Dashboard</option>
+                <option value="Frame Sangrah">Frame Sangrah</option>
+                <option value="Shilekhana (Weapon Vault)">
+                  Shilekhana (Weapon Vault)
                 </option>
                 <option value="Symbolic & Cultural Artefacts">
                   Symbolic & Cultural Artefacts
                 </option>
-                <option value="Sanch (Royal Court Replicas)">
-                  Sanch (Royal Court Replicas)
-                </option>
-                <option value="Historical Warriors">Historical Warriors</option>
-                <option value="Badges & Collectibles">
-                  Badges & Collectibles
-                </option>
+                <option value="Sanch">Sanch</option>
+                <option value="Historical Legends">Historical Legends</option>
+                <option value="Badges">Badges</option>
               </select>
             </div>
 

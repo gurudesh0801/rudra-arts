@@ -48,17 +48,18 @@ const ProductManager = () => {
   const navigate = useNavigate();
 
   const categories = [
-    "Mavale & Warrior Statues",
-    "Maharaj Idol Series",
-    "Miniature Weapon Sets & Figurines",
+    "Mavala",
+    "Maharaj",
+    "Miniature Shastra",
+    "Maniatures",
     "Spiritual Statues",
-    "Car Dashboard & Desk Decor",
-    "Signature Frames",
-    "Shilekhana (Weapon Vault) Series",
+    "Car Dashboard",
+    "Frame Sangrah",
+    "Shilekhana (Weapon Vault)",
     "Symbolic & Cultural Artefacts",
-    "Sanch (Royal Court Replicas)",
-    "Historical Warriors",
-    "Badges & Collectibles",
+    "Sanch",
+    "Historical Legends",
+    "Badges",
   ];
 
   const [editFormData, setEditFormData] = useState({
@@ -169,7 +170,10 @@ const ProductManager = () => {
             product_price: editFormData.pprice,
             product_size: editFormData.psize,
             product_category: editFormData.pcategory,
-            product_image: editFormData.pimage.filter((img) => img), // Remove any undefined/null images
+            product_image: editFormData.pimage.filter(
+              (img) => typeof img === "string" && img.startsWith("http")
+            ),
+            // Remove any undefined/null images
             product_discount: editFormData.pdiscount || 0,
             inStock: editFormData.inStock,
           }),

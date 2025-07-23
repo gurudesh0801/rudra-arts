@@ -68,9 +68,13 @@ const AllProducts = () => {
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
   const filteredProducts = products
-    .filter((p) =>
-      selectedCategory === "All" ? true : p.category === selectedCategory
-    )
+    .filter((p) => {
+      if (selectedCategory === "All") return true;
+      return (
+        p.category?.toLowerCase().trim() ===
+        selectedCategory.toLowerCase().trim()
+      );
+    })
     .filter(
       (p) =>
         p.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -216,13 +220,22 @@ const AllProducts = () => {
               className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80 text-amber-900 transition-all duration-300"
             >
               <option value="All">All Categories</option>
-              <option value="Maharaj Idol Series">Maharaj Idol Series</option>
-              <option value="Miniature Weapon Sets & Figurines">
-                Miniature Weapon Sets & Figurines
+              <option value="Mavala">Mavala</option>
+              <option value="Maharaj">Maharaj</option>
+              <option value="Miniature Shastra">Miniature Shastra</option>
+              <option value="Maniatures">Maniatures</option>
+              <option value="Spiritual Statues">Spiritual Statues</option>
+              <option value="Car Dashboard">Car Dashboard</option>
+              <option value="Frame Sangrah">Frame Sangrah</option>
+              <option value="Shilekhana (Weapon Vault)">
+                Shilekhana (Weapon Vault)
               </option>
-              <option value="Mavale & Warrior Statues">
-                Mavale & Warrior Statues
+              <option value="Symbolic & Cultural Artefacts">
+                Symbolic & Cultural Artefacts
               </option>
+              <option value="Sanch">Sanch</option>
+              <option value="Historical Legends">Historical Legends</option>
+              <option value="Badges">Badges</option>
             </select>
           </div>
         </div>
@@ -267,20 +280,25 @@ const AllProducts = () => {
                       y: -5,
                       boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
                     }}
-                    className="relative group"
+                    className="relative group bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200"
                   >
                     <Link
                       to={`/product-details/${product._id}`}
                       className="block h-full"
                     >
-                      <div className="h-full flex flex-col bg-white/90 backdrop-blur-sm overflow-hidden border border-amber-100 transition-all duration-300 group-hover:shadow-lg">
-                        {/* Product Image */}
-                        <div className="relative h-48 overflow-hidden">
-                          <img
+                      <div className="h-full flex flex-col">
+                        {/* Product Image Container - Amazon Style */}
+                        <div className="relative h-60 w-full overflow-hidden bg-gray-100">
+                          <motion.img
                             src={product.product_image[0]}
                             alt={product.product_name}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover p-2"
                             loading="lazy"
+                            initial={{ scale: 1 }}
+                            whileHover={{
+                              scale: 1.05,
+                              transition: { duration: 0.3 },
+                            }}
                           />
 
                           {/* Badges */}
@@ -296,59 +314,40 @@ const AllProducts = () => {
                               </span>
                             )}
                           </div>
-
-                          {/* Favorite Button */}
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              toggleFavorite(product._id);
-                            }}
-                            className="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition"
-                          >
-                            {product.isFavorite ? (
-                              <FaHeart className="text-red-500" />
-                            ) : (
-                              <FaRegHeart className="text-amber-700 hover:text-red-500 transition" />
-                            )}
-                          </button>
                         </div>
 
                         {/* Product Info */}
-                        <div className="p-4 flex flex-col flex-grow">
-                          <h3 className="text-lg font-semibold text-amber-900 mb-1">
+                        <div className="p-4 flex flex-col flex-grow border-t border-gray-100">
+                          <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2">
                             {product.product_name}
                           </h3>
-                          <p className="text-sm text-amber-700 mb-3 line-clamp-2">
-                            {product.product_description}
-                          </p>
-
-                          {/* Rating */}
-                          <div className="flex items-center mb-3">
-                            <div className="flex mr-1">
-                              {renderStars(product.rating)}
-                            </div>
-                            <span className="text-xs text-amber-600">
-                              ({product.rating.toFixed(1)})
-                            </span>
-                          </div>
 
                           {/* Size */}
-                          <p className="text-sm text-amber-600 mb-4">
-                            Size: {product.product_size}
-                          </p>
+                          {product.product_size && (
+                            <p className="text-sm text-gray-500 mb-3">
+                              Size: {product.product_size}
+                            </p>
+                          )}
 
                           {/* Price and CTA */}
                           <div className="mt-auto flex justify-between items-center">
-                            <span className="text-xl font-medium text-amber-800">
-                              ₹{product.product_price.toLocaleString()}
-                            </span>
+                            <div>
+                              <span className="text-xl font-bold text-gray-900">
+                                ₹{product.product_price.toLocaleString()}
+                              </span>
+                              {product.product_discount > 0 && (
+                                <span className="ml-2 text-sm text-green-600">
+                                  {product.product_discount}% off
+                                </span>
+                              )}
+                            </div>
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="flex items-center gap-1 px-3 py-2 text-sm font-medium bg-amber-700 text-white rounded-lg transition"
+                              className="flex items-center gap-1 px-3 py-2 text-sm font-medium bg-amber-600 text-white rounded-md transition hover:bg-amber-700"
                             >
                               <ShoppingCart size={16} />
-                              <span className="hidden sm:inline">View</span>
+                              <span className="hidden sm:inline">Add</span>
                             </motion.button>
                           </div>
                         </div>

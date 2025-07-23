@@ -28,6 +28,22 @@ const Navbar = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isTablet = useMediaQuery({ maxWidth: 1024 });
 
+  // Product categories from your select dropdown
+  const productCategories = [
+    "Mavala",
+    "Maharaj",
+    "Miniature Shastra",
+    "Maniatures",
+    "Spiritual Statues",
+    "Car Dashboard",
+    "Frame Sangrah",
+    "Shilekhana (Weapon Vault)",
+    "Symbolic & Cultural Artefacts",
+    "Sanch",
+    "Historical Legends",
+    "Badges",
+  ];
+
   // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false);
@@ -68,25 +84,17 @@ const Navbar = () => {
       path: "/products",
       dropdown: [
         { name: "All Products", path: "/products" },
-        {
-          name: "Maharaj Idol Series",
-          path: "/products/category/Maharaj Idol Series",
-        },
-        {
-          name: "Miniature Weapon Sets",
-          path: "/products/category/Miniature Weapon Sets & Figurines",
-        },
-        {
-          name: "Mavale & Warrior Statues",
-          path: "/products/category/Mavale & Warrior Statues",
-        },
+        ...productCategories.map((category) => ({
+          name: category,
+          path: `/products/category/${encodeURIComponent(category)}`,
+        })),
       ],
     },
     { name: "Blog", path: "/blogs" },
     { name: "Maharaj", path: "/maharaj" },
-    { name: "Wall of Fame", path: "/lorem" },
-    { name: "Franchise", path: "/franchises" },
-    { name: "Our Team", path: "/handsbehindrudrarts" },
+    { name: "Wall of Fame", path: "/wall-of-fame" },
+    { name: "Franchise", path: "/franchise" },
+    { name: "Our Team", path: "/our-team" },
     { name: "Contact", path: "/contact" },
   ];
 
