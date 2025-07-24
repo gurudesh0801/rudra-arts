@@ -32,6 +32,7 @@ const Navbar = () => {
   const productCategories = [
     "Mavala",
     "Maharaj",
+    "Shastra (Weapons)",
     "Miniature Shastra",
     "Maniatures",
     "Spiritual Statues",
@@ -92,9 +93,9 @@ const Navbar = () => {
     },
     { name: "Blog", path: "/blogs" },
     { name: "Maharaj", path: "/maharaj" },
-    { name: "Wall of Fame", path: "/wall-of-fame" },
-    { name: "Franchise", path: "/franchise" },
-    { name: "Our Team", path: "/our-team" },
+    { name: "Wall of Fame", path: "/lorem" },
+    { name: "Franchise", path: "/franchises" },
+    { name: "Our Team", path: "/ourteam" },
     { name: "Contact", path: "/contact" },
   ];
 

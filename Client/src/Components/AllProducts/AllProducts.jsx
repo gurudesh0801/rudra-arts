@@ -222,6 +222,7 @@ const AllProducts = () => {
               <option value="All">All Categories</option>
               <option value="Mavala">Mavala</option>
               <option value="Maharaj">Maharaj</option>
+              <option value="Shastra (Weapons)">Shastra (Weapons)</option>
               <option value="Miniature Shastra">Miniature Shastra</option>
               <option value="Maniatures">Maniatures</option>
               <option value="Spiritual Statues">Spiritual Statues</option>
@@ -280,7 +281,7 @@ const AllProducts = () => {
                       y: -5,
                       boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
                     }}
-                    className="relative group bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200"
+                    className="relative group bg-white overflow-hidden shadow-sm border border-gray-200"
                   >
                     <Link
                       to={`/product-details/${product._id}`}

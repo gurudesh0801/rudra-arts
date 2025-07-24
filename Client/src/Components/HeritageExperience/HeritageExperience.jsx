@@ -64,7 +64,7 @@ const InformationCards = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl font-normal font-yatra text-amber-800 mb-4 pt-10">
+        <h2 className="text-4xl font-semibold font-amita text-amber-800 mb-4 pt-10">
           छत्रपती शिवाजी महाराज प्रतिमा
         </h2>
         <div className="w-24 h-1 bg-amber-600 mx-auto"></div>
@@ -85,9 +85,9 @@ const InformationCards = () => {
             {/* Image Section */}
             <div className="w-full md:w-1/2 relative flex justify-center">
               <motion.div
-                whileHover={{ scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                className="rounded-lg shadow-xl border-4 border-customBrown inline-block"
+                whileHover={{ scale: 1.03 }}
+                // transition={{ type: "spring", stiffness: 500, damping: 10 }}
+                className="rounded-lg transition-all shadow-xl border-4 border-customBrown inline-block"
               >
                 <img
                   src={card.image}
@@ -101,13 +101,10 @@ const InformationCards = () => {
             {/* Content Section */}
             <div className="w-full md:w-1/2">
               <div className="space-y-6">
-                <motion.h3
-                  whileHover={{ x: 5 }}
-                  className="text-3xl font-normal text-amber-700 border-b-2 border-amber-400 pb-2"
-                >
+                <motion.h3 className="text-3xl font-amita font-semibold text-amber-700 border-b-2 border-amber-400 pb-2">
                   {card.title}
                 </motion.h3>
-                <p className="text-gray-700 font-normal  text-justify leading-relaxed text-lg">
+                <p className="text-gray-700 font-normal text-justify leading-relaxed text-lg">
                   {card.description}
                 </p>
               </div>

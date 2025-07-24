@@ -14,6 +14,7 @@ import adminRoutes from "./routes/admin.js";
 import productRoutes from "./routes/products.js";
 import newsRoutes from "./routes/news.js";
 import blogRoutes from "./routes/blog.js";
+import checkoutRoutes from "./routes/checkoutRoute.js";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 app.get("/", (req, res) => {
   res.send("Rudra Arts API running with MongoDB");

@@ -48,6 +48,13 @@ const Cart = () => {
         message
       )}`;
 
+      await fetch(
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/checkout/increment`,
+        {
+          method: "POST",
+        }
+      );
+
       window.open(whatsappURL, "_blank");
     } catch (err) {
       console.error("Error preparing WhatsApp message:", err);

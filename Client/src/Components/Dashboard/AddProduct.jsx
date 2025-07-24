@@ -201,6 +201,7 @@ const AddProduct = ({ onProductAdded }) => {
                 <option value="">Select a Category</option>
                 <option value="Mavala">Mavala</option>
                 <option value="Maharaj">Maharaj</option>
+                <option value="Shastra (Weapons)">Shastra (Weapons)</option>
                 <option value="Miniature Shastra">Miniature Shastra</option>
                 <option value="Maniatures">Maniatures</option>
                 <option value="Spiritual Statues">Spiritual Statues</option>

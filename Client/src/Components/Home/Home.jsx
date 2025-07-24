@@ -242,7 +242,7 @@ const Home = () => {
                         isMobile
                           ? "text-2xl"
                           : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-                      } font-normal font-times`}
+                      } font-normal font-times ml-20`}
                       initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
@@ -280,7 +280,7 @@ const Home = () => {
                             isMobile
                               ? "px-4 py-1.5 text-sm"
                               : "px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg"
-                          } font-medium rounded font-times`}
+                          } font-medium rounded font-times ml-20`}
                         >
                           {!isMobile && (
                             <img
