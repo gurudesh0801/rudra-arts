@@ -341,11 +341,13 @@ const ProductDetails = () => {
                 </p>
               </div>
 
-              {product.product_size && (
+              {product.product_size !== "0" ? (
                 <div className="flex items-center space-x-2">
                   <span className="text-gray-500">Size:</span>
                   <span className="font-medium">{product.product_size}</span>
                 </div>
+              ) : (
+                ""
               )}
 
               <div className="prose text-gray-500 max-w-none">

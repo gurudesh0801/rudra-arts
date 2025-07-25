@@ -47,7 +47,12 @@ export default function LatestProducts() {
           >
             <div className="relative overflow-hidden bg-white shadow-md">
               <img
-                src={product.product_image?.[0] || "/placeholder-image.jpg"}
+                src={
+                  product.product_image?.[0].replace(
+                    "/upload/",
+                    "/upload/w_400,q_auto,f_auto/"
+                  ) || "/placeholder-image.jpg"
+                }
                 alt={product.product_name}
                 className="w-full h-48 object-cover"
                 onError={(e) => {

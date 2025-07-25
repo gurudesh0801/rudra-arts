@@ -58,6 +58,7 @@ router.put("/:id", async (req, res) => {
   const {
     product_name,
     product_price,
+    product_description,
     product_size,
     product_category,
     product_image,
@@ -78,6 +79,7 @@ router.put("/:id", async (req, res) => {
     const updateData = {
       product_name,
       product_price,
+      product_description,
       product_size,
       product_category,
       product_discount: product_discount || 0,

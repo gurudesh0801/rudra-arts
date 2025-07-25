@@ -199,7 +199,11 @@ const Navbar = () => {
                   {item.dropdown ? (
                     <>
                       <button
-                        onClick={() => toggleDropdown(item.name)}
+                        onClick={() =>
+                          setOpenDropdown((prev) =>
+                            prev === item.name ? null : item.name
+                          )
+                        }
                         className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase flex items-center ${
                           isActive(item.path, item.dropdown)
                             ? "text-[#ff8732] font-semibold"

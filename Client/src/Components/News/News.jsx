@@ -1,16 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { FaInstagram, FaYoutube, FaExternalLinkAlt } from "react-icons/fa";
+import { FaYoutube, FaExternalLinkAlt, FaPlay } from "react-icons/fa";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
 
 const News = () => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const videoRefs = useRef([]);
+
+  // Static video data
+  const videoCards = [
+    {
+      id: 1,
+      title: "शिवकालीन शस्त्रांचे आजचे शिल्पकार | Satyajit Arun Vaidya",
+      description:
+        "रुद्र आर्ट्स आणि हँडीक्राफ्ट्स चे संस्थापक सत्यजीत अरुण वैद्य यांच्यासोबत हा संवाद आहे, ज्यांनी ऐतिहासिक शस्त्रांची आवड व्यवसायात रूपांतरित केली. त्यांनी त्यांच्या नोकरीला सोडून, इतिहासाच्या प्रेमाने प्रेरित होऊन शस्त्रांची पुनर्रचना कशी केली आणि त्यात आलेल्या अडचणींचा समावेश केला आहे.",
+      videoUrl: "/Videos/videoplayback.mp4",
+      thumbnail: "/images/thumb1.jpg",
+      link: "https://youtu.be/xh-ibz0qxaA?si=xUepIS8RUdQu2EU8",
+    },
+    {
+      id: 2,
+      title:
+        "भेटरूपी ऐतिहासिक शस्त्र बनवतात पुण्यातील सत्यजीत वैद्य | historic weapons",
+      description:
+        "शस्त्रांनी घडवलेला इतिहास आजच्या पिढीला समजावा याची जाणीव सत्यजीत यांना एक घटनेतून झाली आणि मग त्यांनी थेट शस्त्रच बनवायला सुरुवात केली",
+      videoUrl: "/Videos/video2.mp4",
+      thumbnail: "/images/thumb2.jpg",
+      link: "https://youtu.be/2alkiZgDxMI?si=GBQ9R3Cd1j5Yxw0T",
+    },
+    {
+      id: 3,
+      title: "पुरातन शस्त्रांचा इतिहास जोपासणारा 'कलाकार मावळा'",
+      description:
+        "छत्रपती शिवाजी महाराज, छत्रपती संभाजी महाराज यांच्या बरोबर अनेक मावळे शस्रास्रे घेऊन युद्धासाठी जात आणि या लढाया जिकूनच त्यानी  स्वराज्याची स्थापना केली. त्यावेळी जी शस्त्रे वापरत होती ती इतिहासकालीन शस्त्रे आज कुठे तरी लोप पावत चालली आहेत. पण आपलें शस्त्रावरील प्रेम आपलं कलेवरील प्रेम आणि आपला इतिहास जिवंत ठेवण्यासाठी एक तरुण पूर्ण शस्त्रांचे दालन बनवतो ते पण असे दालन जिथे गेल्यावर महाराजांची आठवण आल्याशिवाय राहणार नाही.   ",
+      videoUrl: "Videos/video3.mp4",
+      thumbnail: "/images/thumb3.jpg",
+      link: "https://youtu.be/WpBQTatwZhs?si=FB1EmdLeHk4v0IY8",
+    },
+  ];
 
   const fetchLatestNews = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=3&sort=desc`
+        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/news?limit=4&sort=desc`
       );
       const data = await res.json();
       const filteredNews = (data.newsItems || []).filter(
@@ -28,18 +61,14 @@ const News = () => {
     fetchLatestNews();
   }, []);
 
-  const isYouTubeLink = (url) => {
-    return url?.includes("youtube.com") || url?.includes("youtu.be");
-  };
-
-  const isExternalLink = (url) => {
-    return url?.startsWith("http") || url?.startsWith("www");
-  };
-
-  const getLinkIcon = (url) => {
-    if (isYouTubeLink(url)) return <FaYoutube />;
-    if (isExternalLink(url)) return <FaExternalLinkAlt />;
-    return <FaExternalLinkAlt />;
+  const handleVideoHover = (index, isHovering) => {
+    if (videoRefs.current[index]) {
+      if (isHovering) {
+        videoRefs.current[index].play();
+      } else {
+        videoRefs.current[index].pause();
+      }
+    }
   };
 
   if (loading) {
@@ -51,10 +80,10 @@ const News = () => {
   }
 
   return (
-    <div className="py-12 sm:py-16 bg-gradient-to-b from-amber-50 to-amber-100 text-black font-times">
-      <div className="container mx-auto px-4 sm:px-6">
+    <div className="py-12 sm:py-20 bg-gradient-to-b from-amber-50 to-amber-100 text-black font-times">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div className="text-center mb-12 sm:mb-16">
+        <div className="text-center mb-12 sm:mb-20">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -88,90 +117,148 @@ const News = () => {
           </motion.p>
         </div>
 
-        {/* News Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
-          {newsData.map((news, index) => (
-            <motion.div
-              key={news._id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              viewport={{ once: true, margin: "-50px" }}
-              className="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              {/* Top Image */}
-              <div className="relative">
-                <img
-                  src={news.image}
-                  alt={news.title}
-                  className="w-full h-40 sm:h-52 object-cover"
-                  onError={(e) => {
-                    e.target.src = "/placeholder-news.jpg";
-                  }}
-                  loading="lazy"
-                />
-                <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-amber-600 text-white text-xs px-2 sm:px-3 py-1 rounded-full shadow">
-                  Latest
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-4 sm:p-5 flex flex-col justify-between h-[220px] sm:h-[260px]">
-                <div>
-                  <h3 className="text-base sm:text-lg font-semibold text-customBrown mb-2 line-clamp-2">
-                    {news.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">
-                    {news.shortDescription ||
-                      (news.description &&
-                        news.description.substring(0, 100) + "...") ||
-                      "No description available"}
-                  </p>
+        {/* News Section */}
+        <div className="mb-16">
+          <h2 className="text-xl sm:text-2xl font-medium text-customBrown mb-6 sm:mb-8 text-center">
+            Latest Stories
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {newsData.map((news, index) => (
+              <motion.div
+                key={news._id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true, margin: "-50px" }}
+                className="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              >
+                {/* Top Image */}
+                <div className="relative">
+                  <img
+                    src={news.image}
+                    alt={news.title}
+                    className="w-full h-40 sm:h-52 object-cover"
+                    onError={(e) => {
+                      e.target.src = "/placeholder-news.jpg";
+                    }}
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-amber-600 text-white text-xs px-2 sm:px-3 py-1 rounded-full shadow">
+                    Latest
+                  </div>
                 </div>
 
-                {/* Actions */}
-                <div className="mt-3 sm:mt-4 flex items-center justify-between">
-                  <a
-                    href={news.slug || news.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-1 text-amber-700 text-xs sm:text-sm font-medium hover:text-amber-900 transition"
-                  >
-                    <span>Read More</span>
-                    <svg
-                      className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
-                  </a>
+                {/* Content */}
+                <div className="p-4 sm:p-5 flex flex-col justify-between h-[220px] sm:h-[260px]">
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-customBrown mb-2 line-clamp-2">
+                      {news.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">
+                      {news.shortDescription ||
+                        (news.description &&
+                          news.description.substring(0, 100) + "...") ||
+                        "No description available"}
+                    </p>
+                  </div>
 
-                  {(news.slug || news.link) && (
+                  {/* Actions */}
+                  <div className="mt-3 sm:mt-4 flex items-center justify-between">
                     <a
                       href={news.slug || news.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-amber-700 hover:text-amber-900 transition text-sm sm:text-lg"
-                      title={
-                        isYouTubeLink(news.slug)
-                          ? "Watch on YouTube"
-                          : "View External Link"
-                      }
+                      className="group inline-flex items-center gap-1 text-amber-700 text-xs sm:text-sm font-medium hover:text-amber-900 transition"
                     >
-                      {getLinkIcon(news.slug || news.link)}
+                      <span>Read More</span>
+                      <svg
+                        className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
                     </a>
-                  )}
+
+                    {(news.slug || news.link) && (
+                      <a
+                        href={news.slug || news.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-amber-700 hover:text-amber-900 transition text-sm sm:text-lg"
+                        title="View External Link"
+                      >
+                        <FaExternalLinkAlt />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Videos Section */}
+        <div>
+          <h2 className="text-xl sm:text-2xl font-medium text-customBrown mb-6 sm:mb-8 text-center">
+            Featured Videos
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {videoCards.map((video, index) => (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
+                viewport={{ once: true, margin: "-50px" }}
+                className="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                onMouseEnter={() => handleVideoHover(index, true)}
+                onMouseLeave={() => handleVideoHover(index, false)}
+              >
+                {/* Video Container */}
+                <div className="relative aspect-video bg-black group">
+                  <video
+                    ref={(el) => (videoRefs.current[index] = el)}
+                    src={video.videoUrl}
+                    poster={video.thumbnail}
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-black bg-opacity-50 rounded-full p-3">
+                      <FaPlay className="text-white text-xl" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Video Content */}
+                <div className="p-4 sm:p-5">
+                  <h3 className="text-base sm:text-lg font-semibold text-customBrown mb-2 line-clamp-2">
+                    {video.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-4 line-clamp-2">
+                    {video.description}
+                  </p>
+                  <a
+                    href={video.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-full text-xs sm:text-sm transition-colors duration-300"
+                  >
+                    <FaYoutube className="text-lg" />
+                    <span>Watch More</span>
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -1,25 +1,17 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaEnvelope,
   FaWhatsapp,
   FaMapMarkerAlt,
   FaPhone,
+  FaPaperPlane,
 } from "react-icons/fa";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
-import { useEffect } from "react";
-
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
 
 const ContactSection = () => {
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const [formData, setFormData] = useState({
@@ -39,157 +31,232 @@ const ContactSection = () => {
     setFormData({ name: "", email: "", message: "" });
   };
 
+  // Animation variants
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+  };
+
   return (
-    <section className="min-h-screen py-16 px-6 font-times font-normal bg-gradient-to-b from-amber-50 to-amber-100">
-      <div className="max-w-4xl mx-auto">
+    <section className="min-h-screen py-20 px-4 sm:px-6 font-times bg-gradient-to-b from-amber-50 to-amber-100">
+      <div className="max-w-6xl mx-auto">
         {/* Section Heading */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={fadeIn}
-          className="text-center mb-12 mt-20"
+          variants={container}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-times font-normal text-amber-900 mb-4">
-            <AnimatedUnderline>Contact Us</AnimatedUnderline>
-          </h2>
-          <p className="text-amber-800">
-            We'd love to hear from you. Reach out with any questions or
-            inquiries.
-          </p>
+          <motion.h2
+            variants={item}
+            className="text-4xl md:text-5xl font-normal text-amber-900 mb-6 relative inline-block mt-20"
+          >
+            <AnimatedUnderline>Get In Touch</AnimatedUnderline>
+          </motion.h2>
+          <motion.p
+            variants={item}
+            className="text-lg text-amber-800 max-w-2xl mx-auto"
+          >
+            We cherish every conversation about our traditional craftsmanship.
+            Reach out for inquiries, collaborations, or just to say hello.
+          </motion.p>
         </motion.div>
 
-        {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Contact Content */}
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={container}
+        >
           {/* Contact Form */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="bg-white p-6 rounded-lg shadow-md"
+            variants={item}
+            className="bg-white p-8 rounded-xl shadow-lg border border-amber-100"
           >
-            <h3 className="text-2xl mb-4 text-amber-900">Send a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+            <div className="flex items-center mb-8">
+              <div className="bg-amber-100 p-3 rounded-full mr-4">
+                <FaPaperPlane className="text-amber-600 text-xl" />
+              </div>
+              <h3 className="text-2xl font-normal text-amber-900">
+                Send Us a Message
+              </h3>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <motion.div variants={item}>
+                <label className="block text-amber-800 mb-2">Your Name</label>
                 <input
                   type="text"
                   name="name"
-                  placeholder="Your Name"
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full border border-amber-200 px-4 py-2 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                  className="w-full px-4 py-3 border-b border-customBrown focus:border-amber-800 outline-none bg-transparent transition-all"
+                  placeholder="Enter your name"
                 />
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div variants={item}>
+                <label className="block text-amber-800 mb-2">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   name="email"
-                  placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full border border-amber-200 px-4 py-2 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                  className="w-full px-4 py-3 border-b border-customBrown focus:border-amber-800 outline-none bg-transparent transition-all"
+                  placeholder="your@email.com"
                 />
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div variants={item}>
+                <label className="block text-amber-800 mb-2">
+                  Your Message
+                </label>
                 <textarea
                   name="message"
-                  placeholder="Your Message"
                   value={formData.message}
                   onChange={handleChange}
-                  rows={4}
+                  rows={5}
                   required
-                  className="w-full border border-amber-200 px-4 py-2 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                  className="w-full px-4 py-3 border-b border-customBrown focus:border-amber-800 outline-none bg-transparent transition-all"
+                  placeholder="Share your thoughts with us..."
                 />
-              </div>
+              </motion.div>
 
-              <button
-                type="submit"
-                className="w-full bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition"
-              >
-                Send Message
-              </button>
+              <motion.div variants={item}>
+                <button
+                  type="submit"
+                  className="mt-6 px-8 py-3 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition-all flex items-center gap-2 mx-auto lg:mx-0"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaPaperPlane />
+                  Send Message
+                </button>
+              </motion.div>
             </form>
           </motion.div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
-            <h3 className="text-2xl mb-4 text-amber-900">Our Information</h3>
-
-            <div className="space-y-5">
-              <div className="flex items-start gap-3">
-                <div className="text-amber-600 mt-1">
-                  <FaMapMarkerAlt />
+          {/* Contact Information */}
+          <motion.div variants={item} className="space-y-8">
+            <div className="bg-white p-8 rounded-xl shadow-lg border border-amber-100">
+              <div className="flex items-center mb-8">
+                <div className="bg-amber-100 p-3 rounded-full mr-4">
+                  <FaMapMarkerAlt className="text-amber-600 text-xl" />
                 </div>
-                <div>
-                  <h4 className="font-medium">Address</h4>
-                  <p className="text-amber-800 text-sm">
-                    Famous Chowk, Kirti Nagar Ln No. 1, Ganesh Nagar, Samata
-                    Nagar, New Sangavi, Pune, Pimpri-Chinchwad,
-                    Maharashtra 411027
-                  </p>
-                </div>
+                <h3 className="text-2xl font-normal text-amber-900">
+                  Our Studio
+                </h3>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="text-amber-600 mt-1">
-                  <FaEnvelope />
-                </div>
-                <div>
-                  <h4 className="font-medium">Email</h4>
-                  <a
-                    href="mailto:contact@rudraarts.com"
-                    className="text-amber-800 text-sm hover:text-amber-600"
-                  >
-                    rudra.arts30@gmail.com
-                  </a>
-                </div>
-              </div>
+              <div className="space-y-6">
+                <motion.div
+                  className="flex items-start gap-4"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="text-amber-600 mt-1">
+                    <FaMapMarkerAlt />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-amber-900 mb-1">Address</h4>
+                    <p className="text-amber-800">
+                      Famous Chowk, Kirti Nagar Ln No. 1,
+                      <br />
+                      Ganesh Nagar, Samata Nagar,
+                      <br />
+                      New Sangavi, Pune, Pimpri-Chinchwad,
+                      <br />
+                      Maharashtra 411027
+                    </p>
+                  </div>
+                </motion.div>
 
-              <div className="flex items-start gap-3">
-                <div className="text-amber-600 mt-1">
-                  <FaPhone />
-                </div>
-                <div>
-                  <h4 className="font-medium">Phone</h4>
-                  <a
-                    href="tel:+917028996666"
-                    className="text-amber-800 text-sm hover:text-amber-600"
-                  >
-                    +91 7028996666
-                  </a>
-                </div>
+                <motion.div
+                  className="flex items-start gap-4"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="text-amber-600 mt-1">
+                    <FaEnvelope />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-amber-900 mb-1">Email</h4>
+                    <a
+                      href="mailto:rudra.arts30@gmail.com"
+                      className="text-amber-800 hover:text-amber-600 transition"
+                    >
+                      rudra.arts30@gmail.com
+                    </a>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start gap-4"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="text-amber-600 mt-1">
+                    <FaPhone />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-amber-900 mb-1">Phone</h4>
+                    <a
+                      href="tel:+917028996666"
+                      className="text-amber-800 hover:text-amber-600 transition"
+                    >
+                      +91 7028996666
+                    </a>
+                  </div>
+                </motion.div>
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col gap-3">
-              <a
-                href="mailto:rudraarts@gmail.com"
-                className="flex items-center justify-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition text-sm"
+            <div className="grid grid-cols-2 gap-4">
+              <motion.a
+                href="mailto:rudra.arts30@gmail.com"
+                className="bg-amber-600 text-white p-4 rounded-lg hover:bg-amber-700 transition flex flex-col items-center justify-center text-center"
+                whileHover={{ y: -5 }}
               >
-                <FaEnvelope /> Email Us
-              </a>
-              <a
+                <FaEnvelope className="text-2xl mb-2" />
+                <span>Email Us</span>
+              </motion.a>
+
+              <motion.a
                 href="https://wa.me/7028996666"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm"
+                className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition flex flex-col items-center justify-center text-center"
+                whileHover={{ y: -5 }}
               >
-                <FaWhatsapp /> WhatsApp
-              </a>
+                <FaWhatsapp className="text-2xl mb-2" />
+                <span>WhatsApp</span>
+              </motion.a>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

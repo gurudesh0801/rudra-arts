@@ -68,6 +68,7 @@ export const requestBlog = async (req, res) => {
     await blog.save();
     res.status(201).json({ message: "Blog submitted for review", blog });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Server Error", details: err.message });
   }
 };

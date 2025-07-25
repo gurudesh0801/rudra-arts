@@ -31,21 +31,33 @@ const SideBySidePortrait = () => {
       {/* Images side by side */}
       <div className="flex flex-col md:flex-row items-center justify-center w-full gap-20">
         {/* Left Portrait */}
-        <div className="w-full md:w-2/5 p-3 bg-customBrown">
+        <div className="w-full md:w-1/3 p-3 flex flex-col items-center">
           <img
             src="/images/IMG-20250617-WA0007.jpg"
             alt="Left Portrait"
-            className="w-full h-auto object-cover shadow-lg"
+            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,1)]"
           />
+          <div className="flex-1 flex items-end mt-4">
+            <h1 className="text-xl sm:text-2xl font-times text-customBrown leading-snug text-center">
+              Hon. Prime Minister of India <br />
+              Shri Narendra Modi
+            </h1>
+          </div>
         </div>
 
         {/* Right Portrait */}
-        <div className="w-full md:w-2/5 p-3 bg-customBrown">
+        <div className="w-full md:w-1/3 p-3 flex flex-col items-center">
           <img
             src="/images/IMG-20250617-WA0012.jpg"
             alt="Right Portrait"
-            className="w-full h-auto object-cover shadow-lg"
+            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,1)]"
           />
+          <div className="flex-1 flex items-end mt-4">
+            <h1 className="text-xl sm:text-2xl font-times text-customBrown leading-snug text-center">
+              Hon. NCP Party Chief <br />
+              Shri Sharad Pawar
+            </h1>
+          </div>
         </div>
       </div>
     </div>

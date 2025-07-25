@@ -127,8 +127,8 @@ const App = () => {
         <Route path="/Lorem" element={<Lorem />} />
         <Route path="/franchises" element={<FranchiseCarousel />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />
-        <Route path="/ourteam" element={<TeamComponent />} />
-        <Route path="/handsbehindrudrarts" element={<BTS />} />
+        {/* <Route path="/ourteam" element={<TeamComponent />} /> */}
+        <Route path="/ourteam" element={<BTS />} />
         <Route path="/explore-process" element={<ExploreProcess />} />
         <Route path="/maharaj" element={<HeritageExperience />} />
         <Route path="/awards" element={<AwardsComponent />} />

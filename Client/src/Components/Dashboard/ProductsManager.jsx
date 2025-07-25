@@ -64,6 +64,7 @@ const ProductManager = () => {
 
   const [editFormData, setEditFormData] = useState({
     pname: "",
+    pDescription: "",
     pprice: "",
     psize: "",
     pcategory: "",
@@ -144,6 +145,7 @@ const ProductManager = () => {
     setEditProduct(product);
     setEditFormData({
       pname: product.product_name,
+      pDescription: product.product_description,
       pprice: product.product_price,
       psize: product.product_size,
       pcategory: product.product_category,
@@ -167,6 +169,8 @@ const ProductManager = () => {
           },
           body: JSON.stringify({
             product_name: editFormData.pname,
+            product_name: editFormData.pname,
+            product_description: editFormData.pDescription,
             product_price: editFormData.pprice,
             product_size: editFormData.psize,
             product_category: editFormData.pcategory,
@@ -224,7 +228,9 @@ const ProductManager = () => {
 
       try {
         const res = await fetch(
-          "https://api.cloudinary.com/v1_1/dxpf6dhn1/image/upload",
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.CLOUD_NAME
+          }/image/Rudra-Artss`,
           {
             method: "POST",
             body: formData,
@@ -449,7 +455,12 @@ const ProductManager = () => {
                     <TableCell>
                       <Avatar
                         variant="rounded"
-                        src={product.product_image?.[0] || "/placeholder.jpg"}
+                        src={
+                          product.product_image?.[0].replace(
+                            "/upload/",
+                            "/upload/w_400,q_auto,f_auto/"
+                          ) || "/placeholder.jpg"
+                        }
                         alt={product.product_name}
                         sx={{ width: 60, height: 60 }}
                       />
@@ -515,6 +526,13 @@ const ProductManager = () => {
               label="Product Name"
               name="pname"
               value={editFormData.pname}
+              onChange={handleEditChange}
+              fullWidth
+            />
+            <TextField
+              label="Product Description"
+              name="pDescription"
+              value={editFormData.pDescription}
               onChange={handleEditChange}
               fullWidth
             />

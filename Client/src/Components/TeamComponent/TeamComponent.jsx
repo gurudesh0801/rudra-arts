@@ -70,7 +70,7 @@ const TeamComponent = () => {
     <div className="bg-amber-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Historical Header */}
-        <div className="text-center mb-16 mt-10">
+        <div className="text-center mb-16 mt-20">
           <h2 className="text-5xl font-times font-normal text-amber-800 mb-4 relative inline-block">
             <AnimatedUnderline>Brains Behind Rudra Arts</AnimatedUnderline>
           </h2>

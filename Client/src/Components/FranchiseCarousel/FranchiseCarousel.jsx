@@ -1,20 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, Grid, useTheme, useMediaQuery } from "@mui/material";
 import { motion } from "framer-motion";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
-import { useEffect } from "react";
 
-const FranchiseCard = ({ franchise, index }) => {
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+const FranchiseCard = ({ franchise, index, isMobile }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,103 +13,86 @@ const FranchiseCard = ({ franchise, index }) => {
     >
       <Box
         sx={{
-          height: "100%",
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
-          borderRadius: "16px",
+          borderRadius: 2,
           overflow: "hidden",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.05)",
+          boxShadow: 3,
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
           "&:hover": {
             transform: "translateY(-8px)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.1)",
+            boxShadow: 6,
           },
+          height: "100%",
+          backgroundColor: "#fff7eb",
         }}
-        className="bg-amber-50"
       >
         {/* Content Section */}
         <Box
           sx={{
             flex: 1,
-            p: isMobile ? 3 : 4,
+            p: { xs: 3, sm: 4 },
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
           }}
         >
-          <Box
+          <AnimatedUnderline>
+            <img
+              src={franchise.logo}
+              alt={`${franchise.name} logo`}
+              style={{
+                width: isMobile ? "10rem" : "13rem",
+                objectFit: "contain",
+                marginBottom: "0.5rem",
+              }}
+            />
+          </AnimatedUnderline>
+
+          <Typography
             sx={{
-              flex: 1,
-              p: isMobile ? 3 : 4,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
+              mb: 1,
+              fontSize: isMobile ? "1.3rem" : "2.4rem",
+              fontFamily: "Times New Roman, serif",
+            }}
+            className="text-customBrown"
+          >
+            {franchise.name}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+              fontSize: isMobile ? "0.9rem" : "1.1rem",
+              lineHeight: 1.6,
+              fontFamily: "Times New Roman, serif",
             }}
           >
-            <AnimatedUnderline>
-              <img
-                src={franchise.logo}
-                alt={`${franchise.name} logo`}
-                style={{
-                  width: isMobile ? "10rem" : "15rem",
-                  height: "auto",
-                  objectFit: "contain",
-                  marginBottom: "0.5rem",
-                }}
-              />
-            </AnimatedUnderline>
-            <Typography
-              sx={{
-                mb: 1,
-                fontSize: isMobile ? "1.1rem" : "3rem",
-                fontFamily: "Times New Roman, serif",
-              }}
-              className="text-customBrown"
-            >
-              {franchise.name}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: "text.secondary",
-                lineHeight: 1.6,
-                fontSize: isMobile ? "0.875rem" : "1.2rem",
-                fontFamily: "Times New Roman, serif",
-              }}
-            >
-              {(Array.isArray(franchise.description)
-                ? franchise.description
-                : [franchise.description]
-              ).map((address, idx) => (
-                <Box key={idx} sx={{ mb: 1 }}>
-                  • {address}
-                </Box>
-              ))}
-            </Typography>
-          </Box>
+            {(Array.isArray(franchise.description)
+              ? franchise.description
+              : [franchise.description]
+            ).map((line, idx) => (
+              <Box key={idx} sx={{ mb: 0.5 }}>
+                • {line}
+              </Box>
+            ))}
+          </Typography>
         </Box>
 
-        {/* Image Section - Hidden on mobile, right on desktop */}
+        {/* Image Section (hidden on mobile) */}
         {!isMobile && (
-          <Box
-            sx={{
-              flex: "0 0 30%",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
+          <Box sx={{ flex: "0 0 30%", overflow: "hidden" }}>
             <img
               src={franchise.image}
-              alt={franchise.name}
+              alt={`${franchise.name} main`}
               style={{
                 width: "100%",
                 height: "100%",
                 objectFit: "contain",
-                objectPosition: "center",
-                transition: "transform 0.5s ease, filter 0.3s ease",
+                transition: "transform 0.5s ease",
               }}
             />
           </Box>
@@ -131,28 +103,35 @@ const FranchiseCard = ({ franchise, index }) => {
 };
 
 const FranchiseCarousel = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const franchises = [
     {
       logo: "/images/rudra_arts_logo_single.png",
       image: "/images/rudraArtsDighi.jpg",
       name: "Rudra Arts Dighi",
       description:
-        "Survey No. 4, Hrishikesh Building, Parandenagar ( Samarthnagar) Dighi, Pune 411015, Behind Bikaner Sweets, Pune, Maharashtra 411015",
+        "Survey No. 4, Hrishikesh Building, Parandenagar (Samarthnagar) Dighi, Pune 411015, Behind Bikaner Sweets",
     },
     {
       logo: "/images/franchise14.png",
       image: "/images/pratikrutiArts.jpg",
       name: "Pratikruti Arts",
       description:
-        "Parshuram Apartment, Opposite Lokamanya Vachnalaya, Navi Peth, Pune, Maharashtra 411030, India",
+        "Parshuram Apartment, Opposite Lokamanya Vachnalaya, Navi Peth, Pune 411030",
     },
     {
       logo: "/images/franchise6.png",
       image: "/images/kitabwala1.jpg",
       name: "Kitabwala",
       description: [
-        "Kitabwala Store and Arts, Arvind Apartment, in front of Mantri Hospital, Erandwana Gaothan, Erandwane, Pune, Maharashtra 411004",
-        "Warden Vakil Chawl 2, 3rd floor, Veer Santaji Lane, Ganpatrao Kadam Marg, Lower Parel, Mumbai, Maharashtra 400013",
+        "Kitabwala Store, Arvind Apartment, Opp. Mantri Hospital, Erandwane, Pune 411004",
+        "Warden Vakil Chawl 2, 3rd Floor, Veer Santaji Lane, Lower Parel, Mumbai 400013",
       ],
     },
     {
@@ -160,21 +139,21 @@ const FranchiseCarousel = () => {
       image: "/images/rayriArts.jpg",
       name: "Rayari Arts",
       description:
-        "House no 31/A, Vijayalankar Society, Taljai Rd, Dhankawadi, Pune, Maharashtra 411043",
+        "House No. 31/A, Vijayalankar Society, Taljai Rd, Dhankawadi, Pune 411043",
     },
     {
       logo: "/images/franchise5.png",
       image: "/images/gajaiArts1.jpg",
       name: "Gajai Arts",
       description:
-        "Shop No-12, Anmol Terrace Chs Ltd., Plot no - 20, Sector 5 Kopar Khairane Rd, Sector 5, Kopar Khairane, Navi Mumbai, Maharashtra 400709",
+        "Shop No-12, Anmol Terrace, Plot 20, Sector 5, Kopar Khairane, Navi Mumbai 400709",
     },
     {
       logo: "/images/franchise15.png",
       image: "/images/kaladalanByCanus.jpg",
       name: "Kaladalan By Canus",
       description:
-        "B-1-A, Deepa Arihant building, near maneklal ground, ghatkopar west, Mumbai, Maharashtra 400086",
+        "B-1-A, Deepa Arihant Building, Near Maneklal Ground, Ghatkopar West, Mumbai 400086",
     },
   ];
 
@@ -182,10 +161,8 @@ const FranchiseCarousel = () => {
     <Box
       sx={{
         width: "100%",
-        position: "relative",
         py: 8,
         px: { xs: 2, sm: 4, md: 6 },
-        backgroundColor: "",
       }}
       className="bg-gradient-to-b from-amber-50 to-amber-100"
     >
@@ -214,7 +191,11 @@ const FranchiseCarousel = () => {
       <Grid container spacing={4}>
         {franchises.map((franchise, index) => (
           <Grid item xs={12} sm={6} md={6} lg={3} key={index}>
-            <FranchiseCard franchise={franchise} index={index} />
+            <FranchiseCard
+              franchise={franchise}
+              index={index}
+              isMobile={isMobile}
+            />
           </Grid>
         ))}
       </Grid>

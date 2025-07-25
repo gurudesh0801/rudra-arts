@@ -39,7 +39,9 @@ const Blogs = () => {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL_PRODUCTION}/api/blogs/all`
+        `${
+          import.meta.env.VITE_BASE_URL_PRODUCTION
+        }/api/blogs/all?status=approved`
       );
       const data = await res.json();
       setBlogs(data.reverse());
@@ -53,6 +55,8 @@ const Blogs = () => {
   useEffect(() => {
     fetchBlogs();
   }, []);
+
+  console.log(blogs);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

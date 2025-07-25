@@ -70,9 +70,13 @@ const Product = () => {
               className="relative bg-white/70 backdrop-blur-xl rounded-xl shadow-2xl border border-orange-200 overflow-hidden transition-transform hover:scale-[1.025] duration-300"
             >
               <img
-                src={product.image}
+                src={product.image.replace(
+                  "/upload/",
+                  "/upload/w_400,q_auto,f_auto/"
+                )}
                 alt={product.name}
                 className="w-full h-[15rem] object-cover cursor-pointer"
+                loading="lazy"
                 onClick={() => navigate(`/product-details/${product.id}`)}
               />
 

@@ -7,6 +7,7 @@ import AutoScrollCarousel from "./Carousel";
 import aboutBg from "/images/border.jpg";
 import { Box, Skeleton, Chip } from "@mui/material";
 import AnimatedUnderline from "../AnimatedUnderline/AnimatedUnderline";
+import { useMemo } from "react";
 
 const AllProducts = () => {
   useEffect(() => {
@@ -67,25 +68,31 @@ const AllProducts = () => {
 
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
-  const filteredProducts = products
-    .filter((p) => {
-      if (selectedCategory === "All") return true;
-      return (
-        p.category?.toLowerCase().trim() ===
-        selectedCategory.toLowerCase().trim()
-      );
-    })
-    .filter(
-      (p) =>
-        p.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.product_description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortOption === "price-low") return a.product_price - b.product_price;
-      if (sortOption === "price-high") return b.product_price - a.product_price;
-      if (sortOption === "rating") return b.rating - a.rating;
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
+  const filteredProducts = useMemo(() => {
+    return products
+      .filter((p) => {
+        if (selectedCategory === "All") return true;
+        return (
+          p.category?.toLowerCase().trim() ===
+          selectedCategory.toLowerCase().trim()
+        );
+      })
+      .filter(
+        (p) =>
+          p.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.product_description
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => {
+        if (sortOption === "price-low")
+          return a.product_price - b.product_price;
+        if (sortOption === "price-high")
+          return b.product_price - a.product_price;
+        if (sortOption === "rating") return b.rating - a.rating;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+  }, [products, selectedCategory, searchQuery, sortOption]);
 
   const toggleFavorite = (productId) => {
     setProducts((prev) =>
@@ -291,7 +298,10 @@ const AllProducts = () => {
                         {/* Product Image Container - Amazon Style */}
                         <div className="relative h-60 w-full overflow-hidden bg-gray-100">
                           <motion.img
-                            src={product.product_image[0]}
+                            src={product.product_image[0].replace(
+                              "/upload/",
+                              "/upload/w_400,q_auto,f_auto/"
+                            )}
                             alt={product.product_name}
                             className="w-full h-full object-cover p-2"
                             loading="lazy"
@@ -324,9 +334,17 @@ const AllProducts = () => {
                           </h3>
 
                           {/* Size */}
-                          {product.product_size && (
+                          {product.product_size !== "0" ? (
                             <p className="text-sm text-gray-500 mb-3">
                               Size: {product.product_size}
+                            </p>
+                          ) : (
+                            <p className="text-sm text-black mb-3">
+                              {product.product_description
+                                .split(" ")
+                                .slice(0, 10)
+                                .join(" ")}
+                              ...
                             </p>
                           )}
 
