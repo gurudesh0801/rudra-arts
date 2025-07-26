@@ -35,7 +35,7 @@ const SideBySidePortrait = () => {
           <img
             src="/images/IMG-20250617-WA0007.jpg"
             alt="Left Portrait"
-            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,1)]"
+            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,.6)]"
           />
           <div className="flex-1 flex items-end mt-4">
             <h1 className="text-xl sm:text-2xl font-times text-customBrown leading-snug text-center">
@@ -50,7 +50,7 @@ const SideBySidePortrait = () => {
           <img
             src="/images/IMG-20250617-WA0012.jpg"
             alt="Right Portrait"
-            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,1)]"
+            className="w-full h-auto object-cover rounded-xl shadow-[0_8px_30px_rgba(0,0,0,.6)]"
           />
           <div className="flex-1 flex items-end mt-4">
             <h1 className="text-xl sm:text-2xl font-times text-customBrown leading-snug text-center">

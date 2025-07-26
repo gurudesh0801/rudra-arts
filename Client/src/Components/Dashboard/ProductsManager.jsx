@@ -169,7 +169,6 @@ const ProductManager = () => {
           },
           body: JSON.stringify({
             product_name: editFormData.pname,
-            product_name: editFormData.pname,
             product_description: editFormData.pDescription,
             product_price: editFormData.pprice,
             product_size: editFormData.psize,

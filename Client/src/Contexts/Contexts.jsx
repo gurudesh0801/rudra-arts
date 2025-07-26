@@ -29,9 +29,13 @@ export const CartProvider = ({ children }) => {
     setCartItems(updated);
   };
 
+  const clearCart = () => {
+    setCartItems([]); // or however you're managing state
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, isCartLoading }} // ✅ pass flag
+      value={{ cartItems, addToCart, clearCart, removeFromCart, isCartLoading }} // ✅ pass flag
     >
       {children}
     </CartContext.Provider>

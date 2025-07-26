@@ -14,7 +14,7 @@ const Cart = () => {
     });
   }, []);
 
-  const { cartItems, removeFromCart, isCartLoading } = useCart();
+  const { cartItems, removeFromCart, clearCart, isCartLoading } = useCart();
   const [isBuying, setIsBuying] = useState(false);
   const navigate = useNavigate();
 
@@ -56,6 +56,8 @@ const Cart = () => {
       );
 
       window.open(whatsappURL, "_blank");
+      // ✅ Clear the cart
+      clearCart();
     } catch (err) {
       console.error("Error preparing WhatsApp message:", err);
       alert("Failed to prepare your order. Please try again.");
@@ -124,13 +126,13 @@ const Cart = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col justify-center items-center min-h-[60vh] text-center p-6 bg-gradient-to-b from-amber-50 to-amber-100"
+        className="flex flex-col justify-center items-center min-h-[60vh] text-center p-6 bg-gradient-to-b from-amber-50 to-amber-100 mt-20"
       >
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
-          className="bg-gray-100 p-8 rounded-full mb-6"
+          className="bg-gray-100 p-8 rounded-full mb-6 mt-20"
         >
           <FiShoppingBag className="text-gray-400 text-5xl" />
         </motion.div>

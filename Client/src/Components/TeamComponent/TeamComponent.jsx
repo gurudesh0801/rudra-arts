@@ -81,7 +81,7 @@ const TeamComponent = () => {
           </p>
           <div className="mt-6">
             <img
-              src="/images/rudralogo.png"
+              src="/images/rudra_arts_logo_single.png"
               alt="Historical artisans at work"
               className="h-24 object-cover rounded-lg opacity-90 mx-auto"
             />
@@ -215,7 +215,7 @@ const TeamComponent = () => {
               while innovating for modern connoisseurs.
             </p>
             <img
-              src="/images/rudralogo.png"
+              src="/images/rudra_arts_logo_single.png"
               alt="Founder's signature"
               className="h-12 object-contain opacity-80 mx-auto"
             />

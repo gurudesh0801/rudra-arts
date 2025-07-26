@@ -71,12 +71,12 @@ const BlogDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-[100vh] lg:overflow-y-auto"
+            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-[100vh] lg:overflow-y-auto mt-20"
           >
             <img
               src={blog.image}
               alt={blog.title}
-              className="w-full h-auto max-h-[50vh] lg:max-h-[90vh] lg:object-contain lg:mx-auto lg:py-4 bg-white p-4"
+              className="w-full h-auto max-h-[50vh] lg:max-h-[90vh] lg:object-contain lg:mx-auto lg:py-4 p-4"
             />
           </motion.div>
         )}
@@ -86,7 +86,7 @@ const BlogDetail = () => {
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 bg-white"
+          className="lg:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16"
         >
           {/* Rest of your content remains the same */}
           <motion.div

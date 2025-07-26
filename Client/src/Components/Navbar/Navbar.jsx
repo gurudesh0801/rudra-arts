@@ -10,7 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
 import { FaShoppingCart } from "react-icons/fa";
-import logo from "../../../public/images/rudralogo.png";
+import logo from "/images/rudra_arts_logo_single.png";
 import { useMediaQuery } from "react-responsive";
 
 const Navbar = () => {
@@ -43,6 +43,7 @@ const Navbar = () => {
     "Sanch",
     "Historical Legends",
     "Badges",
+    "Taxidermy",
   ];
 
   // Close mobile menu when route changes

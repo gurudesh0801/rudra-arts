@@ -165,21 +165,21 @@ const Home = () => {
             className="absolute top-24 right-4 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
           >
-            {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
+            {isPlaying ? <FaPause size={10} /> : <FaPlay size={10} />}
           </button>
           <button
             onClick={goToPrev}
             className="absolute left-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label="Previous slide"
           >
-            <FaChevronLeft size={16} />
+            <FaChevronLeft size={10} />
           </button>
           <button
             onClick={goToNext}
             className="absolute right-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label="Next slide"
           >
-            <FaChevronRight size={16} />
+            <FaChevronRight size={10} />
           </button>
         </>
       )}
@@ -241,8 +241,8 @@ const Home = () => {
                       className={`${
                         isMobile
                           ? "text-2xl"
-                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-                      } font-normal font-times ml-20`}
+                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl ml-20"
+                      } font-normal font-times`}
                       initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 1 }}
