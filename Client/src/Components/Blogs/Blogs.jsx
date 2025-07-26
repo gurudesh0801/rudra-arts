@@ -280,14 +280,14 @@ const Blogs = () => {
                       </div>
 
                       <h3
-                        className="text-xl font-semibold text-amber-900 mb-3 line-clamp-2"
+                        className="text-xl font-yatra font-normal text-amber-900 mb-3 line-clamp-2"
                         dangerouslySetInnerHTML={{
                           __html: highlightSearchTerm(blog.title),
                         }}
                       />
 
                       <p
-                        className="text-amber-700 mb-4 line-clamp-3"
+                        className="text-amber-700 font-yatra fonr-normal mb-4 line-clamp-3"
                         dangerouslySetInnerHTML={{
                           __html: highlightSearchTerm(
                             getExcerpt(blog.content, 200)
@@ -332,107 +332,119 @@ const Blogs = () => {
       {/* Create Blog Modal */}
       {openModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6">
-            <h2 className="text-2xl font-semibold text-amber-900 mb-6">
-              Submit New Blog
-            </h2>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[95vh] flex flex-col overflow-hidden">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-amber-100">
+              <h2 className="text-2xl font-semibold text-amber-900">
+                Submit New Blog
+              </h2>
+            </div>
 
-            {submitSuccess ? (
-              <div className="text-center py-8 text-green-600">
-                <p className="text-xl font-medium mb-2">
-                  Blog Submitted Successfully!
-                </p>
-                <p>Your blog has been submitted for admin approval.</p>
+            {/* Modal Body - scrollable */}
+            <div className="p-6 overflow-y-auto flex-grow">
+              {submitSuccess ? (
+                <div className="text-center py-8 text-green-600">
+                  <p className="text-xl font-medium mb-2">
+                    Blog Submitted Successfully!
+                  </p>
+                  <p>Your blog has been submitted for admin approval.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4">
+                    {/* Title */}
+                    <div>
+                      <label className="block text-amber-800 mb-2">Title</label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        value={newBlog.title}
+                        onChange={(e) =>
+                          setNewBlog({ ...newBlog, title: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    {/* Author */}
+                    <div>
+                      <label className="block text-amber-800 mb-2">
+                        Author
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        value={newBlog.author}
+                        onChange={(e) =>
+                          setNewBlog({ ...newBlog, author: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                      <label className="block text-amber-800 mb-2">
+                        Content
+                      </label>
+                      <textarea
+                        className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[200px]"
+                        value={newBlog.content}
+                        onChange={(e) =>
+                          setNewBlog({ ...newBlog, content: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    {/* Image Upload */}
+                    <div>
+                      <label className="block text-amber-800 mb-2">
+                        Featured Image
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="blog-image-upload"
+                        className="hidden"
+                        onChange={handleImageChange}
+                      />
+                      <label
+                        htmlFor="blog-image-upload"
+                        className="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-lg cursor-pointer hover:bg-amber-200 transition mr-4"
+                      >
+                        Upload Image
+                      </label>
+                      {newBlog.previewImage && (
+                        <div className="mt-4 w-full h-48 rounded-lg overflow-hidden">
+                          <img
+                            src={newBlog.previewImage}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Modal Footer - always visible */}
+            {!submitSuccess && (
+              <div className="p-6 border-t border-amber-100 flex justify-end gap-4">
+                <button
+                  onClick={() => setOpenModal(false)}
+                  disabled={isSubmitting}
+                  className="px-6 py-2 text-amber-800 hover:bg-amber-100 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmitBlog}
+                  disabled={isSubmitting || !newBlog.title || !newBlog.content}
+                  className="px-6 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition disabled:opacity-50"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit for Approval"}
+                </button>
               </div>
-            ) : (
-              <>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-amber-800 mb-2">Title</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                      value={newBlog.title}
-                      onChange={(e) =>
-                        setNewBlog({ ...newBlog, title: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-amber-800 mb-2">Author</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                      value={newBlog.author}
-                      onChange={(e) =>
-                        setNewBlog({ ...newBlog, author: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-amber-800 mb-2">Content</label>
-                    <textarea
-                      className="w-full px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 min-h-[200px]"
-                      value={newBlog.content}
-                      onChange={(e) =>
-                        setNewBlog({ ...newBlog, content: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-amber-800 mb-2">
-                      Featured Image
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="blog-image-upload"
-                      className="hidden"
-                      onChange={handleImageChange}
-                    />
-                    <label
-                      htmlFor="blog-image-upload"
-                      className="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-lg cursor-pointer hover:bg-amber-200 transition mr-4"
-                    >
-                      Upload Image
-                    </label>
-                    {newBlog.previewImage && (
-                      <div className="mt-4 w-full h-48 rounded-lg overflow-hidden">
-                        <img
-                          src={newBlog.previewImage}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-4 mt-8">
-                  <button
-                    onClick={() => setOpenModal(false)}
-                    disabled={isSubmitting}
-                    className="px-6 py-2 text-amber-800 hover:bg-amber-100 rounded-lg transition"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSubmitBlog}
-                    disabled={
-                      isSubmitting ||
-                      !newBlog.title ||
-                      !newBlog.content ||
-                      !newBlog.image
-                    }
-                    className="px-6 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition disabled:opacity-50"
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit for Approval"}
-                  </button>
-                </div>
-              </>
             )}
           </div>
         </div>

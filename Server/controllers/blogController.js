@@ -30,15 +30,19 @@ export const getAllBlogs = async (req, res) => {
 export const addBlog = async (req, res) => {
   try {
     const { title, content, author } = req.body;
-    if (!req.file) return res.status(400).json({ error: "Image is required" });
 
-    const result = await streamUpload(req);
+    let imageUrl = null;
+
+    if (req.file) {
+      const result = await streamUpload(req);
+      imageUrl = result.secure_url;
+    }
 
     const blog = new Blog({
       title,
       content,
       author,
-      image: result.secure_url,
+      image: imageUrl, // optional
       status: "approved", // Directly approved
     });
 
@@ -53,15 +57,19 @@ export const addBlog = async (req, res) => {
 export const requestBlog = async (req, res) => {
   try {
     const { title, content, author } = req.body;
-    if (!req.file) return res.status(400).json({ error: "Image is required" });
 
-    const result = await streamUpload(req);
+    let imageUrl = null;
+
+    if (req.file) {
+      const result = await streamUpload(req);
+      imageUrl = result.secure_url;
+    }
 
     const blog = new Blog({
       title,
       content,
       author,
-      image: result.secure_url,
+      image: imageUrl, // optional
       status: "pending",
     });
 

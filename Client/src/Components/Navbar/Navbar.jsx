@@ -1,34 +1,21 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  FiMenu,
-  FiX,
-  FiSearch,
-  FiChevronDown,
-  FiChevronUp,
-} from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
 import { FaShoppingCart } from "react-icons/fa";
 import logo from "/images/rudra_arts_logo_single.png";
 import { useMediaQuery } from "react-responsive";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const searchInputRef = useRef(null);
-  const dropdownRef = useRef(null);
-  const navigate = useNavigate();
   const location = useLocation();
   const { cartItems } = useCart();
-
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  const isTablet = useMediaQuery({ maxWidth: 1024 });
 
-  // Product categories from your select dropdown
+  // Product categories
   const productCategories = [
     "Mavala",
     "Maharaj",
@@ -45,38 +32,6 @@ const Navbar = () => {
     "Badges",
     "Taxidermy",
   ];
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-    setSearchOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (searchOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [searchOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -100,18 +55,19 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("");
-      setSearchOpen(false);
-    }
-  };
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
-  const toggleDropdown = (itemName) => {
-    setOpenDropdown(openDropdown === itemName ? null : itemName);
-  };
+  // Handle scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isActive = (path, dropdownItems = []) => {
     return (
@@ -122,19 +78,19 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[9999]">
-      {/* Top Header - Always visible on mobile, conditionally visible on desktop */}
+      {/* Top Header */}
       <AnimatePresence>
         {(!scrolled || isMobile) && (
           <motion.div
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
-            transition={{ duration: isMobile ? 0.1 : 0.3 }}
+            transition={{ duration: 0.3 }}
             className="w-full bg-gradient-to-b from-amber-50 to-amber-100 text-black"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-16 md:h-20 py-2">
-                {/* CENTER: Logo */}
+                {/* Logo */}
                 <div className="flex-shrink-0 flex items-center justify-center">
                   <Link to="/" className="flex items-center">
                     <motion.img
@@ -151,7 +107,7 @@ const Navbar = () => {
                   </Link>
                 </div>
 
-                {/* RIGHT: Cart + Mobile menu */}
+                {/* Cart + Mobile menu */}
                 <div className="flex-1 flex items-center justify-end">
                   <Link
                     to="/cart"
@@ -184,7 +140,7 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Nav Menu Row */}
+      {/* Desktop Navigation */}
       <div
         className={`w-full transition-all duration-300 ${
           scrolled
@@ -193,81 +149,68 @@ const Navbar = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="hidden md:block border-t border-gray-200 border-opacity-20 pt-2 pb-1">
-            <div className="flex items-center justify-center space-x-2">
-              {navItems.map((item) => (
-                <div key={item.name} className="relative" ref={dropdownRef}>
-                  {item.dropdown ? (
-                    <>
+          <div className="hidden md:flex items-center justify-center space-x-2 border-t border-gray-200 border-opacity-20 pt-2 pb-1">
+            {navItems.map((item) => (
+              <div key={item.name} className="relative">
+                {item.dropdown ? (
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger asChild>
                       <button
-                        onClick={() =>
-                          setOpenDropdown((prev) =>
-                            prev === item.name ? null : item.name
-                          )
-                        }
                         className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase flex items-center ${
                           isActive(item.path, item.dropdown)
                             ? "text-[#ff8732] font-semibold"
                             : "hover:text-orange-500"
                         }`}
-                        aria-expanded={openDropdown === item.name}
                       >
                         {item.name}
-                        {openDropdown === item.name ? (
-                          <FiChevronUp className="ml-1" />
-                        ) : (
-                          <FiChevronDown className="ml-1" />
-                        )}
+                        <FiChevronDown className="ml-1" />
                       </button>
+                    </DropdownMenu.Trigger>
 
-                      <AnimatePresence>
-                        {openDropdown === item.name && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        className="min-w-[220px] bg-white rounded-md shadow-lg z-50"
+                        sideOffset={5}
+                      >
+                        {item.dropdown.map((subItem) => (
+                          <DropdownMenu.Item
+                            key={subItem.name}
+                            asChild
+                            className="outline-none"
                           >
-                            <div className="py-1">
-                              {item.dropdown.map((subItem) => (
-                                <Link
-                                  key={subItem.name}
-                                  to={subItem.path}
-                                  className={`block px-4 py-2 text-sm ${
-                                    location.pathname === subItem.path
-                                      ? "bg-amber-100 text-darkBrown"
-                                      : "text-gray-700 hover:bg-amber-50 hover:text-darkBrown"
-                                  }`}
-                                  onClick={() => setOpenDropdown(null)}
-                                >
-                                  {subItem.name}
-                                </Link>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </>
-                  ) : (
-                    <Link
-                      to={item.path}
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase ${
-                        location.pathname === item.path
-                          ? "text-[#ff8732] font-semibold"
-                          : "hover:text-orange-500"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
+                            <Link
+                              to={subItem.path}
+                              className={`text-sm px-4 py-2 block w-full ${
+                                location.pathname === subItem.path
+                                  ? "bg-amber-100 text-darkBrown font-medium"
+                                  : "text-gray-700 hover:bg-amber-50"
+                              }`}
+                            >
+                              {subItem.name}
+                            </Link>
+                          </DropdownMenu.Item>
+                        ))}
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-times uppercase ${
+                      location.pathname === item.path
+                        ? "text-[#ff8732] font-semibold"
+                        : "hover:text-orange-500"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile Navigation */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -282,54 +225,47 @@ const Navbar = () => {
                 {navItems.map((item) => (
                   <div key={item.name}>
                     {item.dropdown ? (
-                      <>
-                        <button
-                          onClick={() => toggleDropdown(item.name)}
-                          className={`w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium ${
-                            isActive(item.path, item.dropdown)
-                              ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                              : "text-white hover:bg-[#5a3e2a]"
-                          }`}
-                          aria-expanded={openDropdown === item.name}
-                        >
-                          {item.name}
-                          {openDropdown === item.name ? (
-                            <FiChevronUp className="ml-1" />
-                          ) : (
-                            <FiChevronDown className="ml-1" />
-                          )}
-                        </button>
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger asChild>
+                          <button
+                            className={`w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium ${
+                              isActive(item.path, item.dropdown)
+                                ? "bg-[#f3e9dd] text-[#8a4b1f]"
+                                : "text-white hover:bg-[#5a3e2a]"
+                            }`}
+                          >
+                            {item.name}
+                            <FiChevronDown />
+                          </button>
+                        </DropdownMenu.Trigger>
 
-                        <AnimatePresence>
-                          {openDropdown === item.name && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.15 }}
-                              className="pl-4"
-                            >
-                              {item.dropdown.map((subItem) => (
+                        <DropdownMenu.Portal>
+                          <DropdownMenu.Content
+                            className="min-w-full bg-customBrown text-white rounded-none shadow-none"
+                            sideOffset={2}
+                          >
+                            {item.dropdown.map((subItem) => (
+                              <DropdownMenu.Item
+                                key={subItem.name}
+                                asChild
+                                className="outline-none"
+                              >
                                 <Link
-                                  key={subItem.name}
                                   to={subItem.path}
-                                  onClick={() => {
-                                    setIsOpen(false);
-                                    setOpenDropdown(null);
-                                  }}
-                                  className={`block px-3 py-3 rounded-md text-sm ${
+                                  onClick={() => setIsOpen(false)}
+                                  className={`block px-3 py-3 text-sm ${
                                     location.pathname === subItem.path
-                                      ? "bg-[#f3e9dd] text-[#8a4b1f]"
-                                      : "text-gray-200 hover:bg-[#5a3e2a] hover:text-white"
+                                      ? "bg-[#f3e9dd] text-[#8a4b1f] font-medium"
+                                      : "text-gray-200 hover:bg-[#5a3e2a]"
                                   }`}
                                 >
                                   {subItem.name}
                                 </Link>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </>
+                              </DropdownMenu.Item>
+                            ))}
+                          </DropdownMenu.Content>
+                        </DropdownMenu.Portal>
+                      </DropdownMenu.Root>
                     ) : (
                       <Link
                         to={item.path}
