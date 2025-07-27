@@ -230,11 +230,13 @@ const AllProducts = () => {
               <option value="Mavala">Mavala</option>
               <option value="Maharaj">Maharaj</option>
               <option value="Shastra (Weapons)">Shastra (Weapons)</option>
-              <option value="Miniature Shastra">Miniature Shastra</option>
+              <option value="Miniature Shastra">
+                Miniature Shastra (Weapons)
+              </option>
               <option value="Maniatures">Maniatures</option>
               <option value="Spiritual Statues">Spiritual Statues</option>
               <option value="Car Dashboard">Car Dashboard</option>
-              <option value="Frame Sangrah">Frame Sangrah</option>
+              <option value="Frame Collection">Frame Collection</option>
               <option value="Shilekhana (Weapon Vault)">
                 Shilekhana (Weapon Vault)
               </option>
@@ -242,6 +244,8 @@ const AllProducts = () => {
                 Symbolic & Cultural Artefacts
               </option>
               <option value="Sanch">Sanch</option>
+              <option value="Keychains">Keychains</option>
+              <option value="Jewellery">Jewellery</option>
               <option value="Historical Legends">Historical Legends</option>
               <option value="Badges">Badges</option>
             </select>

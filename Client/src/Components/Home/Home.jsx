@@ -21,6 +21,13 @@ const Home = () => {
 
   const slides = [
     {
+      type: "banner", // You can use a unique type to detect
+      image: isMobile ? "/images/mobile/slide1.jpg" : "/images/slide1.jpg", // <- Your new banner image
+      title: "",
+      description: "",
+      buttonText: "",
+    },
+    {
       type: "product",
       image: isMobile
         ? "/images/mobile/WhatsApp-Image-2025-07-19-at-15.32.21_918c279f-mobile.jpg"
@@ -148,7 +155,11 @@ const Home = () => {
               <img
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover brightness-[0.6]"
+                className={`w-full h-full  ${
+                  slide.type !== "banner"
+                    ? "brightness-[0.6] object-cover"
+                    : "object-contain"
+                }`}
                 loading={index === 0 ? "eager" : "lazy"}
                 decoding="async"
               />
@@ -224,7 +235,7 @@ const Home = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="w-full h-full flex flex-col justify-center">
-              {index === 0 ? (
+              {slide.type === "banner" ? null : index === 1 ? (
                 <div
                   className={`w-full flex ${
                     isMobile
@@ -302,7 +313,7 @@ const Home = () => {
                     </motion.div>
                   </div>
                 </div>
-              ) : index === 3 ? (
+              ) : index === 4 ? (
                 <div
                   className={`w-full flex ${
                     isMobile
