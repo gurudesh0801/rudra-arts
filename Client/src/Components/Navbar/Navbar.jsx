@@ -28,6 +28,8 @@ const Navbar = () => {
     "Shilekhana (Weapon Vault)",
     "Symbolic & Cultural Artefacts",
     "Sanch",
+    "Jewellery",
+    "Keychains",
     "Historical Legends",
     "Badges",
     "Taxidermy",
