@@ -51,7 +51,7 @@ const ProductManager = () => {
     "Mavala",
     "Maharaj",
     "Shastra (Weapons)",
-    "Miniature Weapons (Weapons)",
+    "Miniature Weapons",
     "Maniatures",
     "Spiritual Statues",
     "Car Dashboard",
@@ -63,6 +63,7 @@ const ProductManager = () => {
     "Jewellery",
     "Historical Legends",
     "Badges",
+    "Taxidermy",
   ];
 
   const [editFormData, setEditFormData] = useState({

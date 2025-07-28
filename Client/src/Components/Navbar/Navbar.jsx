@@ -20,7 +20,7 @@ const Navbar = () => {
     "Mavala",
     "Maharaj",
     "Shastra (Weapons)",
-    "Miniature Shastra",
+    "Miniature Weapons",
     "Maniatures",
     "Spiritual Statues",
     "Car Dashboard",

@@ -202,9 +202,7 @@ const AddProduct = ({ onProductAdded }) => {
                 <option value="Mavala">Mavala</option>
                 <option value="Maharaj">Maharaj</option>
                 <option value="Shastra (Weapons)">Shastra (Weapons)</option>
-                <option value="Miniature Shastra">
-                  Miniature Shastra (Weapons)
-                </option>
+                <option value="Miniature Weapons">Miniature Weapons</option>
                 <option value="Maniatures">Maniatures</option>
                 <option value="Spiritual Statues">Spiritual Statues</option>
                 <option value="Car Dashboard">Car Dashboard</option>
@@ -220,6 +218,7 @@ const AddProduct = ({ onProductAdded }) => {
                 <option value="Jewellery">Jewellery</option>
                 <option value="Historical Legends">Historical Legends</option>
                 <option value="Badges">Badges</option>
+                <option value="Taxidermy">Taxidermy</option>
               </select>
             </div>
 
