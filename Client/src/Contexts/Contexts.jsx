@@ -33,9 +33,38 @@ export const CartProvider = ({ children }) => {
     setCartItems([]); // or however you're managing state
   };
 
+  const increaseQuantity = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+      )
+    );
+  };
+
+  const decreaseQuantity = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === id
+          ? {
+              ...item,
+              quantity: item.quantity > 1 ? item.quantity - 1 : 1,
+            }
+          : item
+      )
+    );
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, clearCart, removeFromCart, isCartLoading }} // ✅ pass flag
+      value={{
+        cartItems,
+        addToCart,
+        clearCart,
+        removeFromCart,
+        isCartLoading,
+        increaseQuantity,
+        decreaseQuantity,
+      }} // ✅ pass flag
     >
       {children}
     </CartContext.Provider>

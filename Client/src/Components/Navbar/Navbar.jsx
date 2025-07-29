@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../Contexts/Contexts";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBoxOpen } from "react-icons/fa";
 import logo from "/images/rudra_arts_logo_single.png";
 import { useMediaQuery } from "react-responsive";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -14,6 +14,7 @@ const Navbar = () => {
   const location = useLocation();
   const { cartItems } = useCart();
   const isMobile = useMediaQuery({ maxWidth: 768 });
+  const [purchasedCount, setPurchasedCount] = useState(0);
 
   // Product categories
   const productCategories = [
@@ -71,6 +72,25 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Track purchased products count
+  useEffect(() => {
+    const updatePurchasedCount = () => {
+      const purchasedProducts =
+        JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+      setPurchasedCount(purchasedProducts.length);
+    };
+
+    // Initial load
+    updatePurchasedCount();
+
+    // Listen for storage changes
+    window.addEventListener("storage", updatePurchasedCount);
+
+    return () => {
+      window.removeEventListener("storage", updatePurchasedCount);
+    };
+  }, []);
+
   const isActive = (path, dropdownItems = []) => {
     return (
       location.pathname === path ||
@@ -109,8 +129,8 @@ const Navbar = () => {
                   </Link>
                 </div>
 
-                {/* Cart + Mobile menu */}
-                <div className="flex-1 flex items-center justify-end">
+                {/* Cart + Your Products + Mobile menu */}
+                <div className="flex-1 flex items-center justify-end space-x-2">
                   <Link
                     to="/cart"
                     className="relative p-2 rounded-full hover:bg-gray-100 hover:bg-opacity-10 transition-colors"
@@ -118,12 +138,23 @@ const Navbar = () => {
                   >
                     <FaShoppingCart className="h-5 w-5" />
                     {cartItems.length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                      <span className="absolute -top-1 -right-1 bg-customBrown text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
                         {cartItems.length}
                       </span>
                     )}
                   </Link>
-
+                  <Link
+                    to="/your-products"
+                    className="relative p-2 rounded-full hover:bg-gray-100 hover:bg-opacity-10 transition-colors"
+                    aria-label="Your Products"
+                  >
+                    <FaBoxOpen className="h-5 w-5" />
+                    {purchasedCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-customBrown text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                        {purchasedCount}
+                      </span>
+                    )}
+                  </Link>
                   <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="md:hidden ml-4 inline-flex items-center justify-center p-2 rounded-md focus:outline-none"

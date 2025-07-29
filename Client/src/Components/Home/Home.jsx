@@ -21,13 +21,6 @@ const Home = () => {
 
   const slides = [
     {
-      type: "banner", // You can use a unique type to detect
-      image: isMobile ? "/images/mobile/slide1.jpg" : "/images/slide1.jpg", // <- Your new banner image
-      title: "",
-      description: "",
-      buttonText: "",
-    },
-    {
       type: "product",
       image: isMobile
         ? "/images/mobile/WhatsApp-Image-2025-07-19-at-15.32.21_918c279f-mobile.jpg"
@@ -155,11 +148,7 @@ const Home = () => {
               <img
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
-                className={`w-full h-full  ${
-                  slide.type !== "banner"
-                    ? "brightness-[0.6] object-cover"
-                    : "object-contain"
-                }`}
+                className="w-full h-full object-cover brightness-[0.6]"
                 loading={index === 0 ? "eager" : "lazy"}
                 decoding="async"
               />
@@ -176,21 +165,21 @@ const Home = () => {
             className="absolute top-24 right-4 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
           >
-            {isPlaying ? <FaPause size={10} /> : <FaPlay size={10} />}
+            {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
           </button>
           <button
             onClick={goToPrev}
             className="absolute left-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label="Previous slide"
           >
-            <FaChevronLeft size={10} />
+            <FaChevronLeft size={16} />
           </button>
           <button
             onClick={goToNext}
             className="absolute right-4 bottom-1/3 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/80 transition"
             aria-label="Next slide"
           >
-            <FaChevronRight size={10} />
+            <FaChevronRight size={16} />
           </button>
         </>
       )}
@@ -235,7 +224,7 @@ const Home = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="w-full h-full flex flex-col justify-center">
-              {slide.type === "banner" ? null : index === 1 ? (
+              {index === 0 ? (
                 <div
                   className={`w-full flex ${
                     isMobile
@@ -252,7 +241,7 @@ const Home = () => {
                       className={`${
                         isMobile
                           ? "text-2xl"
-                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl ml-20"
+                          : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
                       } font-normal font-times`}
                       initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -291,7 +280,7 @@ const Home = () => {
                             isMobile
                               ? "px-4 py-1.5 text-sm"
                               : "px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg"
-                          } font-medium rounded font-times ml-20`}
+                          } font-medium rounded font-times`}
                         >
                           {!isMobile && (
                             <img
@@ -313,7 +302,7 @@ const Home = () => {
                     </motion.div>
                   </div>
                 </div>
-              ) : index === 4 ? (
+              ) : index === 3 ? (
                 <div
                   className={`w-full flex ${
                     isMobile

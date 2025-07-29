@@ -38,6 +38,7 @@ import FullScreenVideoPlayer from "./Components/FullScreenVideoPlayer/FullScreen
 import SideBySidePortrait from "./Components/PoliticianPhotos/SideBySidePortrait";
 import HeritageExperience from "./Components/HeritageExperience/HeritageExperience";
 import AwardsComponent from "./Components/AwardsComponent/AwardsComponent";
+import YourProducts from "./Components/Cart/YourProducts";
 
 const App = () => {
   const location = useLocation();
@@ -132,6 +133,7 @@ const App = () => {
         <Route path="/explore-process" element={<ExploreProcess />} />
         <Route path="/maharaj" element={<HeritageExperience />} />
         <Route path="/awards" element={<AwardsComponent />} />
+        <Route path="/your-products" element={<YourProducts />} />
 
         <Route
           path="/admin/dashboard"
