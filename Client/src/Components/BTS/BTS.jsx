@@ -168,11 +168,11 @@ const BTS = () => {
         </motion.div>
 
         {/* Statue Manufacturing Unit */}
-        {renderGallery(
+        {/* {renderGallery(
           "statueUnit",
           "Statue Manufacturing Unit",
           "Where ancient techniques meet modern precision to create timeless pieces of art"
-        )}
+        )} */}
 
         {/* 3D Printing and Miniature Unit */}
         {renderGallery(

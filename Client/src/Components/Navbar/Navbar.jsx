@@ -251,14 +251,19 @@ const Navbar = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden fixed top-0 left-0 w-full z-50 bg-customBrown shadow-lg"
-              style={{ marginTop: isMobile ? "4rem" : scrolled ? "0" : "4rem" }}
+              className="md:hidden fixed top-0 left-0 w-full z-[9999] bg-customBrown shadow-lg"
+              style={{
+                marginTop: isMobile ? "4rem" : scrolled ? "0" : "4rem",
+                position: "relative",
+              }} // 🛠️ Key fix
             >
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 relative z-[9999]">
                 {navItems.map((item) => (
                   <div key={item.name}>
                     {item.dropdown ? (
-                      <DropdownMenu.Root>
+                      <DropdownMenu.Root modal={false}>
+                        {" "}
+                        {/* 🛠️ Optional fix */}
                         <DropdownMenu.Trigger asChild>
                           <button
                             className={`w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium ${
@@ -271,10 +276,9 @@ const Navbar = () => {
                             <FiChevronDown />
                           </button>
                         </DropdownMenu.Trigger>
-
                         <DropdownMenu.Portal>
                           <DropdownMenu.Content
-                            className="min-w-full bg-customBrown text-white rounded-none shadow-none"
+                            className="min-w-full max-h-[300px] overflow-y-auto bg-customBrown text-white rounded-none shadow-none z-[9999] scrollbar-thin scrollbar-thumb-gray-400"
                             sideOffset={2}
                           >
                             {item.dropdown.map((subItem) => (
