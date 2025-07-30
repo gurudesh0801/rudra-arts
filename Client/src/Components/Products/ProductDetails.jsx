@@ -235,8 +235,14 @@ const ProductDetails = () => {
                 style={isDragging ? { cursor: "grabbing" } : {}}
               >
                 <img
-                  src={selectedImage}
+                  src={
+                    selectedImage.replace(
+                      "/upload/",
+                      "/upload/w_400,q_auto,f_auto/"
+                    ) || "/placeholder.jpg"
+                  }
                   alt="Product"
+                  loading="lazy"
                   className="object-contain transition-transform duration-300"
                   style={{
                     transform: `translate(${position.x}px, ${position.y}px) scale(${zoomLevel})`,
@@ -313,7 +319,13 @@ const ProductDetails = () => {
                       }`}
                     >
                       <img
-                        src={img}
+                        src={
+                          img.replace(
+                            "/upload/",
+                            "/upload/w_400,q_auto,f_auto/"
+                          ) || "/placeholder.jpg"
+                        }
+                        loading="lazy"
                         alt={`Thumbnail ${index}`}
                         className="w-full h-full object-cover"
                       />

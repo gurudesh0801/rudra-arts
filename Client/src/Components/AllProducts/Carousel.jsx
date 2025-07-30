@@ -53,6 +53,7 @@ export default function LatestProducts() {
                     "/upload/w_400,q_auto,f_auto/"
                   ) || "/placeholder-image.jpg"
                 }
+                loading="lazy"
                 alt={product.product_name}
                 className="w-full h-48 object-cover"
                 onError={(e) => {

@@ -464,6 +464,7 @@ const ProductManager = () => {
                             "/upload/w_400,q_auto,f_auto/"
                           ) || "/placeholder.jpg"
                         }
+                        loading="lazy"
                         alt={product.product_name}
                         sx={{ width: 60, height: 60 }}
                       />

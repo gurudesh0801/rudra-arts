@@ -237,7 +237,13 @@ const Cart = () => {
                   >
                     <motion.img
                       whileHover={{ scale: 1.05 }}
-                      src={item.product_image?.[0]}
+                      src={
+                        item.product_image?.[0].replace(
+                          "/upload/",
+                          "/upload/w_400,q_auto,f_auto/"
+                        ) || "/placeholder-image.jpg"
+                      }
+                      loading="lazy"
                       alt={item.product_name}
                       className="w-full h-full rounded-lg object-cover"
                     />
