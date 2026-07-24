@@ -1,0 +1,117 @@
+.maintenance-page {
+  align-items: center;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(181, 122, 49, 0.2), transparent 31rem),
+    radial-gradient(circle at 88% 82%, rgba(181, 122, 49, 0.14), transparent 28rem),
+    #19120e;
+  box-sizing: border-box;
+  color: #fffaf3;
+  display: flex;
+  font-family: Georgia, "Times New Roman", serif;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 24px;
+  position: relative;
+}
+
+.maintenance-page::before,
+.maintenance-page::after {
+  border: 1px solid rgba(223, 176, 103, 0.2);
+  border-radius: 50%;
+  content: "";
+  height: 32rem;
+  position: absolute;
+  width: 32rem;
+}
+
+.maintenance-page::before {
+  left: -17rem;
+  top: -16rem;
+}
+
+.maintenance-page::after {
+  bottom: -18rem;
+  right: -16rem;
+}
+
+.maintenance-card {
+  background: rgba(38, 27, 20, 0.78);
+  border: 1px solid rgba(223, 176, 103, 0.38);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  max-width: 550px;
+  padding: 58px 48px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+}
+
+.maintenance-icon {
+  align-items: center;
+  background: rgba(181, 122, 49, 0.14);
+  border: 1px solid rgba(223, 176, 103, 0.55);
+  border-radius: 50%;
+  color: #e7b867;
+  display: inline-flex;
+  height: 76px;
+  justify-content: center;
+  margin-bottom: 26px;
+  transform: rotate(-18deg);
+  width: 76px;
+}
+
+.maintenance-label {
+  color: #e7b867;
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  margin: 0 0 18px;
+}
+
+.maintenance-card h1 {
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.08;
+  margin: 0;
+}
+
+.maintenance-message {
+  color: #ded1c4;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 23px auto 31px;
+  max-width: 420px;
+}
+
+.maintenance-status {
+  align-items: center;
+  color: #e7b867;
+  display: inline-flex;
+  font-family: Arial, sans-serif;
+  font-size: 0.78rem;
+  gap: 8px;
+  letter-spacing: 0.04em;
+}
+
+.maintenance-status span {
+  animation: maintenance-pulse 1.8s infinite;
+  background: #e7b867;
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+@keyframes maintenance-pulse {
+  50% {
+    box-shadow: 0 0 0 6px rgba(231, 184, 103, 0.1);
+  }
+}
+
+@media (max-width: 520px) {
+  .maintenance-card {
+    padding: 44px 26px;
+  }
+}

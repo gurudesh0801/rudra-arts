@@ -6,6 +6,7 @@ import { CartProvider } from "./Contexts/Contexts";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import Maintenance from "./Components/Maintenance/Maintenance.jsx";
 
 const LayoutWrapper = () => {
   const location = useLocation();
@@ -20,12 +21,18 @@ const LayoutWrapper = () => {
   );
 };
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <CartProvider>
-        <LayoutWrapper />
-      </CartProvider>
-    </BrowserRouter>
-  </StrictMode>
-);
+const root = createRoot(document.getElementById("root"));
+
+// Maintenance mode is enabled. To restore the website, comment out the next
+// line and uncomment the normal website render block below.
+root.render(<Maintenance />);
+
+// root.render(
+//   <StrictMode>
+//     <BrowserRouter>
+//       <CartProvider>
+//         <LayoutWrapper />
+//       </CartProvider>
+//     </BrowserRouter>
+//   </StrictMode>
+// );
